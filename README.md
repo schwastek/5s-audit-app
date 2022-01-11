@@ -149,6 +149,12 @@ Browse audits
 
 ![Browse audits](./docs/img/browse-audits-page.png)
 
+## Documentation
+
+### API
+
+Please refer to the [API docs](./docs/API.md).
+
 ## Roadmap
 
 - [x] Create audits
