@@ -11,7 +11,7 @@
         "webpack:///src/*": "${webRoot}/*"
       },
       "skipFiles": [
-        "${workspaceFolder}/node_modules/**/*.js"
+        "${workspaceFolder}/client/node_modules/**/*.js"
       ]
     },
     {
