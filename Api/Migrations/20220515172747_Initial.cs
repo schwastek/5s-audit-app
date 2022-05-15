@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Api.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -203,6 +203,26 @@ namespace Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AuditActions",
+                columns: table => new
+                {
+                    AuditActionId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", maxLength: 280, nullable: false),
+                    IsComplete = table.Column<bool>(type: "INTEGER", nullable: false),
+                    AuditId = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuditActions", x => x.AuditActionId);
+                    table.ForeignKey(
+                        name: "FK_AuditActions_Audits_AuditId",
+                        column: x => x.AuditId,
+                        principalTable: "Audits",
+                        principalColumn: "AuditId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Answers",
                 columns: table => new
                 {
@@ -232,12 +252,12 @@ namespace Api.Migrations
             migrationBuilder.InsertData(
                 table: "Audits",
                 columns: new[] { "AuditId", "Area", "Author", "EndDate", "StartDate" },
-                values: new object[] { new Guid("f4940d26-7c0a-4ab6-b1cd-da8f708c5819"), "Warehouse", "John", new DateTime(2021, 12, 30, 18, 27, 57, 557, DateTimeKind.Utc).AddTicks(9181), new DateTime(2021, 12, 30, 18, 12, 57, 557, DateTimeKind.Utc).AddTicks(8829) });
+                values: new object[] { new Guid("f4940d26-7c0a-4ab6-b1cd-da8f708c5819"), "warehouse", "John", new DateTime(2022, 5, 15, 17, 42, 46, 826, DateTimeKind.Utc).AddTicks(9080), new DateTime(2022, 5, 15, 17, 27, 46, 826, DateTimeKind.Utc).AddTicks(8723) });
 
             migrationBuilder.InsertData(
                 table: "Audits",
                 columns: new[] { "AuditId", "Area", "Author", "EndDate", "StartDate" },
-                values: new object[] { new Guid("a065c86d-3846-41bf-a268-423c743ca064"), "Assembly", "Bob", new DateTime(2021, 12, 30, 18, 24, 57, 557, DateTimeKind.Utc).AddTicks(9524), new DateTime(2021, 12, 30, 18, 12, 57, 557, DateTimeKind.Utc).AddTicks(9522) });
+                values: new object[] { new Guid("a065c86d-3846-41bf-a268-423c743ca064"), "assembly", "John", new DateTime(2022, 5, 15, 17, 39, 46, 826, DateTimeKind.Utc).AddTicks(9516), new DateTime(2022, 5, 15, 17, 27, 46, 826, DateTimeKind.Utc).AddTicks(9515) });
 
             migrationBuilder.InsertData(
                 table: "Questions",
@@ -314,6 +334,11 @@ namespace Api.Migrations
                 columns: new[] { "AnswerId", "AnswerText", "AnswerType", "AuditId", "QuestionId" },
                 values: new object[] { new Guid("cc0e98ee-090d-4046-af4c-7bd1e05994b9"), "1", "number", new Guid("a065c86d-3846-41bf-a268-423c743ca064"), new Guid("eb2ef0b3-6af5-4d53-89d8-7b069ccb343c") });
 
+            migrationBuilder.InsertData(
+                table: "AuditActions",
+                columns: new[] { "AuditActionId", "AuditId", "Description", "IsComplete" },
+                values: new object[] { new Guid("33a4a3d5-54dc-4bcb-a27f-0d469f6adca4"), new Guid("f4940d26-7c0a-4ab6-b1cd-da8f708c5819"), "Clean up the workplace", false });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Answers_AuditId",
                 table: "Answers",
@@ -362,6 +387,11 @@ namespace Api.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_AuditActions_AuditId",
+                table: "AuditActions",
+                column: "AuditId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RefreshToken_UserId",
                 table: "RefreshToken",
                 column: "UserId");
@@ -388,16 +418,19 @@ namespace Api.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "RefreshToken");
+                name: "AuditActions");
 
             migrationBuilder.DropTable(
-                name: "Audits");
+                name: "RefreshToken");
 
             migrationBuilder.DropTable(
                 name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Audits");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

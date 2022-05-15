@@ -4,8 +4,8 @@ function list(urlSearchParams) {
   return instance.get('/audits', { params: urlSearchParams }).then((response) => response.data);
 };
 
-function details(id) {
-  return instance.get(`/audits/${id}`).then((response) => response.data);
+function details(id, controller) {
+  return instance.get(`/audits/${id}`, { signal: controller.signal }).then((response) => response.data);
 }
 
 function create(audit) {

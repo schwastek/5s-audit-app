@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "5a838bba-28ee-4b3e-9a30-f6b75ea4db5f",
+		"_postman_id": "f04bacd3-b0a6-426d-b823-3c290472a75e",
 		"name": "5S Audit App",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -417,6 +417,43 @@
 			"response": []
 		},
 		{
+			"name": "Register user successful",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"john@test.com\",\r\n    \"username\": \"john\",\r\n    \"displayName\": \"John\",\r\n    \"password\": \"Pa$$w0rd\"\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/account/register",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"account",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Refresh token for logged in user",
 			"event": [
 				{
@@ -648,14 +685,14 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{url}}/api/audits/3F7EE1FC-A7AA-4893-A840-8AC5993E8CE5",
+					"raw": "{{url}}/api/audits/f4940d26-7c0a-4ab6-b1cd-da8f708c5819",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
 						"audits",
-						"3F7EE1FC-A7AA-4893-A840-8AC5993E8CE5"
+						"f4940d26-7c0a-4ab6-b1cd-da8f708c5819"
 					]
 				}
 			},
@@ -705,6 +742,18 @@
 		},
 		{
 			"name": "POST Audit",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const auditId = pm.variables.replaceIn(\"{{$guid}}\");\r",
+							"pm.variables.set(\"auditId\", auditId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -731,7 +780,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"auditId\": \"{{$guid}}\",\r\n    \"area\": \"Warehouse\",\r\n    \"startDate\": \"2021-07-19T11:09:34.543Z\",\r\n    \"author\": \"John\",\r\n    \"endDate\": \"2021-07-19T11:09:44.543Z\",\r\n    \"answers\": [\r\n        {\r\n            \"questionId\": \"af70e9f3-9a70-4178-80dc-87d38bb1c810\",\r\n            \"answerId\": \"{{$guid}}\",\r\n            \"answerType\": \"number\",\r\n            \"answerText\": \"100\"\r\n        }\r\n    ]\r\n}"
+					"raw": "{\r\n    \"auditId\": \"{{auditId}}\",\r\n    \"area\": \"Warehouse\",\r\n    \"startDate\": \"2021-07-19T11:09:34.543Z\",\r\n    \"author\": \"John\",\r\n    \"endDate\": \"2021-07-19T11:09:44.543Z\",\r\n    \"answers\": [\r\n        {\r\n            \"questionId\": \"af70e9f3-9a70-4178-80dc-87d38bb1c810\",\r\n            \"answerId\": \"{{$guid}}\",\r\n            \"answerType\": \"number\",\r\n            \"answerText\": \"100\"\r\n        }\r\n    ],\r\n    \"actions\": [\r\n        {\r\n            \"auditId\": \"{{auditId}}\",\r\n            \"actionId\": \"{{$guid}}\",\r\n            \"description\": \"Clean upppp2\"\r\n        }\r\n    ]\r\n}"
 				},
 				"url": {
 					"raw": "{{url}}/api/audits",
@@ -747,37 +796,126 @@
 			"response": []
 		},
 		{
-			"name": "Register user successful",
+			"name": "POST Action",
 			"request": {
 				"auth": {
-					"type": "noauth"
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
 				},
 				"method": "POST",
 				"header": [
 					{
 						"key": "Accept",
 						"value": "application/json",
-						"type": "text"
+						"type": "default"
 					},
 					{
 						"key": "Content-Type",
 						"value": "application/json",
-						"type": "text"
+						"type": "default"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"john@test.com\",\r\n    \"username\": \"john\",\r\n    \"displayName\": \"John\",\r\n    \"password\": \"Pa$$w0rd\"\r\n}"
+					"raw": "{\r\n    \"auditId\": \"F4940D26-7C0A-4AB6-B1CD-DA8F708C5819\",\r\n    \"actionId\": \"{{$guid}}\",\r\n    \"description\": \"Clean up\"\r\n}"
 				},
 				"url": {
-					"raw": "{{url}}/api/account/register",
+					"raw": "{{url}}/api/actions",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
-						"account",
-						"register"
+						"actions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UPDATE Action",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"isComplete\": true\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/actions/33A4A3D5-54DC-4BCB-A27F-0D469F6ADCA4",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"actions",
+						"33A4A3D5-54DC-4BCB-A27F-0D469F6ADCA4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE Action",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/actions/11B02123-99B0-4D1D-B37A-A47A5ED77809",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"actions",
+						"11B02123-99B0-4D1D-B37A-A47A5ED77809"
 					]
 				}
 			},

@@ -5,6 +5,7 @@ using Api.Mappers;
 using Api.Models;
 using Api.ResourceParameters;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -54,6 +55,16 @@ namespace Api.Services
                 auditsResourceParameters.PageSize);
 
             return pagedItems;
+        }
+
+        public bool AuditExists(Guid auditId)
+        {
+            if (auditId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(auditId));
+            }
+
+            return _context.Audits.Any(a => a.AuditId == auditId);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Api.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public double Score { get; set; }
-
         public ICollection<AnswerDto> Answers { get; set; }
+        public ICollection<AuditActionDto> Actions { get; set; }
     }
 }

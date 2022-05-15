@@ -11,5 +11,6 @@ namespace Api.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public ICollection<AnswerForCreationDto> Answers { get; set; }
+        public ICollection<AuditActionForCreationDto> Actions { get; set; }
     }
 }

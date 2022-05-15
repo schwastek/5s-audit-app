@@ -8,16 +8,22 @@ namespace Api.Mappers
     public class AuditMapper
     {
         private readonly AnswerMapper _answerMapper;
+        private readonly AuditActionMapper _auditActionMapper;
 
-        public AuditMapper(AnswerMapper answerMapper)
+        public AuditMapper(AnswerMapper answerMapper, AuditActionMapper auditActionMapper)
         {
             _answerMapper = answerMapper;
+            _auditActionMapper = auditActionMapper;
         }
 
         public Audit Map(AuditForCreationDto request)
         {
             ICollection<Answer> answers = request.Answers
                 .Select(answer => _answerMapper.Map(answer))
+                .ToList();
+
+            ICollection<AuditAction> actions = request.Actions
+                .Select(a => _auditActionMapper.Map(a))
                 .ToList();
 
             Audit audit = new()
@@ -27,7 +33,8 @@ namespace Api.Mappers
                 Area = request.Area,
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,
-                Answers = answers
+                Answers = answers,
+                Actions = actions
             };
 
             return audit;
@@ -39,6 +46,10 @@ namespace Api.Mappers
                 .Select(answer => _answerMapper.Map(answer))
                 .ToList();
 
+            ICollection<AuditActionDto> actions = audit.Actions
+                .Select(a => _auditActionMapper.Map(a))
+                .ToList();
+
             AuditDto auditDto = new()
             {
                 AuditId = audit.AuditId,
@@ -47,7 +58,8 @@ namespace Api.Mappers
                 StartDate = audit.StartDate,
                 EndDate = audit.EndDate,
                 Score = audit.CalculateScore(),
-                Answers = answers
+                Answers = answers,
+                Actions = actions
             };
 
             return auditDto;

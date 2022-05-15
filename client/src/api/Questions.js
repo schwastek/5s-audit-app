@@ -1,7 +1,7 @@
 import { instance } from './axios';
 
-function list() {
-  return instance.get('/questions').then((response) => response.data);
+function list(controller) {
+  return instance.get('/questions', { signal: controller.signal }).then((response) => response.data);
 };
 
 export const Questions = {

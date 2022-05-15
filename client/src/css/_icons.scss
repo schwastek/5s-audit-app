@@ -1,0 +1,23 @@
+.fill-success {
+  fill: $success;
+
+  &:hover {
+    fill: $white;
+  }
+}
+
+.fill-danger {
+  fill: $danger;
+
+  &:hover {
+    fill: $white;
+  }
+}
+
+.fill-checkmark {
+  fill: $gray-400;
+}
+
+.fill-checkmark-complete {
+  fill: $success;
+}

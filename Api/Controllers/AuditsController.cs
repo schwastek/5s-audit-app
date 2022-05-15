@@ -71,6 +71,7 @@ namespace Api.Controllers
         public async Task<ActionResult<AuditDto>> GetAudit(Guid id)
         {
             Audit entity = await _context.Audits
+                .Include(audit => audit.Actions)
                 .Include(audit => audit.Answers)
                 .ThenInclude(answer => answer.Question)
                 .AsNoTracking()

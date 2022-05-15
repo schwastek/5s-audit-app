@@ -8,6 +8,9 @@
 | `GET /api/audits?orderBy=author asc&pageSize=5&pageNumber=1`  | Get a list of audits (paged and sorted) |
 | `GET /api/audits/{{id}}` | Get an audit by ID |
 | `POST /api/audits` | Create an audit |
+| `POST /api/actions` | Add an action to audit |
+| `PUT /api/actions/{{id}}` | Update an action |
+| `DELETE /api/actions/{{id}}` | Delete an action |
 | `GET /api/questions` | Get a list of questions |
 | `POST /api/account/login` | Log a user in |
 | `POST /api/account/refreshToken` | Refresh token for a logged in user |

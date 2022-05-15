@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(LeanAuditorContext))]
-    [Migration("20211230181258_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220515172747_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -155,18 +155,51 @@ namespace Api.Migrations
                         new
                         {
                             AuditId = new Guid("f4940d26-7c0a-4ab6-b1cd-da8f708c5819"),
-                            Area = "Warehouse",
+                            Area = "warehouse",
                             Author = "John",
-                            EndDate = new DateTime(2021, 12, 30, 18, 27, 57, 557, DateTimeKind.Utc).AddTicks(9181),
-                            StartDate = new DateTime(2021, 12, 30, 18, 12, 57, 557, DateTimeKind.Utc).AddTicks(8829)
+                            EndDate = new DateTime(2022, 5, 15, 17, 42, 46, 826, DateTimeKind.Utc).AddTicks(9080),
+                            StartDate = new DateTime(2022, 5, 15, 17, 27, 46, 826, DateTimeKind.Utc).AddTicks(8723)
                         },
                         new
                         {
                             AuditId = new Guid("a065c86d-3846-41bf-a268-423c743ca064"),
-                            Area = "Assembly",
-                            Author = "Bob",
-                            EndDate = new DateTime(2021, 12, 30, 18, 24, 57, 557, DateTimeKind.Utc).AddTicks(9524),
-                            StartDate = new DateTime(2021, 12, 30, 18, 12, 57, 557, DateTimeKind.Utc).AddTicks(9522)
+                            Area = "assembly",
+                            Author = "John",
+                            EndDate = new DateTime(2022, 5, 15, 17, 39, 46, 826, DateTimeKind.Utc).AddTicks(9516),
+                            StartDate = new DateTime(2022, 5, 15, 17, 27, 46, 826, DateTimeKind.Utc).AddTicks(9515)
+                        });
+                });
+
+            modelBuilder.Entity("Api.Domain.AuditAction", b =>
+                {
+                    b.Property<Guid>("AuditActionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AuditId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(280)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsComplete")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("AuditActionId");
+
+                    b.HasIndex("AuditId");
+
+                    b.ToTable("AuditActions");
+
+                    b.HasData(
+                        new
+                        {
+                            AuditActionId = new Guid("33a4a3d5-54dc-4bcb-a27f-0d469f6adca4"),
+                            AuditId = new Guid("f4940d26-7c0a-4ab6-b1cd-da8f708c5819"),
+                            Description = "Clean up the workplace",
+                            IsComplete = false
                         });
                 });
 
@@ -448,6 +481,15 @@ namespace Api.Migrations
                     b.Navigation("Question");
                 });
 
+            modelBuilder.Entity("Api.Domain.AuditAction", b =>
+                {
+                    b.HasOne("Api.Domain.Audit", null)
+                        .WithMany("Actions")
+                        .HasForeignKey("AuditId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Api.Domain.RefreshToken", b =>
                 {
                     b.HasOne("Api.Domain.User", "User")
@@ -510,6 +552,8 @@ namespace Api.Migrations
 
             modelBuilder.Entity("Api.Domain.Audit", b =>
                 {
+                    b.Navigation("Actions");
+
                     b.Navigation("Answers");
                 });
 

@@ -44,6 +44,14 @@ namespace Api.DbContexts
                 }
             };
 
+            Guid[,] actionsUuidPool = new Guid[,]
+            {
+                // Actions for audit #1
+                {
+                    Guid.Parse("33a4a3d5-54dc-4bcb-a27f-0d469f6adca4")
+                }
+            };
+
             modelBuilder.Entity<Audit>().HasData(
                 new Audit
                 {
@@ -88,6 +96,16 @@ namespace Api.DbContexts
                 {
                     QuestionId = questionUuidPool[4],
                     QuestionText = "Are occasionally used items stored separately?"
+                });
+
+            // Actions for audit #1
+            modelBuilder.Entity<AuditAction>().HasData(
+                new AuditAction
+                {
+                    AuditId = auditUuidPool[0],
+                    AuditActionId = actionsUuidPool[0, 0],
+                    Description = "Clean up the workplace",
+                    IsComplete = false
                 });
 
             // Answers for audit #1

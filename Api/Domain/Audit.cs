@@ -19,6 +19,7 @@ namespace Api.Domain
         public DateTime EndDate { get; set; }
 
         public ICollection<Answer> Answers { get; set; } = new List<Answer>();
+        public ICollection<AuditAction> Actions { get; set; } = new List<AuditAction>();
 
         public double CalculateScore()
         {

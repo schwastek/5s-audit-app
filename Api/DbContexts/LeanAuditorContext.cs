@@ -8,6 +8,7 @@ namespace Api.DbContexts
   public class LeanAuditorContext : IdentityDbContext<User>
     {
         public DbSet<Audit> Audits { get; set; }
+        public DbSet<AuditAction> AuditActions { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
 

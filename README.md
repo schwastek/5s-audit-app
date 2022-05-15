@@ -155,13 +155,23 @@ Browse audits
 
 Please refer to the [API docs](./docs/API.md).
 
+### Common commands
+
+```sh
+# Add migration
+dotnet ef migrations add MyMigration
+
+# Apply migration
+dotnet ef database update
+```
+
 ## Roadmap
 
 - [x] Create audits
 - [x] Browse audits
 - [x] Login
+- [x] Audit actions
 - [ ] Registration
-- [ ] Audit actions
 - [ ] Action comments
 - [ ] Image upload
 - [ ] Swagger (OpenAPI) documentation
