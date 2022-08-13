@@ -28,7 +28,6 @@ namespace Api.DbContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            AuditsDataInitializer.Seed(modelBuilder);
         }
     }
 }

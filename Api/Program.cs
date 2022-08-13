@@ -2,6 +2,7 @@ using Api.DbContexts;
 using Api.Domain;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -15,26 +16,9 @@ namespace Api
         public static async Task Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
-
-            await SeedUsersAsync(host);
+            await InitializeData(host);
 
             host.Run();
-        }
-
-        private static async Task SeedUsersAsync(IHost host)
-        {
-            using var scope = host.Services.CreateScope();
-            var serviceProvider = scope.ServiceProvider;
-            try
-            {
-                var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
-                await UserDataInitializer.Seed(userManager);
-            }
-            catch (Exception ex)
-            {
-                var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
-                logger.LogError(ex, "An error occurred seeding the DB with users.");
-            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -43,5 +27,33 @@ namespace Api
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
+        private static async Task InitializeData(IHost host)
+        {
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                try
+                {
+                    var env = services.GetRequiredService<IWebHostEnvironment>();
+                    if (env.IsDevelopment())
+                    {
+                        var context = services.GetRequiredService<LeanAuditorContext>();
+                        var userManager = services.GetRequiredService<UserManager<User>>();
+
+                        context.Database.Migrate();
+
+                        await UserDataInitializer.Seed(userManager);
+                        await SampleDataInitializer.Seed(context);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occurred seeding the DB.");
+                }
+            }
+        }
     }
 }

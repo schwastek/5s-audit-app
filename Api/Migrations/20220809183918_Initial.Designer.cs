@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(LeanAuditorContext))]
-    [Migration("20220515172747_Initial")]
+    [Migration("20220809183918_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,88 +43,6 @@ namespace Api.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("Answers");
-
-                    b.HasData(
-                        new
-                        {
-                            AnswerId = new Guid("76551e14-0791-4d3b-99fd-387e25b9c96b"),
-                            AnswerText = "1",
-                            AnswerType = "number",
-                            AuditId = new Guid("f4940d26-7c0a-4ab6-b1cd-da8f708c5819"),
-                            QuestionId = new Guid("af70e9f3-9a70-4178-80dc-87d38bb1c810")
-                        },
-                        new
-                        {
-                            AnswerId = new Guid("0c24c0d3-2092-4266-ba7c-9e36c7b3256d"),
-                            AnswerText = "2",
-                            AnswerType = "number",
-                            AuditId = new Guid("f4940d26-7c0a-4ab6-b1cd-da8f708c5819"),
-                            QuestionId = new Guid("cb1a8298-9eca-4684-8c7c-1ed24298cca2")
-                        },
-                        new
-                        {
-                            AnswerId = new Guid("dd3ae4e3-9651-4142-9a4d-63e33cad11cb"),
-                            AnswerText = "3",
-                            AnswerType = "number",
-                            AuditId = new Guid("f4940d26-7c0a-4ab6-b1cd-da8f708c5819"),
-                            QuestionId = new Guid("6efa4fdb-b626-4af0-aea8-0a38399502d0")
-                        },
-                        new
-                        {
-                            AnswerId = new Guid("30deb494-6e45-4eb5-ab99-cc2f8eac981b"),
-                            AnswerText = "4",
-                            AnswerType = "number",
-                            AuditId = new Guid("f4940d26-7c0a-4ab6-b1cd-da8f708c5819"),
-                            QuestionId = new Guid("bfab9a5c-4e74-4eff-a6ed-7b39748378ad")
-                        },
-                        new
-                        {
-                            AnswerId = new Guid("690da001-2594-4f64-a7d5-68b1fa095493"),
-                            AnswerText = "5",
-                            AnswerType = "number",
-                            AuditId = new Guid("f4940d26-7c0a-4ab6-b1cd-da8f708c5819"),
-                            QuestionId = new Guid("eb2ef0b3-6af5-4d53-89d8-7b069ccb343c")
-                        },
-                        new
-                        {
-                            AnswerId = new Guid("fcaf6a07-c661-4977-bc81-ce4f0675b344"),
-                            AnswerText = "1",
-                            AnswerType = "number",
-                            AuditId = new Guid("a065c86d-3846-41bf-a268-423c743ca064"),
-                            QuestionId = new Guid("af70e9f3-9a70-4178-80dc-87d38bb1c810")
-                        },
-                        new
-                        {
-                            AnswerId = new Guid("1939baab-b109-42b6-be49-7eee38575f69"),
-                            AnswerText = "1",
-                            AnswerType = "number",
-                            AuditId = new Guid("a065c86d-3846-41bf-a268-423c743ca064"),
-                            QuestionId = new Guid("cb1a8298-9eca-4684-8c7c-1ed24298cca2")
-                        },
-                        new
-                        {
-                            AnswerId = new Guid("833bd0a9-2e2c-4a4d-ab7e-59597324f191"),
-                            AnswerText = "1",
-                            AnswerType = "number",
-                            AuditId = new Guid("a065c86d-3846-41bf-a268-423c743ca064"),
-                            QuestionId = new Guid("6efa4fdb-b626-4af0-aea8-0a38399502d0")
-                        },
-                        new
-                        {
-                            AnswerId = new Guid("4d539fc1-bad0-4380-90a4-1ed9d305150b"),
-                            AnswerText = "1",
-                            AnswerType = "number",
-                            AuditId = new Guid("a065c86d-3846-41bf-a268-423c743ca064"),
-                            QuestionId = new Guid("bfab9a5c-4e74-4eff-a6ed-7b39748378ad")
-                        },
-                        new
-                        {
-                            AnswerId = new Guid("cc0e98ee-090d-4046-af4c-7bd1e05994b9"),
-                            AnswerText = "1",
-                            AnswerType = "number",
-                            AuditId = new Guid("a065c86d-3846-41bf-a268-423c743ca064"),
-                            QuestionId = new Guid("eb2ef0b3-6af5-4d53-89d8-7b069ccb343c")
-                        });
                 });
 
             modelBuilder.Entity("Api.Domain.Audit", b =>
@@ -150,24 +68,6 @@ namespace Api.Migrations
                     b.HasKey("AuditId");
 
                     b.ToTable("Audits");
-
-                    b.HasData(
-                        new
-                        {
-                            AuditId = new Guid("f4940d26-7c0a-4ab6-b1cd-da8f708c5819"),
-                            Area = "warehouse",
-                            Author = "John",
-                            EndDate = new DateTime(2022, 5, 15, 17, 42, 46, 826, DateTimeKind.Utc).AddTicks(9080),
-                            StartDate = new DateTime(2022, 5, 15, 17, 27, 46, 826, DateTimeKind.Utc).AddTicks(8723)
-                        },
-                        new
-                        {
-                            AuditId = new Guid("a065c86d-3846-41bf-a268-423c743ca064"),
-                            Area = "assembly",
-                            Author = "John",
-                            EndDate = new DateTime(2022, 5, 15, 17, 39, 46, 826, DateTimeKind.Utc).AddTicks(9516),
-                            StartDate = new DateTime(2022, 5, 15, 17, 27, 46, 826, DateTimeKind.Utc).AddTicks(9515)
-                        });
                 });
 
             modelBuilder.Entity("Api.Domain.AuditAction", b =>
@@ -192,15 +92,6 @@ namespace Api.Migrations
                     b.HasIndex("AuditId");
 
                     b.ToTable("AuditActions");
-
-                    b.HasData(
-                        new
-                        {
-                            AuditActionId = new Guid("33a4a3d5-54dc-4bcb-a27f-0d469f6adca4"),
-                            AuditId = new Guid("f4940d26-7c0a-4ab6-b1cd-da8f708c5819"),
-                            Description = "Clean up the workplace",
-                            IsComplete = false
-                        });
                 });
 
             modelBuilder.Entity("Api.Domain.Question", b =>
@@ -215,33 +106,6 @@ namespace Api.Migrations
                     b.HasKey("QuestionId");
 
                     b.ToTable("Questions");
-
-                    b.HasData(
-                        new
-                        {
-                            QuestionId = new Guid("af70e9f3-9a70-4178-80dc-87d38bb1c810"),
-                            QuestionText = "Are all tools in the work area currently in use?"
-                        },
-                        new
-                        {
-                            QuestionId = new Guid("cb1a8298-9eca-4684-8c7c-1ed24298cca2"),
-                            QuestionText = "Are all tools or parts off the floor?"
-                        },
-                        new
-                        {
-                            QuestionId = new Guid("6efa4fdb-b626-4af0-aea8-0a38399502d0"),
-                            QuestionText = "Are all posted work instructions, notes and drawing currently in use?"
-                        },
-                        new
-                        {
-                            QuestionId = new Guid("bfab9a5c-4e74-4eff-a6ed-7b39748378ad"),
-                            QuestionText = "Are workstations and walkways clear of unnecessary items and clutter?"
-                        },
-                        new
-                        {
-                            QuestionId = new Guid("eb2ef0b3-6af5-4d53-89d8-7b069ccb343c"),
-                            QuestionText = "Are occasionally used items stored separately?"
-                        });
                 });
 
             modelBuilder.Entity("Api.Domain.RefreshToken", b =>
