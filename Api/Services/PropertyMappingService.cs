@@ -12,13 +12,11 @@ namespace Api.Services
         // Container for all mappings
         private readonly IList<IPropertyMapping> _propertyMappings = new List<IPropertyMapping>();
 
-        // Create a case-insensitive dictionary.
-        // You can create 1:many mapping, e.g. "Name" (API call) -> "FirstName" & "LastName" (model)
+        // You can create one to many mapping, e.g. "Name" (request) -> "FirstName" & "LastName" (model)
         private readonly Dictionary<string, PropertyMappingValue> _auditPropertyMapping =
             new(StringComparer.OrdinalIgnoreCase)
             {
-                { "Author", new PropertyMappingValue(new List<string>() { "Author" }) },
-                { "Created", new PropertyMappingValue(new List<string>() { "Created" }) }
+                { "Author", new PropertyMappingValue(new List<string>() { "Author" }) }
             };
 
         public PropertyMappingService()
@@ -32,7 +30,7 @@ namespace Api.Services
 
             Dictionary<string, PropertyMappingValue> propertyMapping = GetPropertyMapping<TSource, TDestination>();
 
-            // "author asc, created desc" -> `["author asc", "created desc"]
+            // "author asc, created desc" -> ["author asc", "created desc"]
             string[] fieldsAfterSplit = fields.Split(',');
 
             foreach (string field in fieldsAfterSplit)
