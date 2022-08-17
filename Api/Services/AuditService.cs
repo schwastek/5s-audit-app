@@ -32,13 +32,14 @@ namespace Api.Services
             return audits;
         }
 
-        public async Task<PagedList<Audit>> GetAudits(AuditsUrlQueryParameters auditsResourceParameters)
+        public async Task<(IEnumerable<AuditDto> audits, MetaData metaData)> GetAudits(AuditsUrlQueryParameters auditsResourceParameters)
         {
             IQueryable<Audit> collection = _context.Audits
                 .Include(audit => audit.Answers)
                 .ThenInclude(answer => answer.Question)
                 .AsQueryable();
 
+            // Apply sorting
             bool hasOrderBy = !string.IsNullOrWhiteSpace(auditsResourceParameters.OrderBy);
 
             if (hasOrderBy)
@@ -54,7 +55,12 @@ namespace Api.Services
                 auditsResourceParameters.PageNumber,
                 auditsResourceParameters.PageSize);
 
-            return pagedItems;
+            // Mapping
+            var auditsDto = pagedItems
+                .Select(audit => _auditMapper.Map(audit))
+                .ToList();
+
+            return (audits: auditsDto, metaData: pagedItems.MetaData);
         }
 
         public bool AuditExists(Guid auditId)

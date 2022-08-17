@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +11,6 @@ using Api.ResourceParameters;
 using Api.Helpers;
 using Api.Extensions;
 using Microsoft.AspNetCore.Routing;
-using System.Linq;
 
 namespace Api.Controllers
 {
@@ -36,7 +34,7 @@ namespace Api.Controllers
 
         // GET: api/audits
         [HttpGet(Name = nameof(GetAudits))]
-        public async Task<ActionResult<IEnumerable<Audit>>> GetAudits([FromQuery] AuditsUrlQueryParameters queryParameters)
+        public async Task<IActionResult> GetAudits([FromQuery] AuditsUrlQueryParameters queryParameters)
         {
             if (!_propertyMappingService.ValidMappingExistsFor<AuditDto, Audit>
                 (queryParameters.OrderBy))
@@ -44,26 +42,20 @@ namespace Api.Controllers
                 return BadRequest();
             }
 
-            PagedList<Audit> audits = await _auditService.GetAudits(queryParameters);
+            var pagedResult = await _auditService.GetAudits(queryParameters);
 
             // Add pagination metadata
-            string previousPageLink = audits.HasPrevious ?
+            string previousPageLink = pagedResult.metaData.HasPrevious ?
                 CreateAuditsResourceUri(queryParameters, EResourceUriType.PreviousPage)
                 : null;
 
-            string nextPageLink = audits.HasNext ?
+            string nextPageLink = pagedResult.metaData.HasNext ?
                 CreateAuditsResourceUri(queryParameters, EResourceUriType.NextPage)
                 : null;
 
-            Response.AddPaginationHeader(audits.CurrentPage, audits.PageSize,
-                audits.TotalCount, audits.TotalPages, previousPageLink, nextPageLink);
+            Response.AddPaginationHeader(pagedResult.metaData, previousPageLink, nextPageLink);
 
-            // Mapping
-            IList<AuditDto> auditDtos = audits
-                .Select(audit => _auditMapper.Map(audit))
-                .ToList();
-
-            return Ok(auditDtos);
+            return Ok(pagedResult.audits);
         }
 
         // GET: api/Audits/5

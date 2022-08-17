@@ -8,21 +8,20 @@ namespace Api.Helpers
 {
     public class PagedList<T> : List<T>
     {
-        public int CurrentPage { get; private set; }
-        public int TotalPages { get; private set; }
-        public int PageSize { get; private set; }
-        public int TotalCount { get; private set; }
-        public bool HasPrevious => (CurrentPage > 1);
-        public bool HasNext => (CurrentPage < TotalPages);
+        public MetaData MetaData { get; set; }
 
         public PagedList(List<T> items, int count, int pageNumber, int pageSize)
         {
-            TotalCount = count;
-            PageSize = pageSize;
-            CurrentPage = pageNumber;
-            // If you have 51 reocrds in total, you get 6 pages in total,
-            // reserving an extra page for the remaining data.
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+            MetaData = new MetaData()
+            {
+                TotalCount = count,
+                PageSize = pageSize,
+                CurrentPage = pageNumber,
+                // If you have 51 reocrds in total, you get 6 pages in total,
+                // reserving an extra page for the remaining data.
+                TotalPages = (int)Math.Ceiling(count / (double)pageSize)
+            };
+
             AddRange(items);
         }
 
