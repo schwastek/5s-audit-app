@@ -45,7 +45,7 @@ namespace Api.Domain
             return number;
         }
 
-        public static double Calculate(IEnumerable<int> answers)
+        private static double Calculate(IEnumerable<int> answers)
         {
             bool isEmpty = !answers.Any();
             if (isEmpty) return 0;
@@ -54,6 +54,9 @@ namespace Api.Domain
             int totalPointsScored = answers.Sum();
             int maxPointsForAnswer = answers.Max();
             int totalPointsPossible = numberOfAnswers * maxPointsForAnswer;
+
+            // Prevent division by zero
+            if (totalPointsPossible == 0) return 0;
 
             double score = (double)totalPointsScored / (double)totalPointsPossible;
 
