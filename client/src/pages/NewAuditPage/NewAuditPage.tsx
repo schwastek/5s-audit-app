@@ -5,8 +5,38 @@ import { Questions } from '../../api/Questions';
 import { Audits } from '../../api/Audits';
 import { v4 as uuidv4 } from 'uuid';
 
-function generateInitialAnswers(questions) {
-  const answers = questions.map((question) => {
+type Question = {
+  questionId: string,
+  questionText: string
+};
+
+type Answer = {
+  answerId: string,
+  questionId: string,
+  answerText: string,
+  answerType: string
+};
+
+type AuditAction = {
+  actionId: string,
+  auditId: string,
+  description: string
+};
+
+type State = {
+  questions: Question[],
+  actions: AuditAction[],
+  error: Object,
+  status: string
+};
+
+type Action = {
+  type: string,
+  payload?: any
+};
+
+function generateInitialAnswers(questions: Question[]): Answer[] {
+  const answers = questions.map((question: Question) => {
     const answer = {
       answerId: uuidv4(),
       questionId: question.questionId,
@@ -20,14 +50,14 @@ function generateInitialAnswers(questions) {
   return answers;
 }
 
-const initialState = {
+const initialState: State = {
   questions: [],
   actions: [],
   error: {},
   status: 'idle'
 };
 
-function actionsReducer(state, action) {
+function actionsReducer(state: State, action: Action) {
   switch (action.type) {
     case 'FETCH_QUESTIONS_START': {
       return {
@@ -39,7 +69,7 @@ function actionsReducer(state, action) {
     case 'FETCH_QUESTIONS_SUCCESS': {
       return {
         ...state,
-        questions: action.questions,
+        questions: action.payload,
         status: 'success'
       };
     }
@@ -47,7 +77,7 @@ function actionsReducer(state, action) {
     case 'FETCH_QUESTIONS_ERROR': {
       return {
         ...state,
-        error: action.error,
+        error: action.payload,
         status: 'error'
       };
     }
@@ -69,13 +99,13 @@ function actionsReducer(state, action) {
     case 'SUBMIT_AUDIT_ERROR': {
       return {
         ...state,
-        error: action.error,
+        error: action.payload,
         status: 'error'
       };
     }
 
     case 'CREATE_ACTION': {
-      const actions = [...state.actions, action.action];
+      const actions = [...state.actions, action.payload];
 
       return {
         ...state,
@@ -85,7 +115,7 @@ function actionsReducer(state, action) {
     }
 
     case 'DELETE_ACTION': {
-      const actions = state.actions.filter(a => a.actionId !== action.actionId);
+      const actions = state.actions.filter(a => a.actionId !== action.payload);
 
       return {
         ...state,
@@ -102,7 +132,7 @@ function actionsReducer(state, action) {
 
 function NewAuditPage() {
   const [state, dispatch] = useReducer(actionsReducer, initialState);
-  const answers = useRef([]);
+  const answers = useRef<Answer[]>([]);
   const auditId = useRef(uuidv4());
   const selectedArea = useRef('assembly');
   const auditStartDate = useRef(new Date());
@@ -115,9 +145,9 @@ function NewAuditPage() {
 
       try {
         const questions = await Questions.list(controller);
-        dispatch({type: 'FETCH_QUESTIONS_SUCCESS', questions});
+        dispatch({type: 'FETCH_QUESTIONS_SUCCESS', payload: questions});
       } catch (error) {
-        dispatch({type: 'FETCH_QUESTIONS_ERROR', error});
+        dispatch({type: 'FETCH_QUESTIONS_ERROR', payload: error});
       }
     }
 
@@ -135,7 +165,7 @@ function NewAuditPage() {
     answers.current = generateInitialAnswers(state.questions);
   }, [state.questions]);
 
-  async function handleSubmitForm(event) {
+  async function handleSubmitForm() {
     dispatch({type: 'SUBMIT_AUDIT_START'});
 
     // Generate audit
@@ -154,11 +184,11 @@ function NewAuditPage() {
       await Audits.create(audit);
       dispatch({type: 'SUBMIT_AUDIT_SUCCESS'});
     } catch (error) {
-      dispatch({type: 'SUBMIT_AUDIT_ERROR', error});
+      dispatch({type: 'SUBMIT_AUDIT_ERROR', payload: error});
     }
   }
 
-  function handleRate(questionId, rate) {
+  function handleRate(questionId: string, rate: number) {
 
       // Generate answer
       const answer = {
@@ -174,11 +204,11 @@ function NewAuditPage() {
       else answers.current.push(answer);
   }
 
-  function handleAreaSelect(area) {
+  function handleAreaSelect(area: string) {
     selectedArea.current = area;
   }
 
-  function handleSubmitAction(description) {
+  function handleSubmitAction(description: string) {
     const actionId = uuidv4();
 
     const action = {
@@ -187,11 +217,11 @@ function NewAuditPage() {
       description: description
     };
 
-    dispatch({type: 'CREATE_ACTION', action});
+    dispatch({type: 'CREATE_ACTION', payload: action});
   }
 
-  function handleDeleteAction(actionId) {
-    dispatch({type: 'DELETE_ACTION', actionId});
+  function handleDeleteAction(actionId: string) {
+    dispatch({type: 'DELETE_ACTION', payload: actionId});
   }
 
   if (state.status === 'idle' || state.status === 'loading') {
