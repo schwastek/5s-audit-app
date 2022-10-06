@@ -1,20 +1,29 @@
 import React from 'react';
-import { classNames } from '../utilities/classNames';
+import { classNames } from '../../utilities/classNames';
+import { StarProps } from './interfaces';
 
-function getLabelText(i) {
+function getLabelText(i: number) {
   return `${i} Star${i !== 1 ? 's' : ''}`;
 }
 
-function Star(props) {
-  const {
-    name,
-    value,
-    isFilled,
-    isChecked,
-    isDisabled,
-    onChange
-  } = props;
+function getTestId(value: number) {
+  if (process.env.NODE_ENV === 'test') {
+    return {
+      'data-testid': `rating-star-${value}`
+    };
+  }
 
+  return {};
+}
+
+function Star({
+  name,
+  value,
+  isFilled,
+  isChecked,
+  isDisabled,
+  onRate
+}: StarProps) {
   const labelText = getLabelText(value);
   const id = `${name}-${value}`;
 
@@ -29,7 +38,7 @@ function Star(props) {
   ]);
 
   return (
-    <>
+    <div {...getTestId(value)}>
       <label htmlFor={id}>
         <span className={classes}>
           <svg className="rating-icon-svg" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
@@ -38,8 +47,8 @@ function Star(props) {
         </span>
         <span className="visually-hidden">{labelText}</span>
       </label>
-      <input type="radio" value={value} id={id} name={name} className="visually-hidden" onChange={onChange} checked={isChecked} disabled={isDisabled}></input>
-    </>
+      <input type="radio" value={value} id={id} name={name} className="visually-hidden" onChange={onRate} checked={isChecked} disabled={isDisabled}></input>
+    </div>
   );
 }
 
