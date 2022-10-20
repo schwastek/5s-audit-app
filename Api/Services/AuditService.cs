@@ -16,20 +16,24 @@ namespace Api.Services
     {
         private readonly LeanAuditorContext _context;
         private readonly AuditMapper _auditMapper;
+        private readonly AuditListMapper _auditListMapper;
         private readonly IPropertyMappingService _propertyMappingService;
 
-        public AuditService(LeanAuditorContext context, AuditMapper auditMapper, IPropertyMappingService propertyMappingService)
+        public AuditService(LeanAuditorContext context, AuditMapper auditMapper, AuditListMapper auditListMapper, 
+            IPropertyMappingService propertyMappingService)
         {
             _context = context;
             _auditMapper = auditMapper;
+            _auditListMapper = auditListMapper;
             _propertyMappingService = propertyMappingService;
         }
 
-        public async Task<(IEnumerable<AuditDto> audits, MetaData metaData)> GetAudits(AuditsUrlQueryParameters auditsResourceParameters)
+        public async Task<(IEnumerable<AuditListSingleDto> audits, MetaData metaData)> GetAudits(AuditsUrlQueryParameters auditsResourceParameters)
         {
             IQueryable<Audit> collection = _context.Audits
                 .Include(audit => audit.Answers)
                 .ThenInclude(answer => answer.Question)
+                .AsNoTracking()
                 .AsQueryable();
 
             // Apply sorting
@@ -49,9 +53,7 @@ namespace Api.Services
                 auditsResourceParameters.PageSize);
 
             // Mapping
-            var auditsDto = pagedItems
-                .Select(audit => _auditMapper.Map(audit))
-                .ToList();
+            var auditsDto = pagedItems.Select(audit => _auditListMapper.Map(audit));
 
             return (audits: auditsDto, metaData: pagedItems.MetaData);
         }

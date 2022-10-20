@@ -34,6 +34,7 @@ namespace Api
             });
             services.AddDbContext<LeanAuditorContext>();
             services.AddSingleton<AuditMapper, AuditMapper>();
+            services.AddSingleton<AuditListMapper, AuditListMapper>();
             services.AddSingleton<AuditActionMapper, AuditActionMapper>();
             services.AddSingleton<AnswerMapper, AnswerMapper>();
             services.AddSingleton<QuestionMapper, QuestionMapper>();
