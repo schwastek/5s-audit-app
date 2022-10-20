@@ -25,13 +25,6 @@ namespace Api.Services
             _propertyMappingService = propertyMappingService;
         }
 
-        public async Task<IEnumerable<Audit>> GetAudits()
-        {
-            IEnumerable<Audit> audits = await _context.Audits.ToListAsync();
-
-            return audits;
-        }
-
         public async Task<(IEnumerable<AuditDto> audits, MetaData metaData)> GetAudits(AuditsUrlQueryParameters auditsResourceParameters)
         {
             IQueryable<Audit> collection = _context.Audits
