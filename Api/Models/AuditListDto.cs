@@ -2,7 +2,7 @@
 
 namespace Api.Models
 {
-    public class AuditListSingleDto
+    public class AuditListDto
     {
         public Guid AuditId { get; set; }
         public string Author { get; set; }

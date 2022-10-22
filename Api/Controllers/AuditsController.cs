@@ -20,14 +20,14 @@ namespace Api.Controllers
     {
         private readonly LeanAuditorContext _context;
         private readonly AuditService _auditService;
-        private readonly AuditMapper _auditMapper;
+        private readonly IMappingService _mapper;
         private readonly IPropertyMappingService _propertyMappingService;
 
-        public AuditsController(LeanAuditorContext context, AuditMapper auditMapper,
+        public AuditsController(LeanAuditorContext context, IMappingService mapper,
             AuditService auditService, IPropertyMappingService propertyMappingService)
         {
             _context = context;
-            _auditMapper = auditMapper;
+            _mapper = mapper;
             _auditService = auditService;
             _propertyMappingService = propertyMappingService;
         }
@@ -74,7 +74,7 @@ namespace Api.Controllers
                 return NotFound();
             }
 
-            AuditDto response = _auditMapper.Map(entity);
+            AuditDto response = _mapper.Map<Audit, AuditDto>(entity);
 
             return Ok(response);
         }
@@ -84,7 +84,7 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Audit>> PostAudit(AuditForCreationDto request)
         {
-            Audit entity = _auditMapper.Map(request);
+            Audit entity = _mapper.Map<AuditForCreationDto, Audit>(request);
 
             _context.Audits.Add(entity);
             await _context.SaveChangesAsync();

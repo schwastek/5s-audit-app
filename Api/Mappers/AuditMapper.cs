@@ -5,25 +5,24 @@ using System.Linq;
 
 namespace Api.Mappers
 {
-    public class AuditMapper
+    public class AuditMapper : 
+        IMapper<AuditForCreationDto, Audit>, IMapper<Audit, AuditDto>, IMapper<Audit, AuditListDto>
     {
-        private readonly AnswerMapper _answerMapper;
-        private readonly AuditActionMapper _auditActionMapper;
+        private readonly IMappingService _mapper;
 
-        public AuditMapper(AnswerMapper answerMapper, AuditActionMapper auditActionMapper)
+        public AuditMapper(IMappingService mapper)
         {
-            _answerMapper = answerMapper;
-            _auditActionMapper = auditActionMapper;
+            _mapper = mapper;
         }
 
         public Audit Map(AuditForCreationDto request)
         {
-            ICollection<Answer> answers = request.Answers
-                .Select(answer => _answerMapper.Map(answer))
+            var answers = request.Answers
+                .Select(answer => _mapper.Map<AnswerForCreationDto, Answer>(answer))
                 .ToList();
 
-            ICollection<AuditAction> actions = request.Actions
-                .Select(a => _auditActionMapper.Map(a))
+            var actions = request.Actions
+                .Select(a => _mapper.Map<AuditActionForCreationDto, AuditAction>(a))
                 .ToList();
 
             Audit audit = new()
@@ -42,12 +41,12 @@ namespace Api.Mappers
 
         public AuditDto Map(Audit audit)
         {
-            ICollection<AnswerDto> answers = audit.Answers
-                .Select(answer => _answerMapper.Map(answer))
+            var answers = audit.Answers
+                .Select(answer => _mapper.Map<Answer, AnswerDto>(answer))
                 .ToList();
 
-            ICollection<AuditActionDto> actions = audit.Actions
-                .Select(a => _auditActionMapper.Map(a))
+            var actions = audit.Actions
+                .Select(a => _mapper.Map<AuditAction, AuditActionDto>(a))
                 .ToList();
 
             AuditDto auditDto = new()
@@ -60,6 +59,21 @@ namespace Api.Mappers
                 Score = audit.CalculateScore(),
                 Answers = answers,
                 Actions = actions
+            };
+
+            return auditDto;
+        }
+
+        AuditListDto IMapper<Audit, AuditListDto>.Map(Audit audit)
+        {
+            var auditDto = new AuditListDto()
+            {
+                AuditId = audit.AuditId,
+                Area = audit.Area,
+                Author = audit.Author,
+                StartDate = audit.StartDate,
+                EndDate = audit.EndDate,
+                Score = audit.CalculateScore()
             };
 
             return auditDto;

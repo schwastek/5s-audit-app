@@ -3,13 +3,13 @@ using Api.Models;
 
 namespace Api.Mappers
 {
-    public class AnswerMapper
+    public class AnswerMapper : IMapper<AnswerForCreationDto, Answer>, IMapper<Answer, AnswerDto>
     {
-        private readonly QuestionMapper _questionMapper;
+        private readonly IMappingService _mapper;
 
-        public AnswerMapper(QuestionMapper questionMapper)
+        public AnswerMapper(IMappingService mapper)
         {
-            _questionMapper = questionMapper;
+            _mapper = mapper;
         }
 
         public Answer Map(AnswerForCreationDto answerDto)
@@ -27,7 +27,7 @@ namespace Api.Mappers
 
         public AnswerDto Map(Answer answer)
         {
-            QuestionDto question = _questionMapper.Map(answer.Question);
+            QuestionDto question = _mapper.Map<Question, QuestionDto>(answer.Question);
 
             AnswerDto answerDto = new()
             {

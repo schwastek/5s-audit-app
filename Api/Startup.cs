@@ -1,6 +1,8 @@
 using Api.DbContexts;
+using Api.Domain;
 using Api.Extensions;
 using Api.Mappers;
+using Api.Models;
 using Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -33,11 +35,26 @@ namespace Api
                 opt.Filters.Add(new AuthorizeFilter(policy));
             });
             services.AddDbContext<LeanAuditorContext>();
-            services.AddSingleton<AuditMapper, AuditMapper>();
-            services.AddSingleton<AuditListMapper, AuditListMapper>();
-            services.AddSingleton<AuditActionMapper, AuditActionMapper>();
-            services.AddSingleton<AnswerMapper, AnswerMapper>();
-            services.AddSingleton<QuestionMapper, QuestionMapper>();
+
+            // Mappers - Audits
+            services.AddSingleton<IMapper<Audit, AuditDto>, AuditMapper>();
+            services.AddSingleton<IMapper<AuditForCreationDto, Audit>, AuditMapper>();
+            services.AddSingleton<IMapper<Audit, AuditListDto>, AuditMapper>();
+
+            // Mappers - Questions
+            services.AddSingleton<IMapper<Question, QuestionDto>, QuestionMapper>();
+
+            // Mappers - Answers
+            services.AddSingleton<IMapper<Answer, AnswerDto>, AnswerMapper>();
+            services.AddSingleton<IMapper<AnswerForCreationDto, Answer>, AnswerMapper>();
+            
+            // Mappers - Actions
+            services.AddSingleton<IMapper<AuditAction, AuditActionDto>, AuditActionMapper>();
+            services.AddSingleton<IMapper<AuditActionForCreationDto, AuditAction>, AuditActionMapper>();
+
+            // Mappers - Universal Service
+            services.AddSingleton<IMappingService, ServiceLocatorMappingService>();
+
             services.AddScoped<AuditService, AuditService>();
             services.AddTransient<IPropertyMappingService, PropertyMappingService>();
 

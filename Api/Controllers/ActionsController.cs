@@ -16,9 +16,9 @@ namespace Api.Controllers
     {
         private readonly LeanAuditorContext _context;
         private readonly AuditService _auditService;
-        private readonly AuditActionMapper _mapper;
+        private readonly IMappingService _mapper;
 
-        public ActionsController(LeanAuditorContext context, AuditService auditService, AuditActionMapper mapper)
+        public ActionsController(LeanAuditorContext context, AuditService auditService, IMappingService mapper)
         {
             _context = context;
             _auditService = auditService;
@@ -35,7 +35,7 @@ namespace Api.Controllers
             }
 
             // Map
-            AuditAction auditAction = _mapper.Map(auditActionDto);
+            AuditAction auditAction = _mapper.Map<AuditActionForCreationDto, AuditAction>(auditActionDto);
 
             // Add to DB
             _context.AuditActions.Add(auditAction);

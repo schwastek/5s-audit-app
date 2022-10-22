@@ -3,7 +3,7 @@ using Api.Models;
 
 namespace Api.Mappers
 {
-    public class QuestionMapper
+    public class QuestionMapper : IMapper<Question, QuestionDto>
     {
         public QuestionDto Map(Question question)
         {

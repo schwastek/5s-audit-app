@@ -3,7 +3,7 @@ using Api.Models;
 
 namespace Api.Mappers
 {
-    public class AuditActionMapper
+    public class AuditActionMapper : IMapper<AuditActionForCreationDto, AuditAction>, IMapper<AuditAction, AuditActionDto>
     {
         public AuditAction Map(AuditActionForCreationDto auditActionDto)
         {
