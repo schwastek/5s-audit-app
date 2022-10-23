@@ -1,5 +1,6 @@
 using Api.DbContexts;
 using Api.Domain;
+using Api.Options;
 using Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -23,7 +24,8 @@ namespace Api.Extensions
                 .AddEntityFrameworkStores<LeanAuditorContext>()
                 .AddSignInManager<SignInManager<User>>();
 
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
+            var jwtOptions = config.GetSection(JwtOptions.Section).Get<JwtOptions>();
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.TokenKey));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

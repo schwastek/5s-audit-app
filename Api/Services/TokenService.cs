@@ -1,24 +1,23 @@
 ﻿using Api.Domain;
-using Microsoft.Extensions.Configuration;
+using Api.Options;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Api.Services
 {
     public class TokenService
     {
-        private readonly IConfiguration _config;
+        private readonly JwtOptions _config;
 
-        public TokenService(IConfiguration config)
+        public TokenService(IOptions<JwtOptions> config)
         {
-            _config = config;
+            _config = config.Value;
         }
 
         public string CreateToken(User user)
@@ -30,7 +29,7 @@ namespace Api.Services
                 new Claim(ClaimTypes.Email, user.Email),
             };
 
-            SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(_config["TokenKey"]));
+            SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(_config.TokenKey));
             SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor

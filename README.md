@@ -72,6 +72,13 @@ git clone https://github.com/schwastek/5s-audit-app.git
 cd client
 npm install
 ```
+3. Set `secrets.json` file for API (see [Secret Manager](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) tool). For example:
+```json
+{
+  "ConnectionStrings:DefaultConnection": "Data Source=audits.db",
+  "Jwt:TokenKey": "My secret key to sign JWT"
+}
+```
 
 ### Running application
 

@@ -4,6 +4,7 @@ using Api.Extensions;
 using Api.Mappers;
 using Api.Models;
 using Api.Services;
+using Api.Options;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -57,6 +58,12 @@ namespace Api
 
             services.AddScoped<AuditService, AuditService>();
             services.AddTransient<IPropertyMappingService, PropertyMappingService>();
+
+            // Options pattern
+            services.Configure<ConnectionStringOptions>(Configuration.GetSection(
+                                        ConnectionStringOptions.Section));
+            services.Configure<JwtOptions>(Configuration.GetSection(
+                                        JwtOptions.Section));
 
             services.AddIdentityServices(Configuration);
 
