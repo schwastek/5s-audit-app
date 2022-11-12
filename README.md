@@ -27,7 +27,7 @@ Make sure you have installed the following prerequisites:
 
 * [VS Code](https://code.visualstudio.com/) _(optional but preferred)_
 
-* [SQLiteStudio](https://sqlitestudio.pl/) _(or other software to browse SQLite database `Api/audits.db`)_
+* [SQLiteStudio](https://sqlitestudio.pl/) _(or other software to browse SQLite database)_
 
 * [Git](https://git-scm.com/downloads)
 
@@ -75,7 +75,7 @@ npm install
 3. Set `secrets.json` file for API (see [Secret Manager](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) tool). For example:
 ```json
 {
-  "ConnectionStrings:DefaultConnection": "Data Source=audits.db",
+  "ConnectionStrings:DefaultConnection": "audits.db",
   "Jwt:TokenKey": "My secret key to sign JWT"
 }
 ```
@@ -161,6 +161,17 @@ Browse audits
 ### API
 
 Please refer to the [API docs](./docs/API.md).
+
+### Database
+
+SQLite database file is created in the special "local" folder for your platform.  
+Use Run command below (`WIN+R`) to open the "local" folder on Windows: `C:\Users\{Username}\AppData\Local`.
+
+```
+%LocalAppData%
+```
+
+Database is seeded in `Development` mode.
 
 ### Common commands
 
