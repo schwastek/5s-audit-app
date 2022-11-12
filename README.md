@@ -79,6 +79,17 @@ npm install
   "Jwt:TokenKey": "My secret key to sign JWT"
 }
 ```
+Secret Manager works only in `Development` mode. For `Staging` mode (tests), you need `appsettings.Staging.json` in the `Api` project:
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "audits-tests.db"
+  },
+  "Jwt": {
+    "TokenKey": "My secret key to sign jwt"
+  }
+}
+```
 
 ### Running application
 

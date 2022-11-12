@@ -2,7 +2,7 @@ using Api.Domain;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Api.Tests
+namespace Api.UnitTests
 {
     public class AuditScoreCalculationTest
     {
