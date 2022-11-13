@@ -8,3 +8,10 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
+
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# Node.js
+node_modules/
