@@ -1,10 +1,10 @@
 ﻿using Api.DbContexts;
 using Api.Domain;
+using Api.Exceptions;
 using Api.Mappers;
 using Api.Models;
 using Api.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
@@ -31,7 +31,7 @@ namespace Api.Controllers
         {
             if (!_auditService.AuditExists(auditActionDto.AuditId))
             {
-                return NotFound();
+                throw new AuditNotFoundException(auditActionDto.AuditId);
             }
 
             // Map
@@ -52,7 +52,7 @@ namespace Api.Controllers
 
             if (auditAction == null)
             {
-                return NotFound(new { Message = $"Action with ID {actionId} does not exist." });
+                throw new ActionNotFoundException(actionId);
             }
 
             _context.Remove(auditAction);
@@ -70,7 +70,7 @@ namespace Api.Controllers
 
             if (auditAction == null)
             {
-                return NotFound(new { Message = $"Action with ID {actionId} does not exist." });
+                throw new ActionNotFoundException(actionId);
             }
 
             auditAction.Description = auditActionDto.Description ?? auditAction.Description;

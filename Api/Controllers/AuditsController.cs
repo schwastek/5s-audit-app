@@ -11,6 +11,7 @@ using Api.ResourceParameters;
 using Api.Helpers;
 using Api.Extensions;
 using Microsoft.AspNetCore.Routing;
+using Api.Exceptions;
 
 namespace Api.Controllers
 {
@@ -71,7 +72,7 @@ namespace Api.Controllers
 
             if (entity == null)
             {
-                return NotFound();
+                throw new AuditNotFoundException(id);
             }
 
             AuditDto response = _mapper.Map<Audit, AuditDto>(entity);

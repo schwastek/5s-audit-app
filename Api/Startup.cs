@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using Api.Exceptions;
 
 namespace Api
 {
@@ -28,7 +29,6 @@ namespace Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers(opt =>
             {
                 // Require authenticated users. Add a default AuthorizeFilter to all endpoints.
@@ -48,7 +48,7 @@ namespace Api
             // Mappers - Answers
             services.AddSingleton<IMapper<Answer, AnswerDto>, AnswerMapper>();
             services.AddSingleton<IMapper<AnswerForCreationDto, Answer>, AnswerMapper>();
-            
+
             // Mappers - Actions
             services.AddSingleton<IMapper<AuditAction, AuditActionDto>, AuditActionMapper>();
             services.AddSingleton<IMapper<AuditActionForCreationDto, AuditAction>, AuditActionMapper>();
@@ -94,10 +94,9 @@ namespace Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            } else
+            app.UseMiddleware<ExceptionMiddleware>();
+
+            if (env.IsProduction())
             {
                 // Set Strict-Transport-Security response header
                 app.UseHsts();
