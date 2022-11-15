@@ -30,11 +30,7 @@ namespace Api.Exceptions
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = GetStatusCode(error);
 
-            var responseBody = new ErrorDetails()
-            {
-                StatusCode = context.Response.StatusCode,
-                Message = error.Message,
-            }.ToString();
+            var responseBody = new ErrorDetails(context.Response.StatusCode, error.Message).ToString();
 
             await context.Response.WriteAsync(responseBody);
         }

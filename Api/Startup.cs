@@ -96,6 +96,9 @@ namespace Api
         {
             app.UseMiddleware<ExceptionMiddleware>();
 
+            // Handle unexisting endpoints (this middleware doesn't catch exceptions)
+            app.UseStatusCodePagesWithReExecute("/errors/{0}");
+
             if (env.IsProduction())
             {
                 // Set Strict-Transport-Security response header
