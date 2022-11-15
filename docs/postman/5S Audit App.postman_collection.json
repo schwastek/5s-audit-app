@@ -364,6 +364,24 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "GET nonexistent endpoint",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/pathThatDoesNotExist",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"pathThatDoesNotExist"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
