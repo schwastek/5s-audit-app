@@ -94,6 +94,8 @@ namespace Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSecurityHeaders();
+
             app.UseMiddleware<ExceptionMiddleware>();
 
             // Handle unexisting endpoints (this middleware doesn't catch exceptions)
@@ -104,8 +106,6 @@ namespace Api
                 // Set Strict-Transport-Security response header
                 app.UseHsts();
             }
-
-            app.UseSecurityHeaders();
 
             app.UseHttpsRedirection();
 
