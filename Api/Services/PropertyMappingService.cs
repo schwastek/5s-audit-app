@@ -1,4 +1,5 @@
 ﻿using Api.Domain;
+using Api.Exceptions;
 using Api.Models;
 using System;
 using System.Collections.Generic;
@@ -64,8 +65,8 @@ namespace Api.Services
                 return matchingMapping.First()._mappingDictionary;
             }
 
-            throw new Exception($"Cannot find exact property mapping instance " +
-                $"for <{typeof(TSource)},{typeof(TDestination)}");
+            throw new Exception($"Cannot find property mapping " +
+                $"between {typeof(TSource)} and {typeof(TDestination)}");
         }
     }
 }

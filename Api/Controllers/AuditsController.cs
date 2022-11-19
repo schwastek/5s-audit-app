@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Api.DbContexts;
 using Api.Models;
-using Api.Domain;
-using Api.Mappers;
-using Api.Services;
 using Api.ResourceParameters;
 using Api.Helpers;
 using Api.Extensions;
 using Microsoft.AspNetCore.Routing;
-using Api.Exceptions;
+using Api.Queries;
+using MediatR;
 
 namespace Api.Controllers
 {
@@ -19,31 +15,18 @@ namespace Api.Controllers
     [ApiController]
     public class AuditsController : ControllerBase
     {
-        private readonly LeanAuditorContext _context;
-        private readonly AuditService _auditService;
-        private readonly IMappingService _mapper;
-        private readonly IPropertyMappingService _propertyMappingService;
+        private readonly ISender sender;
 
-        public AuditsController(LeanAuditorContext context, IMappingService mapper,
-            AuditService auditService, IPropertyMappingService propertyMappingService)
+        public AuditsController(ISender sender)
         {
-            _context = context;
-            _mapper = mapper;
-            _auditService = auditService;
-            _propertyMappingService = propertyMappingService;
+            this.sender = sender;
         }
 
         // GET: api/audits
         [HttpGet(Name = nameof(GetAudits))]
         public async Task<IActionResult> GetAudits([FromQuery] AuditsUrlQueryParameters queryParameters)
         {
-            if (!_propertyMappingService.ValidMappingExistsFor<AuditDto, Audit>
-                (queryParameters.OrderBy))
-            {
-                return BadRequest();
-            }
-
-            var pagedResult = await _auditService.GetAudits(queryParameters);
+            var pagedResult = await sender.Send(new GetAuditsQuery(queryParameters));
 
             // Add pagination metadata
             string previousPageLink = pagedResult.metaData.HasPrevious ?
@@ -61,38 +44,23 @@ namespace Api.Controllers
 
         // GET: api/Audits/5
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<AuditDto>> GetAudit(Guid id)
+        public async Task<IActionResult> GetAudit([FromRoute] Guid id)
         {
-            Audit entity = await _context.Audits
-                .Include(audit => audit.Actions)
-                .Include(audit => audit.Answers)
-                .ThenInclude(answer => answer.Question)
-                .AsNoTracking()
-                .SingleOrDefaultAsync(audit => audit.AuditId.Equals(id));
+            AuditDto auditDto = await sender.Send(new GetAuditQuery(id));
 
-            if (entity == null)
-            {
-                throw new AuditNotFoundException(id);
-            }
-
-            AuditDto response = _mapper.Map<Audit, AuditDto>(entity);
-
-            return Ok(response);
+            return Ok(auditDto);
         }
 
         // POST: api/Audits
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Audit>> PostAudit(AuditForCreationDto request)
+        public async Task<IActionResult> PostAudit([FromBody] AuditForCreationDto audit)
         {
-            Audit entity = _mapper.Map<AuditForCreationDto, Audit>(request);
-
-            _context.Audits.Add(entity);
-            await _context.SaveChangesAsync();
+            AuditDto auditDto = await sender.Send(new CreateAuditCommand(audit));
 
             // Adds a Location header to the response.
             // The Location header specifies the URI of the newly created item.
-            return CreatedAtAction("GetAudit", new { id = entity.AuditId }, entity);
+            return CreatedAtAction(nameof(GetAudit), new { id = auditDto.AuditId }, auditDto);
         }
 
         private string CreateAuditsResourceUri(AuditsUrlQueryParameters auditsResourceParameters,

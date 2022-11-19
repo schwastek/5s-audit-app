@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using Api.Exceptions;
+using MediatR;
 
 namespace Api
 {
@@ -36,6 +37,9 @@ namespace Api
                 opt.Filters.Add(new AuthorizeFilter(policy));
             });
             services.AddDbContext<LeanAuditorContext>();
+
+            // Register MediatR services
+            services.AddMediatR(typeof(Startup));
 
             // Mappers - Audits
             services.AddSingleton<IMapper<Audit, AuditDto>, AuditMapper>();

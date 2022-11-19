@@ -1,9 +1,8 @@
-﻿using Api.DbContexts;
+﻿using Api.Commands;
 using Api.Domain;
-using Api.Exceptions;
-using Api.Mappers;
 using Api.Models;
-using Api.Services;
+using Api.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -14,69 +13,37 @@ namespace Api.Controllers
     [ApiController]
     public class ActionsController : ControllerBase
     {
-        private readonly LeanAuditorContext _context;
-        private readonly AuditService _auditService;
-        private readonly IMappingService _mapper;
+        private readonly ISender sender;
 
-        public ActionsController(LeanAuditorContext context, AuditService auditService, IMappingService mapper)
+        public ActionsController(ISender sender)
         {
-            _context = context;
-            _auditService = auditService;
-            _mapper = mapper;
+            this.sender = sender;
         }
 
         // POST: api/actions
         [HttpPost]
-        public async Task<ActionResult<AuditAction>> CreateAction([FromBody] AuditActionForCreationDto auditActionDto)
+        public async Task<IActionResult> CreateAction([FromBody] AuditActionForCreationDto auditAction)
         {
-            if (!_auditService.AuditExists(auditActionDto.AuditId))
-            {
-                throw new AuditNotFoundException(auditActionDto.AuditId);
-            }
+            AuditActionDto createdAuditAction = await sender.Send(new CreateAuditActionCommand(auditAction));
 
-            // Map
-            AuditAction auditAction = _mapper.Map<AuditActionForCreationDto, AuditAction>(auditActionDto);
-
-            // Add to DB
-            _context.AuditActions.Add(auditAction);
-            await _context.SaveChangesAsync();
-
-            return Ok(auditAction);
+            return Ok(createdAuditAction);
         }
 
         // DELETE: api/actions/3
         [HttpDelete("{actionId:guid}")]
-        public async Task<ActionResult<AuditAction>> DeleteAction([FromRoute] Guid actionId)
+        public async Task<IActionResult> DeleteAction([FromRoute] Guid actionId)
         {
-            AuditAction auditAction = await _context.AuditActions.FindAsync(actionId);
-
-            if (auditAction == null)
-            {
-                throw new ActionNotFoundException(actionId);
-            }
-
-            _context.Remove(auditAction);
-            await _context.SaveChangesAsync();
+            await sender.Send(new DeleteAuditActionCommand(actionId));
 
             return NoContent();
         }
 
         // PUT: api/actions/3
         [HttpPut("{actionId:guid}")]
-        public async Task<ActionResult<AuditAction>> UpdateAction([FromRoute] Guid actionId,
+        public async Task<IActionResult> UpdateAction([FromRoute] Guid actionId,
             [FromBody] AuditActionForUpdateDto auditActionDto)
         {
-            AuditAction auditAction = await _context.AuditActions.FindAsync(actionId);
-
-            if (auditAction == null)
-            {
-                throw new ActionNotFoundException(actionId);
-            }
-
-            auditAction.Description = auditActionDto.Description ?? auditAction.Description;
-            auditAction.IsComplete = auditActionDto.IsComplete;
-
-            await _context.SaveChangesAsync();
+            await sender.Send(new UpdateAuditActionCommand(actionId, auditActionDto));
 
             return NoContent();
         }

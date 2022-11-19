@@ -41,6 +41,8 @@ namespace Api.Exceptions
             {
                 case NotFoundException:
                     return StatusCodes.Status404NotFound;
+                case BadRequestException:
+                    return StatusCodes.Status400BadRequest;
                 default:
                     return StatusCodes.Status500InternalServerError;
             }
