@@ -203,8 +203,8 @@ dotnet ef database update
 - [ ] Registration
 - [ ] Action comments
 - [ ] Image upload
-- [ ] Swagger (OpenAPI) documentation
-- [ ] Unit / Integration tests
+- [x] Swagger (OpenAPI) documentation
+- [x] Unit / Integration tests
 - [ ] TypeScript
 - [ ] Cache
 

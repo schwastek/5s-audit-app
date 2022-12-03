@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Net.Mime;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -15,6 +16,7 @@ namespace Api.Controllers
 {
     [ApiController]
     [Route("api/account")]
+    [Produces(MediaTypeNames.Application.Json)]
     public class AccountController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
@@ -29,8 +31,15 @@ namespace Api.Controllers
             _tokenService = tokenService;
         }
 
+        /// <summary>
+        /// Returns access token
+        /// </summary>
+        /// <param name="loginDto"></param>
+        /// <returns>User information with access token</returns>
+        /// <response code="200">User is logged in</response>
         [AllowAnonymous]
         [HttpPost("login")]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
             User user = await _userManager.FindByEmailAsync(loginDto.Email);
@@ -42,14 +51,25 @@ namespace Api.Controllers
             if (result.Succeeded)
             {
                 await SetRefreshToken(user);
-                return CreateUserObject(user);
+                UserDto userDto = CreateUserObject(user);
+
+                return Ok(userDto);
             }
 
             return Unauthorized();
         }
 
+        /// <summary>
+        /// Registers new user
+        /// </summary>
+        /// <param name="registerDto"></param>
+        /// <returns>New user information with access token</returns>
+        /// <response code="200">New user is registered</response>
+        /// <response code="400">Validation error</response>
         [AllowAnonymous]
         [HttpPost("register")]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
             if (await _userManager.Users.AnyAsync(x => x.Email == registerDto.Email))
@@ -75,22 +95,37 @@ namespace Api.Controllers
             if (result.Succeeded)
             {
                 await SetRefreshToken(user);
-                return CreateUserObject(user);
+                UserDto userDto = CreateUserObject(user);
+
+                return Ok(userDto);
             }
 
             return BadRequest("Problem registering user");
         }
 
+        /// <summary>
+        /// Gets user information
+        /// </summary>
+        /// <returns>User information</returns>
+        /// <response code="200">User information</response>
         [HttpGet]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             User user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
             await SetRefreshToken(user);
+            UserDto userDto = CreateUserObject(user);
 
-            return CreateUserObject(user);
+            return Ok(userDto);
         }
 
+        /// <summary>
+        /// Refreshes access token
+        /// </summary>
+        /// <returns>User information with new access token</returns>
+        /// <response code="200">User information with new access token</response>
         [HttpPost("refreshToken")]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
         public async Task<ActionResult<UserDto>> RefreshToken()
         {
             var refreshToken = Request.Cookies["refreshToken"];
@@ -108,7 +143,9 @@ namespace Api.Controllers
             }
 
             // Generate new JWT
-            return CreateUserObject(user);
+            UserDto userDto = CreateUserObject(user);
+
+            return Ok(userDto);
         }
 
         private async Task SetRefreshToken(User user)

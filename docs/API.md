@@ -30,3 +30,19 @@ For testing API, you can use [Postman](https://www.postman.com/downloads/) and i
 Use **Login user successful** request to authenticate yourself before using protected API resources (e.g. creating audits).
 
 Some API requests require token in the `Authorization` header. Token is set automatically by Postman (using environment variables) when you send request named **Login user successful**.
+
+## Swagger
+
+**Swagger UI** is available at https://localhost:5000 after [running the application](/README.md#running-application).
+
+![Swagger UI](./img/swagger.png)
+
+### Authentication
+
+To execute protected endpoints you need to authenticate yourself first.
+
+Execute `/api/account/login` endpoint to obtain the access token.
+
+Then click **Authorize** button and paste the access token in the following format: `Bearer xxxxxxxx.yyyyy.zzzzz`.
+
+![Swagger Authentication](./img/swagger-authorization.png)

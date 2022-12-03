@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using Api.Exceptions;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Api
 {
@@ -37,6 +38,9 @@ namespace Api
                 opt.Filters.Add(new AuthorizeFilter(policy));
             });
             services.AddDbContext<LeanAuditorContext>();
+
+            // Register the Swagger generator
+            services.ConfigureSwagger();
 
             // Register MediatR services
             services.AddMediatR(typeof(Startup));
@@ -112,6 +116,18 @@ namespace Api
             }
 
             app.UseHttpsRedirection();
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger - ui(HTML, JS, CSS, etc.)
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+
+                // Serve UI at `localhost:port` instead of `localhost:port/swagger`
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseRouting();
 

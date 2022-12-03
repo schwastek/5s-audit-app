@@ -2,7 +2,10 @@ namespace Api.Models
 {
     public class LoginDto
     {
+        /// <example>john@test.com</example>
         public string Email { get; set; }
+        
+        /// <example>Pa$$w0rd</example>
         public string Password { get; set; }
     }
 }
