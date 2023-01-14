@@ -2,25 +2,24 @@
 using System;
 using System.Linq;
 
-namespace Api.Services
+namespace Api.Services;
+
+public class AuditService
 {
-    public class AuditService
+    private readonly LeanAuditorContext context;
+
+    public AuditService(LeanAuditorContext context)
     {
-        private readonly LeanAuditorContext context;
+        this.context = context;
+    }
 
-        public AuditService(LeanAuditorContext context)
+    public bool AuditExists(Guid auditId)
+    {
+        if (auditId == Guid.Empty)
         {
-            this.context = context;
+            throw new ArgumentNullException(nameof(auditId));
         }
 
-        public bool AuditExists(Guid auditId)
-        {
-            if (auditId == Guid.Empty)
-            {
-                throw new ArgumentNullException(nameof(auditId));
-            }
-
-            return context.Audits.Any(a => a.AuditId == auditId);
-        }
+        return context.Audits.Any(a => a.AuditId == auditId);
     }
 }

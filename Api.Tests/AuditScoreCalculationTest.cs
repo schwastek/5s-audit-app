@@ -2,92 +2,91 @@ using Api.Domain;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Api.UnitTests
+namespace Api.UnitTests;
+
+public class AuditScoreCalculationTest
 {
-    public class AuditScoreCalculationTest
+    [Fact]
+    public void Score_ShouldBe50()
     {
-        [Fact]
-        public void Score_ShouldBe50()
+        // Arrange
+        var answers = new List<Answer>
         {
-            // Arrange
-            var answers = new List<Answer>
+            new Answer
             {
-                new Answer
-                {
-                    AnswerText = "10"
-                },
-                new Answer
-                {
-                    AnswerText = "0"
-                }
-            };
-
-            var audit = new Audit
+                AnswerText = "10"
+            },
+            new Answer
             {
-                Answers = answers
-            };
+                AnswerText = "0"
+            }
+        };
 
-            // Act
-            var score = audit.CalculateScore();
-
-            // Assert
-            Assert.Equal(0.5, score);
-        }
-
-        [Fact]
-        public void Score_ShouldBe100()
+        var audit = new Audit
         {
-            // Arrange
-            var answers = new List<Answer>
-            {
-                new Answer
-                {
-                    AnswerText = "5"
-                },
-                new Answer
-                {
-                    AnswerText = "5"
-                }
-            };
+            Answers = answers
+        };
 
-            var audit = new Audit
-            {
-                Answers = answers
-            };
+        // Act
+        var score = audit.CalculateScore();
 
-            // Act
-            var score = audit.CalculateScore();
+        // Assert
+        Assert.Equal(0.5, score);
+    }
 
-            // Assert
-            Assert.Equal(1, score);
-        }
-
-        [Fact]
-        public void Score_ShouldBe0()
+    [Fact]
+    public void Score_ShouldBe100()
+    {
+        // Arrange
+        var answers = new List<Answer>
         {
-            // Arrange
-            var answers = new List<Answer>
+            new Answer
             {
-                new Answer
-                {
-                    AnswerText = "0"
-                },
-                new Answer
-                {
-                    AnswerText = "0"
-                }
-            };
-
-            var audit = new Audit
+                AnswerText = "5"
+            },
+            new Answer
             {
-                Answers = answers
-            };
+                AnswerText = "5"
+            }
+        };
 
-            // Act
-            var score = audit.CalculateScore();
+        var audit = new Audit
+        {
+            Answers = answers
+        };
 
-            // Assert
-            Assert.Equal(0, score);
-        }
+        // Act
+        var score = audit.CalculateScore();
+
+        // Assert
+        Assert.Equal(1, score);
+    }
+
+    [Fact]
+    public void Score_ShouldBe0()
+    {
+        // Arrange
+        var answers = new List<Answer>
+        {
+            new Answer
+            {
+                AnswerText = "0"
+            },
+            new Answer
+            {
+                AnswerText = "0"
+            }
+        };
+
+        var audit = new Audit
+        {
+            Answers = answers
+        };
+
+        // Act
+        var score = audit.CalculateScore();
+
+        // Assert
+        Assert.Equal(0, score);
     }
 }

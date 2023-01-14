@@ -1,82 +1,80 @@
 ﻿using Api.Domain;
 using Api.Models;
-using System.Collections.Generic;
 using System.Linq;
 
-namespace Api.Mappers
+namespace Api.Mappers;
+
+public class AuditMapper : 
+    IMapper<AuditForCreationDto, Audit>, IMapper<Audit, AuditDto>, IMapper<Audit, AuditListDto>
 {
-    public class AuditMapper : 
-        IMapper<AuditForCreationDto, Audit>, IMapper<Audit, AuditDto>, IMapper<Audit, AuditListDto>
+    private readonly IMappingService _mapper;
+
+    public AuditMapper(IMappingService mapper)
     {
-        private readonly IMappingService _mapper;
+        _mapper = mapper;
+    }
 
-        public AuditMapper(IMappingService mapper)
+    public Audit Map(AuditForCreationDto request)
+    {
+        var answers = request.Answers
+            .Select(answer => _mapper.Map<AnswerForCreationDto, Answer>(answer))
+            .ToList();
+
+        var actions = request.Actions
+            .Select(a => _mapper.Map<AuditActionForCreationDto, AuditAction>(a))
+            .ToList();
+
+        Audit audit = new()
         {
-            _mapper = mapper;
-        }
+            AuditId = request.AuditId,
+            Author = request.Author,
+            Area = request.Area,
+            StartDate = request.StartDate,
+            EndDate = request.EndDate,
+            Answers = answers,
+            Actions = actions
+        };
 
-        public Audit Map(AuditForCreationDto request)
+        return audit;
+    }
+
+    public AuditDto Map(Audit audit)
+    {
+        var answers = audit.Answers
+            .Select(answer => _mapper.Map<Answer, AnswerDto>(answer))
+            .ToList();
+
+        var actions = audit.Actions
+            .Select(a => _mapper.Map<AuditAction, AuditActionDto>(a))
+            .ToList();
+
+        AuditDto auditDto = new()
         {
-            var answers = request.Answers
-                .Select(answer => _mapper.Map<AnswerForCreationDto, Answer>(answer))
-                .ToList();
+            AuditId = audit.AuditId,
+            Area = audit.Area,
+            Author = audit.Author,
+            StartDate = audit.StartDate,
+            EndDate = audit.EndDate,
+            Score = audit.CalculateScore(),
+            Answers = answers,
+            Actions = actions
+        };
 
-            var actions = request.Actions
-                .Select(a => _mapper.Map<AuditActionForCreationDto, AuditAction>(a))
-                .ToList();
+        return auditDto;
+    }
 
-            Audit audit = new()
-            {
-                AuditId = request.AuditId,
-                Author = request.Author,
-                Area = request.Area,
-                StartDate = request.StartDate,
-                EndDate = request.EndDate,
-                Answers = answers,
-                Actions = actions
-            };
-
-            return audit;
-        }
-
-        public AuditDto Map(Audit audit)
+    AuditListDto IMapper<Audit, AuditListDto>.Map(Audit audit)
+    {
+        var auditDto = new AuditListDto()
         {
-            var answers = audit.Answers
-                .Select(answer => _mapper.Map<Answer, AnswerDto>(answer))
-                .ToList();
+            AuditId = audit.AuditId,
+            Area = audit.Area,
+            Author = audit.Author,
+            StartDate = audit.StartDate,
+            EndDate = audit.EndDate,
+            Score = audit.CalculateScore()
+        };
 
-            var actions = audit.Actions
-                .Select(a => _mapper.Map<AuditAction, AuditActionDto>(a))
-                .ToList();
-
-            AuditDto auditDto = new()
-            {
-                AuditId = audit.AuditId,
-                Area = audit.Area,
-                Author = audit.Author,
-                StartDate = audit.StartDate,
-                EndDate = audit.EndDate,
-                Score = audit.CalculateScore(),
-                Answers = answers,
-                Actions = actions
-            };
-
-            return auditDto;
-        }
-
-        AuditListDto IMapper<Audit, AuditListDto>.Map(Audit audit)
-        {
-            var auditDto = new AuditListDto()
-            {
-                AuditId = audit.AuditId,
-                Area = audit.Area,
-                Author = audit.Author,
-                StartDate = audit.StartDate,
-                EndDate = audit.EndDate,
-                Score = audit.CalculateScore()
-            };
-
-            return auditDto;
-        }
+        return auditDto;
     }
 }

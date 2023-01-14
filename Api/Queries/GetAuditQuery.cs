@@ -2,7 +2,6 @@
 using MediatR;
 using System;
 
-namespace Api.Queries
-{
-    public sealed record GetAuditQuery(Guid AuditId) : IRequest<AuditDto>;
-}
+namespace Api.Queries;
+
+public sealed record GetAuditQuery(Guid AuditId) : IRequest<AuditDto>;

@@ -1,33 +1,32 @@
 ﻿using Api.Domain;
 using Api.Models;
 
-namespace Api.Mappers
+namespace Api.Mappers;
+
+public class AuditActionMapper : IMapper<AuditActionForCreationDto, AuditAction>, IMapper<AuditAction, AuditActionDto>
 {
-    public class AuditActionMapper : IMapper<AuditActionForCreationDto, AuditAction>, IMapper<AuditAction, AuditActionDto>
+    public AuditAction Map(AuditActionForCreationDto auditActionDto)
     {
-        public AuditAction Map(AuditActionForCreationDto auditActionDto)
+        AuditAction auditAction = new()
         {
-            AuditAction auditAction = new()
-            {
-                AuditId = auditActionDto.AuditId,
-                AuditActionId = auditActionDto.ActionId,
-                Description = auditActionDto.Description
-            };
+            AuditId = auditActionDto.AuditId,
+            AuditActionId = auditActionDto.ActionId,
+            Description = auditActionDto.Description
+        };
 
-            return auditAction;
-        }
+        return auditAction;
+    }
 
-        public AuditActionDto Map(AuditAction auditAction)
+    public AuditActionDto Map(AuditAction auditAction)
+    {
+        var auditActionDto = new AuditActionDto()
         {
-            var auditActionDto = new AuditActionDto()
-            {
-                ActionId = auditAction.AuditActionId,
-                AuditId = auditAction.AuditId,
-                Description = auditAction.Description,
-                IsComplete = auditAction.IsComplete
-            };
+            ActionId = auditAction.AuditActionId,
+            AuditId = auditAction.AuditId,
+            Description = auditAction.Description,
+            IsComplete = auditAction.IsComplete
+        };
 
-            return auditActionDto;
-        }
+        return auditActionDto;
     }
 }

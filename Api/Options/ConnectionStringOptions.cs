@@ -1,9 +1,8 @@
-﻿namespace Api.Options
-{
-    public class ConnectionStringOptions
-    {
-        public const string Section = "ConnectionStrings";
+﻿namespace Api.Options;
 
-        public string DefaultConnection { get; set; }
-    }
+public class ConnectionStringOptions
+{
+    public const string Section = "ConnectionStrings";
+
+    public string DefaultConnection { get; set; }
 }

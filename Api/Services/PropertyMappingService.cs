@@ -1,72 +1,69 @@
 ﻿using Api.Domain;
-using Api.Exceptions;
 using Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace Api.Services
+namespace Api.Services;
+
+public class PropertyMappingService : IPropertyMappingService
 {
-    public class PropertyMappingService : IPropertyMappingService
+    // Container for all mappings
+    private readonly IList<IPropertyMapping> _propertyMappings = new List<IPropertyMapping>();
+
+    // You can create one to many mapping, e.g. "Name" (request) -> "FirstName" & "LastName" (model)
+    private readonly Dictionary<string, PropertyMappingValue> _auditPropertyMapping =
+        new(StringComparer.OrdinalIgnoreCase)
+        {
+            { "Author", new PropertyMappingValue(new List<string>() { "Author" }) }
+        };
+
+    public PropertyMappingService()
     {
-        // Container for all mappings
-        private readonly IList<IPropertyMapping> _propertyMappings = new List<IPropertyMapping>();
+        _propertyMappings.Add(new PropertyMapping<AuditDto, Audit>(_auditPropertyMapping));
+    }
 
-        // You can create one to many mapping, e.g. "Name" (request) -> "FirstName" & "LastName" (model)
-        private readonly Dictionary<string, PropertyMappingValue> _auditPropertyMapping =
-            new(StringComparer.OrdinalIgnoreCase)
-            {
-                { "Author", new PropertyMappingValue(new List<string>() { "Author" }) }
-            };
+    public bool ValidMappingExistsFor<TSource, TDestination>(string fields)
+    {
+        if (string.IsNullOrWhiteSpace(fields)) return true;
 
-        public PropertyMappingService()
+        Dictionary<string, PropertyMappingValue> propertyMapping = GetPropertyMapping<TSource, TDestination>();
+
+        // "author asc, created desc" -> ["author asc", "created desc"]
+        string[] fieldsAfterSplit = fields.Split(',');
+
+        foreach (string field in fieldsAfterSplit)
         {
-            _propertyMappings.Add(new PropertyMapping<AuditDto, Audit>(_auditPropertyMapping));
-        }
+            string trimmedField = field.Trim();
 
-        public bool ValidMappingExistsFor<TSource, TDestination>(string fields)
-        {
-            if (string.IsNullOrWhiteSpace(fields)) return true;
+            // "created desc" -> "created"
+            int indexOfFirstSpace = trimmedField.IndexOf(" ");
+            string propertyName = indexOfFirstSpace == -1 ?
+                trimmedField : trimmedField.Remove(indexOfFirstSpace);
 
-            Dictionary<string, PropertyMappingValue> propertyMapping = GetPropertyMapping<TSource, TDestination>();
-
-            // "author asc, created desc" -> ["author asc", "created desc"]
-            string[] fieldsAfterSplit = fields.Split(',');
-
-            foreach (string field in fieldsAfterSplit)
+            // Check if the property exists (if user can order data by the field)
+            if (!propertyMapping.ContainsKey(propertyName))
             {
-                string trimmedField = field.Trim();
-
-                // "created desc" -> "created"
-                int indexOfFirstSpace = trimmedField.IndexOf(" ");
-                string propertyName = indexOfFirstSpace == -1 ?
-                    trimmedField : trimmedField.Remove(indexOfFirstSpace);
-
-                // Check if the property exists (if user can order data by the field)
-                if (!propertyMapping.ContainsKey(propertyName))
-                {
-                    return false;
-                }
+                return false;
             }
-
-            return true;
         }
 
-        public Dictionary<string, PropertyMappingValue> GetPropertyMapping<TSource, TDestination>()
+        return true;
+    }
+
+    public Dictionary<string, PropertyMappingValue> GetPropertyMapping<TSource, TDestination>()
+    {
+        // Search for elements by their types, e.g. mapping between properties
+        // of "AuditDto" (from request) and "Audit" (DB entity).
+        IEnumerable<PropertyMapping<TSource, TDestination>> matchingMapping = _propertyMappings
+            .OfType<PropertyMapping<TSource, TDestination>>();
+
+        if (matchingMapping.Any())
         {
-            // Search for elements by their types, e.g. mapping between properties
-            // of "AuditDto" (from request) and "Audit" (DB entity).
-            IEnumerable<PropertyMapping<TSource, TDestination>> matchingMapping = _propertyMappings
-                .OfType<PropertyMapping<TSource, TDestination>>();
-
-            if (matchingMapping.Any())
-            {
-                return matchingMapping.First()._mappingDictionary;
-            }
-
-            throw new Exception($"Cannot find property mapping " +
-                $"between {typeof(TSource)} and {typeof(TDestination)}");
+            return matchingMapping.First()._mappingDictionary;
         }
+
+        throw new Exception($"Cannot find property mapping " +
+            $"between {typeof(TSource)} and {typeof(TDestination)}");
     }
 }

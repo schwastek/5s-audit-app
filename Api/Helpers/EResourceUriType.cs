@@ -1,8 +1,7 @@
-﻿namespace Api.Helpers
+﻿namespace Api.Helpers;
+
+public enum EResourceUriType
 {
-    public enum EResourceUriType
-    {
-        PreviousPage,
-        NextPage
-    }
+    PreviousPage,
+    NextPage
 }

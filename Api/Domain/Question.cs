@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace Api.Domain
+namespace Api.Domain;
+
+public class Question
 {
-    public class Question
-    {
-        public Guid QuestionId { get; set; }
-        public string QuestionText { get; set; }
-    }
+    public Guid QuestionId { get; set; }
+    public string QuestionText { get; set; }
 }
