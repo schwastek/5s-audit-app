@@ -23,7 +23,7 @@ public class AuditDto
     /// <example>0.6</example>
     public double Score { get; set; }
     
-    public ICollection<AnswerDto> Answers { get; set; }
+    public ICollection<AnswerDto> Answers { get; set; } = new List<AnswerDto>();
     
-    public ICollection<AuditActionDto> Actions { get; set; }
+    public ICollection<AuditActionDto> Actions { get; set; } = new List<AuditActionDto>();
 }

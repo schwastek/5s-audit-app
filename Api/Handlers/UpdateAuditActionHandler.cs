@@ -1,6 +1,5 @@
 ﻿using Api.Commands;
 using Api.DbContexts;
-using Api.Domain;
 using Api.Exceptions;
 using MediatR;
 using System.Threading;
@@ -19,7 +18,7 @@ public sealed class UpdateAuditActionHandler : IRequestHandler<UpdateAuditAction
 
     public async Task<Unit> Handle(UpdateAuditActionCommand request, CancellationToken cancellationToken)
     {
-        AuditAction auditAction = await context.AuditActions.FindAsync(request.ActionId);
+        var auditAction = await context.AuditActions.FindAsync(request.ActionId);
 
         if (auditAction == null)
         {
