@@ -1,15 +1,14 @@
 ﻿using System;
 
-namespace Api.Domain
-{
-    public class Answer
-    {
-        public Guid AnswerId { get; set; }
-        public string AnswerText { get; set; }
-        public string AnswerType { get; set; }
+namespace Api.Domain;
 
-        public Guid AuditId { get; set; }
-        public Guid QuestionId { get; set; }
-        public Question Question { get; set; }
-    }
+public class Answer
+{
+    public Guid AnswerId { get; set; }
+    public string AnswerText { get; set; }
+    public string AnswerType { get; set; }
+
+    public Guid AuditId { get; set; }
+    public Guid QuestionId { get; set; }
+    public Question Question { get; set; }
 }

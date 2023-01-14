@@ -2,35 +2,33 @@
 using Api.DbContexts;
 using Api.Domain;
 using Api.Exceptions;
-using Api.Mappers;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Api.Handlers
+namespace Api.Handlers;
+
+public sealed class DeleteAuditActionHandler : IRequestHandler<DeleteAuditActionCommand, Unit>
 {
-    public sealed class DeleteAuditActionHandler : IRequestHandler<DeleteAuditActionCommand, Unit>
+    private readonly LeanAuditorContext context;
+
+    public DeleteAuditActionHandler(LeanAuditorContext context)
     {
-        private readonly LeanAuditorContext context;
+        this.context = context;
+    }
 
-        public DeleteAuditActionHandler(LeanAuditorContext context)
+    public async Task<Unit> Handle(DeleteAuditActionCommand request, CancellationToken cancellationToken)
+    {
+        AuditAction auditAction = await context.AuditActions.FindAsync(request.ActionId);
+
+        if (auditAction == null)
         {
-            this.context = context;
+            throw new ActionNotFoundException(request.ActionId);
         }
 
-        public async Task<Unit> Handle(DeleteAuditActionCommand request, CancellationToken cancellationToken)
-        {
-            AuditAction auditAction = await context.AuditActions.FindAsync(request.ActionId);
+        context.Remove(auditAction);
+        await context.SaveChangesAsync();
 
-            if (auditAction == null)
-            {
-                throw new ActionNotFoundException(request.ActionId);
-            }
-
-            context.Remove(auditAction);
-            await context.SaveChangesAsync();
-
-            return Unit.Value;
-        }
+        return Unit.Value;
     }
 }

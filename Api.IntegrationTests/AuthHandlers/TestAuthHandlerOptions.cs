@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 
-namespace Api.IntegrationTests.AuthHandlers
+namespace Api.IntegrationTests.AuthHandlers;
+
+public class TestAuthHandlerOptions : AuthenticationSchemeOptions
 {
-    public class TestAuthHandlerOptions : AuthenticationSchemeOptions
-    {
-    }
 }

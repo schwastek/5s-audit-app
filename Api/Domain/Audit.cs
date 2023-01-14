@@ -3,64 +3,63 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace Api.Domain
+namespace Api.Domain;
+
+public class Audit
 {
-    public class Audit
+    [Required]
+    public Guid AuditId { get; set; }
+    [Required]
+    public string Author { get; set; }
+    [Required]
+    public string Area { get; set; }
+    [Required]
+    public DateTime StartDate { get; set; }
+    [Required]
+    public DateTime EndDate { get; set; }
+
+    public ICollection<Answer> Answers { get; set; } = new List<Answer>();
+    public ICollection<AuditAction> Actions { get; set; } = new List<AuditAction>();
+
+    public double CalculateScore()
     {
-        [Required]
-        public Guid AuditId { get; set; }
-        [Required]
-        public string Author { get; set; }
-        [Required]
-        public string Area { get; set; }
-        [Required]
-        public DateTime StartDate { get; set; }
-        [Required]
-        public DateTime EndDate { get; set; }
+        // Convert string answers to numbers: "4" to 4
+        List<int> parsedAnswers = Answers
+                .Select(a => ParseStringToNumber(a.AnswerText))
+                .ToList();
 
-        public ICollection<Answer> Answers { get; set; } = new List<Answer>();
-        public ICollection<AuditAction> Actions { get; set; } = new List<AuditAction>();
+        double score = Calculate(parsedAnswers);
 
-        public double CalculateScore()
+        return score;
+    }
+
+    private static int ParseStringToNumber(string input)
+    {
+        bool isParsable = Int32.TryParse(input, out int number);
+
+        if (!isParsable)
         {
-            // Convert string answers to numbers: "4" to 4
-            List<int> parsedAnswers = Answers
-                    .Select(a => ParseStringToNumber(a.AnswerText))
-                    .ToList();
-
-            double score = Calculate(parsedAnswers);
-
-            return score;
+            return 0;
         }
 
-        private static int ParseStringToNumber(string input)
-        {
-            bool isParsable = Int32.TryParse(input, out int number);
+        return number;
+    }
 
-            if (!isParsable)
-            {
-                return 0;
-            }
+    private static double Calculate(IEnumerable<int> answers)
+    {
+        bool isEmpty = !answers.Any();
+        if (isEmpty) return 0;
 
-            return number;
-        }
+        int numberOfAnswers = answers.Count();
+        int totalPointsScored = answers.Sum();
+        int maxPointsForAnswer = answers.Max();
+        int totalPointsPossible = numberOfAnswers * maxPointsForAnswer;
 
-        private static double Calculate(IEnumerable<int> answers)
-        {
-            bool isEmpty = !answers.Any();
-            if (isEmpty) return 0;
+        // Prevent division by zero
+        if (totalPointsPossible == 0) return 0;
 
-            int numberOfAnswers = answers.Count();
-            int totalPointsScored = answers.Sum();
-            int maxPointsForAnswer = answers.Max();
-            int totalPointsPossible = numberOfAnswers * maxPointsForAnswer;
+        double score = (double)totalPointsScored / (double)totalPointsPossible;
 
-            // Prevent division by zero
-            if (totalPointsPossible == 0) return 0;
-
-            double score = (double)totalPointsScored / (double)totalPointsPossible;
-
-            return score;
-        }
+        return score;
     }
 }

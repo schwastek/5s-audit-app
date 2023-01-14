@@ -10,42 +10,41 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
 
-namespace Api.Extensions
+namespace Api.Extensions;
+
+public static class IdentityServiceExtensions
 {
-    public static class IdentityServiceExtensions
+    public static IServiceCollection AddIdentityServices(this IServiceCollection services,
+        IConfiguration config)
     {
-        public static IServiceCollection AddIdentityServices(this IServiceCollection services,
-            IConfiguration config)
+        services.AddIdentityCore<User>(opt =>
         {
-            services.AddIdentityCore<User>(opt =>
+            opt.Password.RequireNonAlphanumeric = false;
+        })
+            .AddEntityFrameworkStores<LeanAuditorContext>()
+            .AddSignInManager<SignInManager<User>>();
+
+        var jwtOptions = config.GetSection(JwtOptions.Section).Get<JwtOptions>();
+        SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.TokenKey));
+
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
-                opt.Password.RequireNonAlphanumeric = false;
-            })
-                .AddEntityFrameworkStores<LeanAuditorContext>()
-                .AddSignInManager<SignInManager<User>>();
-
-            var jwtOptions = config.GetSection(JwtOptions.Section).Get<JwtOptions>();
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.TokenKey));
-
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = key,
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = key,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
 
-                        // Expire token on the exact time (by default token will be still valid up to 5 minutes)
-                        ClockSkew = TimeSpan.Zero
-                    };
-                });
+                    // Expire token on the exact time (by default token will be still valid up to 5 minutes)
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
 
-                services.AddScoped<TokenService>();
+            services.AddScoped<TokenService>();
 
-            return services;
-        }
+        return services;
     }
 }

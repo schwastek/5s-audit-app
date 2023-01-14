@@ -6,32 +6,31 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Api.Handlers
+namespace Api.Handlers;
+
+public sealed class UpdateAuditActionHandler : IRequestHandler<UpdateAuditActionCommand, Unit>
 {
-    public sealed class UpdateAuditActionHandler : IRequestHandler<UpdateAuditActionCommand, Unit>
+    private readonly LeanAuditorContext context;
+
+    public UpdateAuditActionHandler(LeanAuditorContext context)
     {
-        private readonly LeanAuditorContext context;
+        this.context = context;
+    }
 
-        public UpdateAuditActionHandler(LeanAuditorContext context)
+    public async Task<Unit> Handle(UpdateAuditActionCommand request, CancellationToken cancellationToken)
+    {
+        AuditAction auditAction = await context.AuditActions.FindAsync(request.ActionId);
+
+        if (auditAction == null)
         {
-            this.context = context;
+            throw new ActionNotFoundException(request.ActionId);
         }
 
-        public async Task<Unit> Handle(UpdateAuditActionCommand request, CancellationToken cancellationToken)
-        {
-            AuditAction auditAction = await context.AuditActions.FindAsync(request.ActionId);
+        auditAction.Description = request.AuditAction.Description ?? auditAction.Description;
+        auditAction.IsComplete = request.AuditAction.IsComplete;
 
-            if (auditAction == null)
-            {
-                throw new ActionNotFoundException(request.ActionId);
-            }
+        await context.SaveChangesAsync();
 
-            auditAction.Description = request.AuditAction.Description ?? auditAction.Description;
-            auditAction.IsComplete = request.AuditAction.IsComplete;
-
-            await context.SaveChangesAsync();
-
-            return Unit.Value;
-        }
+        return Unit.Value;
     }
 }

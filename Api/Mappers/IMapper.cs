@@ -1,7 +1,6 @@
-﻿namespace Api.Mappers
+﻿namespace Api.Mappers;
+
+public interface IMapper<TSource, TDestination>
 {
-    public interface IMapper<TSource, TDestination>
-    {
-        TDestination Map(TSource entity);
-    }
+    TDestination Map(TSource entity);
 }

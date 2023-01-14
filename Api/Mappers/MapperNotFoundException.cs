@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
-namespace Api.Mappers
+namespace Api.Mappers;
+
+public sealed class MapperNotFoundException : Exception
 {
-    public sealed class MapperNotFoundException : Exception
+    public MapperNotFoundException(Type source, Type destination) 
+        : base($"No Mapper from '{source}' to '{destination}' was found.")
     {
-        public MapperNotFoundException(Type source, Type destination) 
-            : base($"No Mapper from '{source}' to '{destination}' was found.")
-        {
-        }
     }
 }

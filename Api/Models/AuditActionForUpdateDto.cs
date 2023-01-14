@@ -1,13 +1,10 @@
-﻿using System;
+﻿namespace Api.Models;
 
-namespace Api.Models
+public class AuditActionForUpdateDto
 {
-    public class AuditActionForUpdateDto
-    {
-        /// <example>Clean up (UPDATED)</example>
-        public string Description { get; set; }
-        
-        /// <example>true</example>
-        public bool IsComplete { get; set; }
-    }
+    /// <example>Clean up (UPDATED)</example>
+    public string Description { get; set; }
+    
+    /// <example>true</example>
+    public bool IsComplete { get; set; }
 }

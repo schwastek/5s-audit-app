@@ -9,36 +9,35 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Api.Handlers
+namespace Api.Handlers;
+
+public sealed class GetAuditHandler : IRequestHandler<GetAuditQuery, AuditDto>
 {
-    public sealed class GetAuditHandler : IRequestHandler<GetAuditQuery, AuditDto>
+    private readonly LeanAuditorContext context;
+    private readonly IMappingService mapper;
+
+    public GetAuditHandler(LeanAuditorContext context, IMappingService mapper)
     {
-        private readonly LeanAuditorContext context;
-        private readonly IMappingService mapper;
+        this.context = context;
+        this.mapper = mapper;
+    }
 
-        public GetAuditHandler(LeanAuditorContext context, IMappingService mapper)
+    public async Task<AuditDto> Handle(GetAuditQuery request, CancellationToken cancellationToken)
+    {
+        var audit = await context.Audits
+            .Include(audit => audit.Actions)
+            .Include(audit => audit.Answers)
+            .ThenInclude(answer => answer.Question)
+            .AsNoTracking()
+            .SingleOrDefaultAsync(audit => audit.AuditId.Equals(request.AuditId));
+
+        if (audit == null)
         {
-            this.context = context;
-            this.mapper = mapper;
+            throw new AuditNotFoundException(request.AuditId);
         }
 
-        public async Task<AuditDto> Handle(GetAuditQuery request, CancellationToken cancellationToken)
-        {
-            var audit = await context.Audits
-                .Include(audit => audit.Actions)
-                .Include(audit => audit.Answers)
-                .ThenInclude(answer => answer.Question)
-                .AsNoTracking()
-                .SingleOrDefaultAsync(audit => audit.AuditId.Equals(request.AuditId));
+        var auditDto = mapper.Map<Audit, AuditDto>(audit);
 
-            if (audit == null)
-            {
-                throw new AuditNotFoundException(request.AuditId);
-            }
-
-            var auditDto = mapper.Map<Audit, AuditDto>(audit);
-
-            return auditDto;
-        }
+        return auditDto;
     }
 }

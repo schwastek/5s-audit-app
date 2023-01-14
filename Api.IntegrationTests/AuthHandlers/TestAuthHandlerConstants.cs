@@ -1,7 +1,6 @@
-﻿namespace Api.IntegrationTests.AuthHandlers
+﻿namespace Api.IntegrationTests.AuthHandlers;
+
+public class TestAuthHandlerConstants
 {
-    public class TestAuthHandlerConstants
-    {
-        public const string AuthenticationScheme = "TestScheme";
-    }
+    public const string AuthenticationScheme = "TestScheme";
 }

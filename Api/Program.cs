@@ -9,50 +9,49 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
-namespace Api
+namespace Api;
+
+public class Program
 {
-    public class Program
+    public static async Task Main(string[] args)
     {
-        public static async Task Main(string[] args)
-        {
-            var host = CreateHostBuilder(args).Build();
-            await InitializeData(host);
+        var host = CreateHostBuilder(args).Build();
+        await InitializeData(host);
 
-            host.Run();
-        }
+        host.Run();
+    }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-
-        private static async Task InitializeData(IHost host)
-        {
-            using (var scope = host.Services.CreateScope())
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
             {
-                var services = scope.ServiceProvider;
+                webBuilder.UseStartup<Startup>();
+            });
 
-                try
+    private static async Task InitializeData(IHost host)
+    {
+        using (var scope = host.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+
+            try
+            {
+                var env = services.GetRequiredService<IWebHostEnvironment>();
+                if (env.IsDevelopment())
                 {
-                    var env = services.GetRequiredService<IWebHostEnvironment>();
-                    if (env.IsDevelopment())
-                    {
-                        var context = services.GetRequiredService<LeanAuditorContext>();
-                        var userManager = services.GetRequiredService<UserManager<User>>();
+                    var context = services.GetRequiredService<LeanAuditorContext>();
+                    var userManager = services.GetRequiredService<UserManager<User>>();
 
-                        context.Database.Migrate();
+                    context.Database.Migrate();
 
-                        await UserDataInitializer.Seed(userManager);
-                        await SampleDataInitializer.Seed(context);
-                    }
+                    await UserDataInitializer.Seed(userManager);
+                    await SampleDataInitializer.Seed(context);
                 }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred seeding the DB.");
-                }
+            }
+            catch (Exception ex)
+            {
+                var logger = services.GetRequiredService<ILogger<Program>>();
+                logger.LogError(ex, "An error occurred seeding the DB.");
             }
         }
     }

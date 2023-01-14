@@ -1,14 +1,13 @@
-namespace Api.Models
+namespace Api.Models;
+
+public class UserDto
 {
-    public class UserDto
-    {
-        /// <example>John</example>
-        public string DisplayName { get; set; }
-        
-        /// <example>xxxxx.yyyyy.zzzzz</example>
-        public string Token { get; set; }
-        
-        /// <example>john</example>
-        public string Username { get; set; }
-    }
+    /// <example>John</example>
+    public string DisplayName { get; set; }
+    
+    /// <example>xxxxx.yyyyy.zzzzz</example>
+    public string Token { get; set; }
+    
+    /// <example>john</example>
+    public string Username { get; set; }
 }

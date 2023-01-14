@@ -5,26 +5,25 @@ using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
-namespace Api.IntegrationTests.AuthHandlers
+namespace Api.IntegrationTests.AuthHandlers;
+
+public class TestAuthHandler : AuthenticationHandler<TestAuthHandlerOptions>
 {
-    public class TestAuthHandler : AuthenticationHandler<TestAuthHandlerOptions>
+    public TestAuthHandler(IOptionsMonitor<TestAuthHandlerOptions> options,
+        ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
+        : base(options, logger, encoder, clock)
     {
-        public TestAuthHandler(IOptionsMonitor<TestAuthHandlerOptions> options,
-            ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
-            : base(options, logger, encoder, clock)
-        {
-        }
+    }
 
-        protected override Task<AuthenticateResult> HandleAuthenticateAsync()
-        {
-            var claims = new Claim[] { new Claim(ClaimTypes.Name, "Test user") };
-            var identity = new ClaimsIdentity(claims, TestAuthHandlerConstants.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
-            var ticket = new AuthenticationTicket(principal, TestAuthHandlerConstants.AuthenticationScheme);
+    protected override Task<AuthenticateResult> HandleAuthenticateAsync()
+    {
+        var claims = new Claim[] { new Claim(ClaimTypes.Name, "Test user") };
+        var identity = new ClaimsIdentity(claims, TestAuthHandlerConstants.AuthenticationScheme);
+        var principal = new ClaimsPrincipal(identity);
+        var ticket = new AuthenticationTicket(principal, TestAuthHandlerConstants.AuthenticationScheme);
 
-            var result = AuthenticateResult.Success(ticket);
+        var result = AuthenticateResult.Success(ticket);
 
-            return Task.FromResult(result);
-        }
+        return Task.FromResult(result);
     }
 }
