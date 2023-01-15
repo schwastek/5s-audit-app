@@ -36,24 +36,8 @@ builder.Services.ConfigureSwagger();
 // Register MediatR services
 builder.Services.AddMediatR(typeof(Program));
 
-// Mappers - Audits
-builder.Services.AddSingleton<IMapper<Audit, AuditDto>, AuditMapper>();
-builder.Services.AddSingleton<IMapper<AuditForCreationDto, Audit>, AuditMapper>();
-builder.Services.AddSingleton<IMapper<Audit, AuditListDto>, AuditMapper>();
-
-// Mappers - Questions
-builder.Services.AddSingleton<IMapper<Question, QuestionDto>, QuestionMapper>();
-
-// Mappers - Answers
-builder.Services.AddSingleton<IMapper<Answer, AnswerDto>, AnswerMapper>();
-builder.Services.AddSingleton<IMapper<AnswerForCreationDto, Answer>, AnswerMapper>();
-
-// Mappers - Actions
-builder.Services.AddSingleton<IMapper<AuditAction, AuditActionDto>, AuditActionMapper>();
-builder.Services.AddSingleton<IMapper<AuditActionForCreationDto, AuditAction>, AuditActionMapper>();
-
-// Mappers - Universal Service
-builder.Services.AddSingleton<IMappingService, ServiceLocatorMappingService>();
+// Register mappers
+builder.Services.ConfigureMappers();
 
 builder.Services.AddScoped<AuditService, AuditService>();
 builder.Services.AddTransient<IPropertyMappingService, PropertyMappingService>();

@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System;
+using Api.Mappers;
+using Api.Domain;
+using Api.Models;
 
 namespace Api.Extensions;
 
@@ -46,5 +49,27 @@ public static class ServiceExtensions
                 }
             });
         });
+    }
+
+    public static void ConfigureMappers(this IServiceCollection services)
+    {
+        // Universal service
+        services.AddSingleton<IMappingService, ServiceLocatorMappingService>();
+
+        // For Audits
+        services.AddSingleton<IMapper<Audit, AuditDto>, AuditMapper>();
+        services.AddSingleton<IMapper<AuditForCreationDto, Audit>, AuditMapper>();
+        services.AddSingleton<IMapper<Audit, AuditListDto>, AuditMapper>();
+
+        // For Questions
+        services.AddSingleton<IMapper<Question, QuestionDto>, QuestionMapper>();
+
+        // For Answers
+        services.AddSingleton<IMapper<Answer, AnswerDto>, AnswerMapper>();
+        services.AddSingleton<IMapper<AnswerForCreationDto, Answer>, AnswerMapper>();
+
+        // For Actions
+        services.AddSingleton<IMapper<AuditAction, AuditActionDto>, AuditActionMapper>();
+        services.AddSingleton<IMapper<AuditActionForCreationDto, AuditAction>, AuditActionMapper>();
     }
 }
