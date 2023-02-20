@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Api.Core.Domain;
 using Microsoft.AspNetCore.Identity;
 
-namespace Api.DbContexts;
+namespace Api.Data;
 
 public class UserDataInitializer
 {

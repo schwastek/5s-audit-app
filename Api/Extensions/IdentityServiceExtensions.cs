@@ -1,6 +1,6 @@
-using Api.DbContexts;
+using Api.Data;
 using Api.Core.Domain;
-using Api.Options;
+using Api.Core.Options;
 using Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;

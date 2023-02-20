@@ -1,5 +1,5 @@
 ﻿using Api.Core.Domain;
-using Api.Options;
+using Api.Core.Options;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;

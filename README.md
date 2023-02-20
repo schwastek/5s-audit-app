@@ -188,10 +188,13 @@ Database is seeded in `Development` mode.
 
 ```sh
 # Add migration
-dotnet ef migrations add MyMigration
+dotnet ef migrations add MyMigration --project Api.Data --startup-project Api
 
-# Apply migration
-dotnet ef database update
+# Remove last migration
+dotnet ef migrations remove --project Api.Data --startup-project Api
+
+# Apply migrations (for specific environment)
+dotnet ef database update --project Api.Data --startup-project Api -- --environment Development
 ```
 
 ## Roadmap

@@ -1,16 +1,16 @@
-﻿using Api.Core.Domain;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
-using Api.Options;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Api.Core.Domain;
 using Microsoft.Extensions.Options;
+using Api.Core.Options;
 
-namespace Api.DbContexts;
+namespace Api.Data;
 
 public class LeanAuditorContext : IdentityDbContext<User>
 {
-    private readonly ConnectionStringOptions _config;
-    public string ConnectionString { get; }
+    private readonly ConnectionStringOptions _config = new();
+    private string _connectionString { get; }
     public DbSet<Audit> Audits => Set<Audit>();
     public DbSet<AuditAction> AuditActions => Set<AuditAction>();
     public DbSet<Question> Questions => Set<Question>();
@@ -20,7 +20,7 @@ public class LeanAuditorContext : IdentityDbContext<User>
     : base(options)
     {
         _config = config.Value;
-        ConnectionString = GetConnectionString();
+        _connectionString = GetConnectionString();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -28,7 +28,7 @@ public class LeanAuditorContext : IdentityDbContext<User>
         optionsBuilder
             .LogTo(Console.WriteLine)
             .EnableSensitiveDataLogging()
-            .UseSqlite(ConnectionString);
+            .UseSqlite(_connectionString);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

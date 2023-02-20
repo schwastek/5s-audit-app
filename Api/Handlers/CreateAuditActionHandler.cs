@@ -1,4 +1,4 @@
-﻿using Api.DbContexts;
+﻿using Api.Data;
 using Api.Core.Domain;
 using Api.Exceptions;
 using Api.Mappers;

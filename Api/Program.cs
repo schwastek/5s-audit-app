@@ -1,10 +1,7 @@
-using Api.DbContexts;
+using Api.Data;
 using Api.Core.Domain;
 using Api.Exceptions;
 using Api.Extensions;
-using Api.Mappers;
-using Api.Models;
-using Api.Options;
 using Api.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -17,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using Api.Core.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
