@@ -11,10 +11,10 @@ public class LeanAuditorContext : IdentityDbContext<User>
 {
     private readonly ConnectionStringOptions _config;
     public string ConnectionString { get; }
-    public DbSet<Audit> Audits { get; set; }
-    public DbSet<AuditAction> AuditActions { get; set; }
-    public DbSet<Question> Questions { get; set; }
-    public DbSet<Answer> Answers { get; set; }
+    public DbSet<Audit> Audits => Set<Audit>();
+    public DbSet<AuditAction> AuditActions => Set<AuditAction>();
+    public DbSet<Question> Questions => Set<Question>();
+    public DbSet<Answer> Answers => Set<Answer>();
 
     public LeanAuditorContext(DbContextOptions<LeanAuditorContext> options, IOptions<ConnectionStringOptions> config)
     : base(options)
