@@ -5,7 +5,7 @@ using System.IO;
 using System.Reflection;
 using System;
 using Api.Mappers;
-using Api.Domain;
+using Api.Core.Domain;
 using Api.Models;
 
 namespace Api.Extensions;

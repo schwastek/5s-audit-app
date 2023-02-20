@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Api.Domain;
+namespace Api.Core.Domain;
 
 public class Answer
 {

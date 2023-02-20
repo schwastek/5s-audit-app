@@ -1,5 +1,5 @@
 ﻿using Api.DbContexts;
-using Api.Domain;
+using Api.Core.Domain;
 using Api.Exceptions;
 using Api.Helpers;
 using Api.Mappers;

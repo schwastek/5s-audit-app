@@ -1,5 +1,5 @@
 ﻿using Api.DbContexts;
-using Api.Domain;
+using Api.Core.Domain;
 using System;
 using System.Collections.Generic;
 

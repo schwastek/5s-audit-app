@@ -1,4 +1,4 @@
-using Api.Domain;
+using Api.Core.Domain;
 using System.Collections.Generic;
 using Xunit;
 

@@ -1,4 +1,4 @@
-﻿using Api.Domain;
+﻿using Api.Core.Domain;
 using Api.Options;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

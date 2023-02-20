@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Api.Domain;
+using Api.Core.Domain;
 using Microsoft.AspNetCore.Identity;
 
 namespace Api.DbContexts;

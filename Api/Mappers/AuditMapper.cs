@@ -1,4 +1,4 @@
-﻿using Api.Domain;
+﻿using Api.Core.Domain;
 using Api.Models;
 using System.Linq;
 

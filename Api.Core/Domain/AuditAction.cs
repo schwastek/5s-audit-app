@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Api.Domain;
+namespace Api.Core.Domain;
 
 public class AuditAction
 {

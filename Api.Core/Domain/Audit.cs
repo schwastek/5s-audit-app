@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace Api.Domain;
+namespace Api.Core.Domain;
 
 public class Audit
 {
