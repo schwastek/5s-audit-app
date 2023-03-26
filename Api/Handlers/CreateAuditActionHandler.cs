@@ -1,5 +1,4 @@
-﻿using Api.Data;
-using Api.Core.Domain;
+﻿using Api.Core.Domain;
 using Api.Exceptions;
 using Api.Mappers;
 using Api.Models;
@@ -8,6 +7,7 @@ using Api.Services;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using Api.Data.DbContext;
 
 namespace Api.Handlers;
 

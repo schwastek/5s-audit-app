@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.UnitTests", "Api.Tests\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.IntegrationTests", "Api.IntegrationTests\Api.IntegrationTests.csproj", "{61A7507D-DF13-4C0C-8D8B-29F7DC86E71D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core", "Api.Core\Api.Core.csproj", "{1EA5E5B7-3868-4D36-9CA1-19811BC62D5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.Core", "Api.Core\Api.Core.csproj", "{1EA5E5B7-3868-4D36-9CA1-19811BC62D5D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.Data", "Api.Data\Api.Data.csproj", "{2559294A-D100-43A9-90D9-AFE0BA9C636C}"
 EndProject

@@ -1,5 +1,5 @@
 ﻿using Api.Commands;
-using Api.Data;
+using Api.Data.DbContext;
 using Api.Exceptions;
 using MediatR;
 using System.Threading;

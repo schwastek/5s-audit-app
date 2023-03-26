@@ -1,5 +1,4 @@
-﻿using Api.Data;
-using Api.Core.Domain;
+﻿using Api.Core.Domain;
 using Api.Mappers;
 using Api.Models;
 using Api.Queries;
@@ -9,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Api.Data.DbContext;
 
 namespace Api.Handlers;
 

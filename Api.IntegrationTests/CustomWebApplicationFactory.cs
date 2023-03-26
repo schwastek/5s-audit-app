@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System;
-using Api.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Api.IntegrationTests.Helpers;
 using Api.IntegrationTests.AuthHandlers;
+using Api.Data.DbContext;
+using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.IntegrationTests;
 
@@ -14,8 +16,11 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         // The test app's `builder.ConfigureServices` callback is executed
-        // after the app's `Startup.ConfigureServices` code is executed
-        builder.ConfigureServices(services =>
+        // after the app's Program.cs code is executed
+        builder
+            // Set SUT's environment
+            .UseEnvironment(Environments.Development)
+            .ConfigureServices(services =>
         {
             // Mock authentication
             services
@@ -38,7 +43,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
 
                 // Seed DB
                 db.Database.EnsureDeleted();
-                db.Database.EnsureCreated();
+                db.Database.Migrate();
 
                 try
                 {

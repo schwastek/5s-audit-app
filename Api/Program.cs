@@ -1,5 +1,3 @@
-using Api.Data;
-using Api.Core.Domain;
 using Api.Exceptions;
 using Api.Extensions;
 using Api.Services;
@@ -7,14 +5,12 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System;
 using Api.Core.Options;
+using Api.Data.DbContext;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -109,32 +105,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-// Initialize data
-
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-
-    try
-    {
-        if (app.Environment.IsDevelopment())
-        {
-            var context = services.GetRequiredService<LeanAuditorContext>();
-            var userManager = services.GetRequiredService<UserManager<User>>();
-
-            context.Database.Migrate();
-
-            await UserDataInitializer.Seed(userManager);
-            await SampleDataInitializer.Seed(context);
-        }
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred seeding the DB.");
-    }
-}
 
 app.Run();
 

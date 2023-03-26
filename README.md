@@ -50,15 +50,14 @@ npm --version
 
 ```sh
 dotnet --version
-# => 5.0.404
+# => 6.0.407
 ```
 
 * [EF Core CLI tools](https://docs.microsoft.com/en-us/ef/core/cli/dotnet)
 
 ```sh
 dotnet ef --version
-# => Entity Framework Core .NET Command-line Tools
-# => 6.0.1
+# => 7.0.3
 ```
 
 ### Installation
@@ -72,28 +71,11 @@ git clone https://github.com/schwastek/5s-audit-app.git
 cd client
 npm install
 ```
-3. Set `secrets.json` file for API (see [Secret Manager](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) tool). For example:
-```json
-{
-  "ConnectionStrings:DefaultConnection": "audits.db",
-  "Jwt:TokenKey": "My secret key to sign JWT"
-}
-```
-Secret Manager works only in `Development` mode. For `Staging` mode (tests), you need `appsettings.Staging.json` in the `Api` project:
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "audits-tests.db"
-  },
-  "Jwt": {
-    "TokenKey": "My secret key to sign jwt"
-  }
-}
-```
 
 ### Running application
 
-When you start ASP.NET Core web API, it won't launch React client app automatically. **Both frontend and backend must be started manually.**
+When you start ASP.NET Core web API, it won't launch React client app automatically.  
+**Both frontend and backend must be started manually.**
 
 Run React frontend app:
 
@@ -120,7 +102,7 @@ Run ASP.NET Core web API:
 
 ```sh
 cd Api
-dotnet watch run
+dotnet run
 ```
 
 The console output shows messages similar to the following:
@@ -131,20 +113,6 @@ Application started. Press Ctrl+C to shut down.
 Hosting environment: Development
 Content root path: C:\5sAuditApp\Api
 ```
-
-To determine the environment, ASP.NET Core reads `ASPNETCORE_ENVIRONMENT` value from [`Api/Properties/launchSettings.json`](./Api/Properties/launchSettings.json) file.
-Environment values set in `launchSettings.json` override values set in the system environment.
-
-To set the `ASPNETCORE_ENVIRONMENT` for the current shell session only, use the following commands:
-
-```sh
-set ASPNETCORE_ENVIRONMENT=Staging
-dotnet watch run --no-launch-profile
-```
-
-See [Use multiple environments in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-5.0) for more information.
-
-Note: Sensitive data logging is enabled in every environment (although in the future, it should only be enabled in development environment).
 
 In a web browser, navigate to http://localhost:3000.
 
@@ -182,19 +150,27 @@ Use Run command below (`WIN+R`) to open the "local" folder on Windows: `C:\Users
 %LocalAppData%
 ```
 
-Database is seeded in `Development` mode.
+You can run `Api.Data` console application to seed database:
+
+![Setup database console application](./docs/img/setup-database-console-app.png)
 
 ### Common commands
 
+To manage migrations you can use [dotnet ef CLI tools](https://learn.microsoft.com/en-us/ef/core/cli/dotnet)
+or [Package Manager Console](https://learn.microsoft.com/en-us/ef/core/cli/powershell).
+
 ```sh
 # Add migration
-dotnet ef migrations add MyMigration --project Api.Data --startup-project Api
+dotnet ef migrations add MyMigration --project Api.Data --startup-project Api.Data
 
 # Remove last migration
-dotnet ef migrations remove --project Api.Data --startup-project Api
+dotnet ef migrations remove --project Api.Data --startup-project Api.Data
 
-# Apply migrations (for specific environment)
-dotnet ef database update --project Api.Data --startup-project Api -- --environment Development
+# Apply migrations (specify environment)
+dotnet ef database update --project Api.Data --startup-project Api.Data -- --environment Development
+
+# Or apply migrations using Package Manager Console
+Update-Database -Project Api.Data -StartupProject Api.Data -Args '--environment Development'
 ```
 
 ## Roadmap

@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Api.Core.Domain;
 using Microsoft.Extensions.Options;
 using Api.Core.Options;
 
-namespace Api.Data;
+namespace Api.Data.DbContext;
 
 public class LeanAuditorContext : IdentityDbContext<User>
 {
@@ -26,8 +25,8 @@ public class LeanAuditorContext : IdentityDbContext<User>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder
-            .LogTo(Console.WriteLine)
-            .EnableSensitiveDataLogging()
+            //.LogTo(Console.WriteLine)
+            //.EnableSensitiveDataLogging()
             .UseSqlite(_connectionString);
     }
 

@@ -1,7 +1,7 @@
-﻿using Api.Data;
-using Api.Core.Domain;
+﻿using Api.Core.Domain;
 using System;
 using System.Collections.Generic;
+using Api.Data.DbContext;
 
 namespace Api.IntegrationTests.Helpers;
 

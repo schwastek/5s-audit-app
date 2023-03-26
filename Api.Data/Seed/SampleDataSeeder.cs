@@ -1,25 +1,13 @@
 ﻿using Api.Core.Domain;
+using Api.Data.DbContext;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Api.Data;
+namespace Api.Data.Seed;
 
-public class SampleDataInitializer
+public class SampleDataSeeder
 {
-    public static async Task Seed(LeanAuditorContext context)
+    public static async Task SeedAsync(LeanAuditorContext context)
     {
-        if (context.Audits.Any())
-        {
-            // DB has been seeded
-            return;
-        }
-
-        // Start clean
-        ClearData(context);
-
         // Audits
         var audits = new List<Audit>()
         {
@@ -187,7 +175,7 @@ public class SampleDataInitializer
         await context.SaveChangesAsync();
     }
 
-    private static void ClearData(LeanAuditorContext context)
+    public async static Task ClearAsync(LeanAuditorContext context)
     {
         var entities = new[]
         {
@@ -199,9 +187,11 @@ public class SampleDataInitializer
 
         foreach (var entityName in entities)
         {
-            var entity = context.Model.FindEntityType(entityName);
-            var tableName = entity.GetTableName();
+            var entity = context.Model.FindEntityType(entityName!);
+            var tableName = entity!.GetTableName();
             context.Database.ExecuteSqlRaw($"DELETE FROM {tableName}");
         }
+
+        await context.SaveChangesAsync();
     }
 }

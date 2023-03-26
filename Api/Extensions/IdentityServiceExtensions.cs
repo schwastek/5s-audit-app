@@ -1,4 +1,3 @@
-using Api.Data;
 using Api.Core.Domain;
 using Api.Core.Options;
 using Api.Services;
@@ -9,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
+using Api.Data.DbContext;
 
 namespace Api.Extensions;
 
