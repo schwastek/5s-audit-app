@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Api.Core.Domain;
@@ -17,11 +18,13 @@ public class Audit
     public DateTime StartDate { get; set; }
     [Required]
     public DateTime EndDate { get; set; }
+    [NotMapped]
+    public double Score { get; set; }
 
     public ICollection<Answer> Answers { get; set; } = new List<Answer>();
     public ICollection<AuditAction> Actions { get; set; } = new List<AuditAction>();
 
-    public double CalculateScore()
+    public void CalculateScore()
     {
         // Convert string answers to numbers: "4" to 4
         List<int> parsedAnswers = Answers
@@ -30,7 +33,7 @@ public class Audit
 
         double score = Calculate(parsedAnswers);
 
-        return score;
+        Score = score;
     }
 
     private static int ParseStringToNumber(string input)

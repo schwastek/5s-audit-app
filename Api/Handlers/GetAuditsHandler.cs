@@ -59,8 +59,11 @@ public sealed class GetAuditsHandler : IRequestHandler<GetAuditsQuery, (IEnumera
             request.QueryParameters.PageNumber,
             request.QueryParameters.PageSize);
 
-        // Mapping
-        var auditsDto = pagedItems.Select(audit => mapper.Map<Audit, AuditListDto>(audit));
+        // Calculate score
+        pagedItems.ForEach(audit => audit.CalculateScore());
+
+        // Map
+        var auditsDto = mapper.Map<IEnumerable<Audit>, IEnumerable<AuditListDto>>(pagedItems);
 
         return (audits: auditsDto, metaData: pagedItems.MetaData);
     }

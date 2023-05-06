@@ -1,11 +1,12 @@
 ﻿using Api.Core.Domain;
 using Api.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Api.Mappers;
 
 public class AuditMapper : 
-    IMapper<AuditForCreationDto, Audit>, IMapper<Audit, AuditDto>, IMapper<Audit, AuditListDto>
+    IMapper<AuditForCreationDto, Audit>, IMapper<Audit, AuditDto>, IMapper<IEnumerable<Audit>, IEnumerable<AuditListDto>>
 {
     private readonly IMappingService _mapper;
 
@@ -55,7 +56,7 @@ public class AuditMapper :
             Author = audit.Author,
             StartDate = audit.StartDate,
             EndDate = audit.EndDate,
-            Score = audit.CalculateScore(),
+            Score = audit.Score,
             Answers = answers,
             Actions = actions
         };
@@ -63,18 +64,18 @@ public class AuditMapper :
         return auditDto;
     }
 
-    AuditListDto IMapper<Audit, AuditListDto>.Map(Audit audit)
+    public IEnumerable<AuditListDto> Map(IEnumerable<Audit> audits)
     {
-        var auditDto = new AuditListDto()
+        var result = audits.Select(audit => new AuditListDto()
         {
             AuditId = audit.AuditId,
             Area = audit.Area,
             Author = audit.Author,
             StartDate = audit.StartDate,
             EndDate = audit.EndDate,
-            Score = audit.CalculateScore()
-        };
+            Score = audit.Score
+        });
 
-        return auditDto;
+        return result;
     }
 }
