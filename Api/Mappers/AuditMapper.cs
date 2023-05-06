@@ -1,12 +1,15 @@
 ﻿using Api.Core.Domain;
 using Api.Models;
+using Api.Queries;
+using Api.Requests;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Api.Mappers;
 
 public class AuditMapper : 
-    IMapper<AuditForCreationDto, Audit>, IMapper<Audit, AuditDto>, IMapper<IEnumerable<Audit>, IEnumerable<AuditListDto>>
+    IMapper<AuditForCreationDto, Audit>, IMapper<Audit, AuditDto>, IMapper<IEnumerable<Audit>, IEnumerable<AuditListDto>>,
+    IMapper<GetAuditsRequest, GetAuditsQuery>
 {
     private readonly IMappingService _mapper;
 
@@ -75,6 +78,18 @@ public class AuditMapper :
             EndDate = audit.EndDate,
             Score = audit.Score
         });
+
+        return result;
+    }
+
+    public GetAuditsQuery Map(GetAuditsRequest entity)
+    {
+        var result = new GetAuditsQuery()
+        {
+            PageNumber = entity.PageNumber,
+            PageSize = entity.PageSize,
+            OrderBy = entity.OrderBy
+        };
 
         return result;
     }

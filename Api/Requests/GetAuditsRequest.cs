@@ -1,6 +1,6 @@
-﻿namespace Api.ResourceParameters;
+﻿namespace Api.Requests;
 
-public class AuditsUrlQueryParameters
+public class GetAuditsRequest
 {
     // Don't let the user pass page number -1 in the URL params
     private const int minPageNumber = 1;
@@ -13,14 +13,14 @@ public class AuditsUrlQueryParameters
     public int PageNumber
     {
         get => _pageNumber;
-        set => _pageNumber = (value < minPageNumber) ? minPageNumber : value; 
+        set => _pageNumber = value < minPageNumber ? minPageNumber : value;
     }
 
     /// <example>5</example>
     public int PageSize
     {
         get => _pageSize;
-        set => _pageSize = (value > maxPageSize) ? maxPageSize : value;
+        set => _pageSize = value > maxPageSize ? maxPageSize : value;
     }
 
     /// <example>author asc</example>

@@ -1,12 +1,14 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Api.Core.Domain;
+using Api.Mappers;
+using Api.Models;
+using Api.Queries;
+using Api.Requests;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System;
-using Api.Mappers;
-using Api.Core.Domain;
-using Api.Models;
 
 namespace Api.Extensions;
 
@@ -60,6 +62,7 @@ public static class ServiceExtensions
         services.AddSingleton<IMapper<Audit, AuditDto>, AuditMapper>();
         services.AddSingleton<IMapper<AuditForCreationDto, Audit>, AuditMapper>();
         services.AddSingleton<IMapper<IEnumerable<Audit>, IEnumerable<AuditListDto>>, AuditMapper>();
+        services.AddSingleton<IMapper<GetAuditsRequest, GetAuditsQuery>, AuditMapper>();
 
         // For Questions
         services.AddSingleton<IMapper<Question, QuestionDto>, QuestionMapper>();

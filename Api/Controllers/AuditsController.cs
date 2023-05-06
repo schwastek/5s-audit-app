@@ -1,17 +1,18 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Api.Models;
-using Api.ResourceParameters;
-using Api.Helpers;
+﻿using Api.Exceptions;
 using Api.Extensions;
-using Microsoft.AspNetCore.Routing;
+using Api.Helpers;
+using Api.Mappers;
+using Api.Models;
 using Api.Queries;
+using Api.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using System.Net.Mime;
-using Api.Exceptions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using System;
 using System.Collections.Generic;
+using System.Net.Mime;
+using System.Threading.Tasks;
 
 namespace Api.Controllers;
 
@@ -21,16 +22,18 @@ namespace Api.Controllers;
 public class AuditsController : ControllerBase
 {
     private readonly ISender sender;
+    private readonly IMappingService mapper;
 
-    public AuditsController(ISender sender)
+    public AuditsController(ISender sender, IMappingService mapper)
     {
         this.sender = sender;
+        this.mapper = mapper;
     }
 
     /// <summary>
     /// Gets list of audits
     /// </summary>
-    /// <param name="queryParameters"></param>
+    /// <param name="request"></param>
     /// <returns>A list of audits</returns>
     /// <response code="200">A list of audits</response>
     /// <response code="400">Validation error</response>
@@ -38,17 +41,18 @@ public class AuditsController : ControllerBase
     [HttpGet(Name = nameof(GetAudits))]
     [ProducesResponseType(typeof(IEnumerable<AuditListDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetAudits([FromQuery] AuditsUrlQueryParameters queryParameters)
+    public async Task<IActionResult> GetAudits([FromQuery] GetAuditsRequest request)
     {
-        var pagedResult = await sender.Send(new GetAuditsQuery(queryParameters));
+        var query = mapper.Map<GetAuditsRequest, GetAuditsQuery>(request);
+        var pagedResult = await sender.Send(query);
 
         // Add pagination metadata
         string? previousPageLink = pagedResult.metaData.HasPrevious ?
-            CreateAuditsResourceUri(queryParameters, EResourceUriType.PreviousPage)
+            CreateAuditsResourceUri(request, EResourceUriType.PreviousPage)
             : null;
 
         string? nextPageLink = pagedResult.metaData.HasNext ?
-            CreateAuditsResourceUri(queryParameters, EResourceUriType.NextPage)
+            CreateAuditsResourceUri(request, EResourceUriType.NextPage)
             : null;
 
         Response.AddPaginationHeader(pagedResult.metaData, previousPageLink, nextPageLink);
@@ -93,7 +97,7 @@ public class AuditsController : ControllerBase
         return CreatedAtAction(nameof(GetAudit), new { id = auditDto.AuditId }, auditDto);
     }
 
-    private string? CreateAuditsResourceUri(AuditsUrlQueryParameters auditsResourceParameters,
+    private string? CreateAuditsResourceUri(GetAuditsRequest auditsResourceParameters,
         EResourceUriType type)
     {
         switch (type)

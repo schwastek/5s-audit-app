@@ -1,4 +1,5 @@
 ﻿using Api.Core.Domain;
+using Api.Data.DbContext;
 using Api.Exceptions;
 using Api.Helpers;
 using Api.Mappers;
@@ -11,17 +12,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Api.Data.DbContext;
 
 namespace Api.Handlers;
 
-public sealed class GetAuditsHandler : IRequestHandler<GetAuditsQuery, (IEnumerable<AuditListDto> audits, MetaData metaData)>
+public sealed class GetAuditsQueryHandler : IRequestHandler<GetAuditsQuery, (IEnumerable<AuditListDto> audits, MetaData metaData)>
 {
     private readonly LeanAuditorContext context;
     private readonly IMappingService mapper;
     private readonly IPropertyMappingService propertyMappingService;
 
-    public GetAuditsHandler(LeanAuditorContext context, IMappingService mapper,
+    public GetAuditsQueryHandler(LeanAuditorContext context, IMappingService mapper,
         IPropertyMappingService propertyMappingService)
     {
         this.context = context;
@@ -32,9 +32,9 @@ public sealed class GetAuditsHandler : IRequestHandler<GetAuditsQuery, (IEnumera
     public async Task<(IEnumerable<AuditListDto> audits, MetaData metaData)> Handle(GetAuditsQuery request, CancellationToken cancellationToken)
     {
         if (!propertyMappingService.ValidMappingExistsFor<AuditDto, Audit>
-            (request.QueryParameters.OrderBy))
+            (request.OrderBy))
         {
-            throw new IncorrectPropertyBadRequestException(request.QueryParameters.OrderBy);
+            throw new IncorrectPropertyBadRequestException(request.OrderBy);
         }
 
         IQueryable<Audit> collection = context.Audits
@@ -44,20 +44,20 @@ public sealed class GetAuditsHandler : IRequestHandler<GetAuditsQuery, (IEnumera
             .AsQueryable();
 
         // Apply sorting
-        bool hasOrderBy = !string.IsNullOrWhiteSpace(request.QueryParameters.OrderBy);
+        bool hasOrderBy = !string.IsNullOrWhiteSpace(request.OrderBy);
 
         if (hasOrderBy)
         {
             Dictionary<string, PropertyMappingValue> auditPropertyMapping =
                 propertyMappingService.GetPropertyMapping<AuditDto, Audit>();
 
-            collection = collection.ApplySort(request.QueryParameters.OrderBy,
+            collection = collection.ApplySort(request.OrderBy,
                 auditPropertyMapping);
         }
 
         PagedList<Audit> pagedItems = await PagedList<Audit>.CreateAsync(collection,
-            request.QueryParameters.PageNumber,
-            request.QueryParameters.PageSize);
+            request.PageNumber,
+            request.PageSize);
 
         // Calculate score
         pagedItems.ForEach(audit => audit.CalculateScore());
