@@ -3,13 +3,12 @@ using Api.Data.DbContext;
 using Api.Exceptions;
 using Api.Helpers;
 using Api.Mappers;
+using Api.Mappers.OrderBy;
 using Api.Models;
 using Api.Queries;
-using Api.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,43 +18,35 @@ public sealed class GetAuditsQueryHandler : IRequestHandler<GetAuditsQuery, (IEn
 {
     private readonly LeanAuditorContext context;
     private readonly IMappingService mapper;
-    private readonly IPropertyMappingService propertyMappingService;
+    private readonly OrderByMappingService<AuditListDto, Audit> orderByMapping;
 
-    public GetAuditsQueryHandler(LeanAuditorContext context, IMappingService mapper,
-        IPropertyMappingService propertyMappingService)
+    public GetAuditsQueryHandler(
+        LeanAuditorContext context,
+        IMappingService mapper,
+        OrderByMappingService<AuditListDto, Audit> orderByMapping
+    )
     {
         this.context = context;
         this.mapper = mapper;
-        this.propertyMappingService = propertyMappingService;
+        this.orderByMapping = orderByMapping;
     }
 
     public async Task<(IEnumerable<AuditListDto> audits, MetaData metaData)> Handle(GetAuditsQuery request, CancellationToken cancellationToken)
     {
-        if (!propertyMappingService.ValidMappingExistsFor<AuditDto, Audit>
-            (request.OrderBy))
+        if (!orderByMapping.ValidMappingExists(request.OrderBy))
         {
             throw new IncorrectPropertyBadRequestException(request.OrderBy);
         }
 
-        IQueryable<Audit> collection = context.Audits
+        var sortables = orderByMapping.Map(request.OrderBy);
+
+        var collection = context.Audits
             .Include(audit => audit.Answers)
             .ThenInclude(answer => answer.Question)
-            .AsNoTracking()
-            .AsQueryable();
+            .ApplySort(sortables)
+            .AsNoTracking();
 
-        // Apply sorting
-        bool hasOrderBy = !string.IsNullOrWhiteSpace(request.OrderBy);
-
-        if (hasOrderBy)
-        {
-            Dictionary<string, PropertyMappingValue> auditPropertyMapping =
-                propertyMappingService.GetPropertyMapping<AuditDto, Audit>();
-
-            collection = collection.ApplySort(request.OrderBy,
-                auditPropertyMapping);
-        }
-
-        PagedList<Audit> pagedItems = await PagedList<Audit>.CreateAsync(collection,
+        var pagedItems = await PagedList<Audit>.CreateAsync(collection,
             request.PageNumber,
             request.PageSize);
 

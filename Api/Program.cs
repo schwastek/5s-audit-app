@@ -1,3 +1,5 @@
+using Api.Core.Options;
+using Api.Data.DbContext;
 using Api.Exceptions;
 using Api.Extensions;
 using Api.Services;
@@ -9,8 +11,6 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using Api.Core.Options;
-using Api.Data.DbContext;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,8 +33,10 @@ builder.Services.AddMediatR(typeof(Program));
 // Register mappers
 builder.Services.ConfigureMappers();
 
+// Register OrderBy mappers
+builder.Services.ConfigureOrderByMappers();
+
 builder.Services.AddScoped<AuditService, AuditService>();
-builder.Services.AddTransient<IPropertyMappingService, PropertyMappingService>();
 
 // Options pattern
 builder.Services.Configure<ConnectionStringOptions>(builder.Configuration.GetSection(

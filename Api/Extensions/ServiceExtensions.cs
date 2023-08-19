@@ -1,5 +1,6 @@
 ﻿using Api.Core.Domain;
 using Api.Mappers;
+using Api.Mappers.OrderBy;
 using Api.Models;
 using Api.Queries;
 using Api.Requests;
@@ -74,5 +75,14 @@ public static class ServiceExtensions
         // For Actions
         services.AddSingleton<IMapper<AuditAction, AuditActionDto>, AuditActionMapper>();
         services.AddSingleton<IMapper<AuditActionForCreationDto, AuditAction>, AuditActionMapper>();
+    }
+
+    public static void ConfigureOrderByMappers(this IServiceCollection services)
+    {
+        // Universal service
+        services.AddSingleton(typeof(OrderByMappingService<,>));
+
+        // For Audits
+        services.AddSingleton<OrderByMapper<AuditListDto, Audit>, AuditOrderByMapper>();
     }
 }
