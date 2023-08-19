@@ -21,7 +21,9 @@
 
 ### Sending requests
 
-For testing API, you can use [Postman](https://www.postman.com/downloads/) and import [`5S Audit App.postman_collection.json`](./postman/5S%20Audit%20App.postman_collection.json).
+For testing API, you can use [Postman](https://www.postman.com/downloads/) and import:
+* Collection [`5S Audit App.postman_collection.json`](./postman/5S%20Audit%20App.postman_collection.json)
+* Environment Development [`Development.postman_environment.json`](./postman/Development.postman_environment.json)
 
 ![Postman](./img/postman-collection.png)
 

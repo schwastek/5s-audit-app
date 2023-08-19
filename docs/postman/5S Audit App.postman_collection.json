@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "f04bacd3-b0a6-426d-b823-3c290472a75e",
+		"_postman_id": "3df067e7-d092-4597-ba90-b8e6209bf0fd",
 		"name": "5S Audit App",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29224363"
 	},
 	"item": [
 		{
@@ -88,7 +89,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{token}}",
+									"value": "{{access_token}}",
 									"type": "string"
 								}
 							]
@@ -126,6 +127,9 @@
 				{
 					"name": "Register user validation error",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -160,6 +164,9 @@
 				{
 					"name": "Register user weak password",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -194,6 +201,9 @@
 				{
 					"name": "Register user error email taken",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -368,6 +378,16 @@
 				{
 					"name": "GET nonexistent endpoint",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -393,7 +413,7 @@
 					"script": {
 						"exec": [
 							"const user = pm.response.json();\r",
-							"pm.environment.set('token', user.token);"
+							"pm.environment.set('access_token', user.token);"
 						],
 						"type": "text/javascript"
 					}
@@ -491,7 +511,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{access_token}}",
 							"type": "string"
 						}
 					]
@@ -538,7 +558,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{access_token}}",
 							"type": "string"
 						}
 					]
@@ -579,7 +599,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{access_token}}",
 							"type": "string"
 						}
 					]
@@ -630,7 +650,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{access_token}}",
 							"type": "string"
 						}
 					]
@@ -648,7 +668,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{url}}/api/audits?orderBy=author asc&pageSize=5&pageNumber=1",
+					"raw": "{{url}}/api/audits?orderBy=area desc&pageSize=5&pageNumber=1",
 					"host": [
 						"{{url}}"
 					],
@@ -659,7 +679,7 @@
 					"query": [
 						{
 							"key": "orderBy",
-							"value": "author asc"
+							"value": "area desc"
 						},
 						{
 							"key": "pageSize",
@@ -685,7 +705,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{access_token}}",
 							"type": "string"
 						}
 					]
@@ -727,7 +747,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{access_token}}",
 							"type": "string"
 						}
 					]
@@ -778,7 +798,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{access_token}}",
 							"type": "string"
 						}
 					]
@@ -821,7 +841,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{access_token}}",
 							"type": "string"
 						}
 					]
@@ -864,7 +884,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{access_token}}",
 							"type": "string"
 						}
 					]
@@ -908,7 +928,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{access_token}}",
 							"type": "string"
 						}
 					]
