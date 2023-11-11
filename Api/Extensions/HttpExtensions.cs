@@ -1,4 +1,4 @@
-﻿using Api.Helpers;
+﻿using Api.Common;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 
@@ -6,14 +6,14 @@ namespace Api.Extensions;
 
 public static class HttpExtensions
 {
-    public static void AddPaginationHeader(this HttpResponse response, MetaData metaData, string? previousPageLink, string? nextPageLink)
+    public static void AddPaginationHeader<T>(this HttpResponse response, PagedResult<T> result, string? previousPageLink, string? nextPageLink)
     {
         var paginationMetadata = new
         {
-            currentPage = metaData.CurrentPage,
-            pageSize = metaData.PageSize,
-            totalCount = metaData.TotalCount,
-            totalPages = metaData.TotalPages,
+            currentPage = result.CurrentPage,
+            pageSize = result.PageSize,
+            totalCount = result.TotalCount,
+            totalPages = result.TotalPages,
             previousPage = previousPageLink,
             nextPage = nextPageLink
         };

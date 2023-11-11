@@ -1,7 +1,7 @@
 ﻿using Api.Core.Domain;
 using Api.Data.DbContext;
 using Api.Exceptions;
-using Api.Helpers;
+using Api.Extensions;
 using Api.Mappers;
 using Api.Mappers.OrderBy;
 using Api.Models;
@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Api.Handlers;
 
-public sealed class GetAuditsQueryHandler : IRequestHandler<GetAuditsQuery, (IEnumerable<AuditListDto> audits, MetaData metaData)>
+public sealed class GetAuditsQueryHandler : IRequestHandler<GetAuditsQuery, GetAuditsQueryResult>
 {
     private readonly LeanAuditorContext context;
     private readonly IMappingService mapper;
@@ -31,7 +31,7 @@ public sealed class GetAuditsQueryHandler : IRequestHandler<GetAuditsQuery, (IEn
         this.orderByMapping = orderByMapping;
     }
 
-    public async Task<(IEnumerable<AuditListDto> audits, MetaData metaData)> Handle(GetAuditsQuery request, CancellationToken cancellationToken)
+    public async Task<GetAuditsQueryResult> Handle(GetAuditsQuery request, CancellationToken cancellationToken)
     {
         if (!orderByMapping.ValidMappingExists(request.OrderBy))
         {
@@ -40,22 +40,22 @@ public sealed class GetAuditsQueryHandler : IRequestHandler<GetAuditsQuery, (IEn
 
         var sortables = orderByMapping.Map(request.OrderBy);
 
-        var collection = context.Audits
+        var audits = await context.Audits
+            .AsNoTracking()
             .Include(audit => audit.Answers)
             .ThenInclude(answer => answer.Question)
             .ApplySort(sortables)
-            .AsNoTracking();
-
-        var pagedItems = await PagedList<Audit>.CreateAsync(collection,
-            request.PageNumber,
-            request.PageSize);
+            .ApplyPaging(request)
+            .ToListAsync(cancellationToken);
 
         // Calculate score
-        pagedItems.ForEach(audit => audit.CalculateScore());
+        audits.ForEach(audit => audit.CalculateScore());
 
         // Map
-        var auditsDto = mapper.Map<IEnumerable<Audit>, IEnumerable<AuditListDto>>(pagedItems);
+        var auditsDto = mapper.Map<List<Audit>, List<AuditListDto>>(audits);
 
-        return (audits: auditsDto, metaData: pagedItems.MetaData);
+        var result = new GetAuditsQueryResult(auditsDto, request);
+
+        return result;
     }
 }

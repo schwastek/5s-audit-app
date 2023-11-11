@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using System;
-using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
 
@@ -39,7 +38,7 @@ public class AuditsController : ControllerBase
     /// <response code="400">Validation error</response>
     // GET: api/audits
     [HttpGet(Name = nameof(GetAudits))]
-    [ProducesResponseType(typeof(IEnumerable<AuditListDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetAuditsQueryResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetAudits([FromQuery] GetAuditsRequest request)
     {
@@ -47,17 +46,17 @@ public class AuditsController : ControllerBase
         var pagedResult = await sender.Send(query);
 
         // Add pagination metadata
-        string? previousPageLink = pagedResult.metaData.HasPrevious ?
+        string? previousPageLink = pagedResult.HasPrevious ?
             CreateAuditsResourceUri(request, EResourceUriType.PreviousPage)
             : null;
 
-        string? nextPageLink = pagedResult.metaData.HasNext ?
+        string? nextPageLink = pagedResult.HasNext ?
             CreateAuditsResourceUri(request, EResourceUriType.NextPage)
             : null;
 
-        Response.AddPaginationHeader(pagedResult.metaData, previousPageLink, nextPageLink);
+        Response.AddPaginationHeader(pagedResult, previousPageLink, nextPageLink);
 
-        return Ok(pagedResult.audits);
+        return Ok(pagedResult);
     }
 
     /// <summary>
