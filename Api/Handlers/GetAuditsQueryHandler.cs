@@ -1,4 +1,5 @@
-﻿using Api.Core.Domain;
+﻿using Api.Common;
+using Api.Core.Domain;
 using Api.Data.DbContext;
 using Api.Exceptions;
 using Api.Extensions;
@@ -40,21 +41,32 @@ public sealed class GetAuditsQueryHandler : IRequestHandler<GetAuditsQuery, GetA
 
         var sortables = orderByMapping.Map(request.OrderBy);
 
-        var audits = await context.Audits
+        var audits = context.Audits
             .AsNoTracking()
             .Include(audit => audit.Answers)
             .ThenInclude(answer => answer.Question)
-            .ApplySort(sortables)
+            .ApplySort(sortables);
+
+        var totalCount = await audits.CountAsync(cancellationToken);
+
+        var paged = await audits
             .ApplyPaging(request)
             .ToListAsync(cancellationToken);
 
         // Calculate score
-        audits.ForEach(audit => audit.CalculateScore());
+        paged.ForEach(audit => audit.CalculateScore());
 
         // Map
-        var auditsDto = mapper.Map<List<Audit>, List<AuditListDto>>(audits);
+        var auditsDto = mapper.Map<List<Audit>, List<AuditListDto>>(paged);
 
-        var result = new GetAuditsQueryResult(auditsDto, request);
+        // Create result
+        var metadata = new PaginationMetadata(totalCount, request);
+
+        var result = new GetAuditsQueryResult
+        {
+            Items = auditsDto,
+            Metadata = metadata
+        };
 
         return result;
     }

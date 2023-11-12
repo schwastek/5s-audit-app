@@ -1,6 +1,4 @@
 ﻿using Api.Exceptions;
-using Api.Extensions;
-using Api.Helpers;
 using Api.Mappers;
 using Api.Models;
 using Api.Queries;
@@ -45,17 +43,6 @@ public class AuditsController : ControllerBase
         var query = mapper.Map<GetAuditsRequest, GetAuditsQuery>(request);
         var pagedResult = await sender.Send(query);
 
-        // Add pagination metadata
-        string? previousPageLink = pagedResult.HasPrevious ?
-            CreateAuditsResourceUri(request, EResourceUriType.PreviousPage)
-            : null;
-
-        string? nextPageLink = pagedResult.HasNext ?
-            CreateAuditsResourceUri(request, EResourceUriType.NextPage)
-            : null;
-
-        Response.AddPaginationHeader(pagedResult, previousPageLink, nextPageLink);
-
         return Ok(pagedResult);
     }
 
@@ -94,37 +81,5 @@ public class AuditsController : ControllerBase
         // Adds a Location header to the response.
         // The Location header specifies the URI of the newly created item.
         return CreatedAtAction(nameof(GetAudit), new { id = auditDto.AuditId }, auditDto);
-    }
-
-    private string? CreateAuditsResourceUri(GetAuditsRequest auditsResourceParameters,
-        EResourceUriType type)
-    {
-        switch (type)
-        {
-            case EResourceUriType.PreviousPage:
-                return Url.Link(nameof(GetAudits),
-                    new
-                    {
-                        pageSize = auditsResourceParameters.PageSize,
-                        pageNumber = auditsResourceParameters.PageNumber - 1,
-                        orderBy = auditsResourceParameters.OrderBy
-                    });
-            case EResourceUriType.NextPage:
-                return Url.Link(nameof(GetAudits),
-                    new
-                    {
-                        pageSize = auditsResourceParameters.PageSize,
-                        pageNumber = auditsResourceParameters.PageNumber + 1,
-                        orderBy = auditsResourceParameters.OrderBy
-                    });
-            default:
-                return Url.Link(nameof(GetAudits),
-                    new
-                    {
-                        pageSize = auditsResourceParameters.PageSize,
-                        pageNumber = auditsResourceParameters.PageNumber,
-                        orderBy = auditsResourceParameters.OrderBy
-                    });
-        }
     }
 }
