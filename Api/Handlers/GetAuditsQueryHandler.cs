@@ -2,7 +2,6 @@
 using Api.Core.Domain;
 using Api.Data.DbContext;
 using Api.Exceptions;
-using Api.Extensions;
 using Api.Mappers;
 using Api.Mappers.OrderBy;
 using Api.Models;
@@ -20,16 +19,19 @@ public sealed class GetAuditsQueryHandler : IRequestHandler<GetAuditsQuery, GetA
     private readonly LeanAuditorContext context;
     private readonly IMappingService mapper;
     private readonly OrderByMappingService<AuditListDto, Audit> orderByMapping;
+    private readonly IPaginatedResultFactory<Audit> paginatedResultFactory;
 
     public GetAuditsQueryHandler(
         LeanAuditorContext context,
         IMappingService mapper,
-        OrderByMappingService<AuditListDto, Audit> orderByMapping
+        OrderByMappingService<AuditListDto, Audit> orderByMapping,
+        IPaginatedResultFactory<Audit> paginatedResultFactory
     )
     {
         this.context = context;
         this.mapper = mapper;
         this.orderByMapping = orderByMapping;
+        this.paginatedResultFactory = paginatedResultFactory;
     }
 
     public async Task<GetAuditsQueryResult> Handle(GetAuditsQuery request, CancellationToken cancellationToken)
@@ -47,25 +49,21 @@ public sealed class GetAuditsQueryHandler : IRequestHandler<GetAuditsQuery, GetA
             .ThenInclude(answer => answer.Question)
             .ApplySort(sortables);
 
-        var totalCount = await audits.CountAsync(cancellationToken);
-
-        var paged = await audits
-            .ApplyPaging(request)
-            .ToListAsync(cancellationToken);
+        var paged = await paginatedResultFactory.CreateAsync(audits, request, cancellationToken);
 
         // Calculate score
-        paged.ForEach(audit => audit.CalculateScore());
+        foreach (var audit in paged.Items)
+        {
+            audit.CalculateScore();
+        }
 
         // Map
-        var auditsDto = mapper.Map<List<Audit>, List<AuditListDto>>(paged);
-
-        // Create result
-        var metadata = new PaginationMetadata(totalCount, request);
+        var auditsDto = mapper.Map<IReadOnlyList<Audit>, IReadOnlyList<AuditListDto>>(paged.Items);
 
         var result = new GetAuditsQueryResult
         {
             Items = auditsDto,
-            Metadata = metadata
+            Metadata = paged.Metadata
         };
 
         return result;

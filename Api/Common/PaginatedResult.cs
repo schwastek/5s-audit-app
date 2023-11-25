@@ -1,13 +1,50 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Api.Common;
 
-public abstract class PaginatedResult<T>
+public interface IPaginatedResultFactory<T>
 {
-    // TODO: Change `null!` to `required` when C# 11 is available
-    public IReadOnlyList<T> Items { get; init; } = null!;
-    public IPaginationMetadata Metadata { get; init; } = null!;
+    Task<PaginatedResult<T>> CreateAsync(IQueryable<T> source, IPageableQuery query, CancellationToken cancellationToken);
+}
+
+public class PaginatedResultFactory<T> : IPaginatedResultFactory<T>
+{
+    public async Task<PaginatedResult<T>> CreateAsync(IQueryable<T> source, IPageableQuery query, CancellationToken cancellationToken)
+    {
+        int count = await source.CountAsync(cancellationToken);
+        var items = await source
+            .Skip((query.PageNumber - 1) * query.PageSize)
+            .Take(query.PageSize)
+            .ToListAsync(cancellationToken);
+
+        var metadata = new PaginationMetadata(count, query);
+        var result = new PaginatedResult<T>(items, metadata);
+
+        return result;
+    }
+}
+
+public interface IPaginatedResult<T>
+{
+    IReadOnlyList<T> Items { get; }
+    IPaginationMetadata Metadata { get; }
+}
+
+public class PaginatedResult<T> : IPaginatedResult<T>
+{
+    public IReadOnlyList<T> Items { get; }
+    public IPaginationMetadata Metadata { get; }
+
+    public PaginatedResult(List<T> items, IPaginationMetadata metadata)
+    {
+        Items = items;
+        Metadata = metadata;
+    }
 }
 
 public interface IPaginationMetadata

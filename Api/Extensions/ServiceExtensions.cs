@@ -62,7 +62,7 @@ public static class ServiceExtensions
         // For Audits
         services.AddSingleton<IMapper<Audit, AuditDto>, AuditMapper>();
         services.AddSingleton<IMapper<AuditForCreationDto, Audit>, AuditMapper>();
-        services.AddSingleton<IMapper<List<Audit>, List<AuditListDto>>, AuditMapper>();
+        services.AddSingleton<IMapper<IReadOnlyList<Audit>, IReadOnlyList<AuditListDto>>, AuditMapper>();
         services.AddSingleton<IMapper<GetAuditsRequest, GetAuditsQuery>, AuditMapper>();
 
         // For Questions

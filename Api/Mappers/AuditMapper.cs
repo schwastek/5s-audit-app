@@ -10,7 +10,7 @@ namespace Api.Mappers;
 public class AuditMapper :
     IMapper<AuditForCreationDto, Audit>,
     IMapper<Audit, AuditDto>,
-    IMapper<List<Audit>, List<AuditListDto>>,
+    IMapper<IReadOnlyList<Audit>, IReadOnlyList<AuditListDto>>,
     IMapper<GetAuditsRequest, GetAuditsQuery>
 {
     private readonly IMappingService _mapper;
@@ -69,7 +69,7 @@ public class AuditMapper :
         return auditDto;
     }
 
-    public List<AuditListDto> Map(List<Audit> audits)
+    public IReadOnlyList<AuditListDto> Map(IReadOnlyList<Audit> audits)
     {
         var result = audits.Select(audit => new AuditListDto()
         {

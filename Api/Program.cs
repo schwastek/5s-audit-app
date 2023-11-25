@@ -1,3 +1,4 @@
+using Api.Common;
 using Api.Core.Options;
 using Api.Data.DbContext;
 using Api.Exceptions;
@@ -37,6 +38,7 @@ builder.Services.ConfigureMappers();
 builder.Services.ConfigureOrderByMappers();
 
 builder.Services.AddScoped<AuditService, AuditService>();
+builder.Services.AddSingleton(typeof(IPaginatedResultFactory<>), typeof(PaginatedResultFactory<>));
 
 // Options pattern
 builder.Services.Configure<ConnectionStringOptions>(builder.Configuration.GetSection(
