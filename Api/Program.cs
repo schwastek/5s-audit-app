@@ -4,6 +4,8 @@ using Api.Data.DbContext;
 using Api.Exceptions;
 using Api.Extensions;
 using Api.Services;
+using Api.Validators;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -30,6 +32,10 @@ builder.Services.ConfigureSwagger();
 
 // Register MediatR services
 builder.Services.AddMediatR(typeof(Program));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
+
+// Register validators
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
 // Register mappers
 builder.Services.ConfigureMappers();
