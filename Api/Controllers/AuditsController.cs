@@ -1,6 +1,4 @@
 ﻿using Api.Exceptions;
-using Api.Extensions;
-using Api.Helpers;
 using Api.Mappers;
 using Api.Models;
 using Api.Queries;
@@ -10,7 +8,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using System;
-using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
 
@@ -39,25 +36,14 @@ public class AuditsController : ControllerBase
     /// <response code="400">Validation error</response>
     // GET: api/audits
     [HttpGet(Name = nameof(GetAudits))]
-    [ProducesResponseType(typeof(IEnumerable<AuditListDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetAuditsQueryResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetAudits([FromQuery] GetAuditsRequest request)
     {
         var query = mapper.Map<GetAuditsRequest, GetAuditsQuery>(request);
         var pagedResult = await sender.Send(query);
 
-        // Add pagination metadata
-        string? previousPageLink = pagedResult.metaData.HasPrevious ?
-            CreateAuditsResourceUri(request, EResourceUriType.PreviousPage)
-            : null;
-
-        string? nextPageLink = pagedResult.metaData.HasNext ?
-            CreateAuditsResourceUri(request, EResourceUriType.NextPage)
-            : null;
-
-        Response.AddPaginationHeader(pagedResult.metaData, previousPageLink, nextPageLink);
-
-        return Ok(pagedResult.audits);
+        return Ok(pagedResult);
     }
 
     /// <summary>
@@ -95,37 +81,5 @@ public class AuditsController : ControllerBase
         // Adds a Location header to the response.
         // The Location header specifies the URI of the newly created item.
         return CreatedAtAction(nameof(GetAudit), new { id = auditDto.AuditId }, auditDto);
-    }
-
-    private string? CreateAuditsResourceUri(GetAuditsRequest auditsResourceParameters,
-        EResourceUriType type)
-    {
-        switch (type)
-        {
-            case EResourceUriType.PreviousPage:
-                return Url.Link(nameof(GetAudits),
-                    new
-                    {
-                        pageSize = auditsResourceParameters.PageSize,
-                        pageNumber = auditsResourceParameters.PageNumber - 1,
-                        orderBy = auditsResourceParameters.OrderBy
-                    });
-            case EResourceUriType.NextPage:
-                return Url.Link(nameof(GetAudits),
-                    new
-                    {
-                        pageSize = auditsResourceParameters.PageSize,
-                        pageNumber = auditsResourceParameters.PageNumber + 1,
-                        orderBy = auditsResourceParameters.OrderBy
-                    });
-            default:
-                return Url.Link(nameof(GetAudits),
-                    new
-                    {
-                        pageSize = auditsResourceParameters.PageSize,
-                        pageNumber = auditsResourceParameters.PageNumber,
-                        orderBy = auditsResourceParameters.OrderBy
-                    });
-        }
     }
 }
