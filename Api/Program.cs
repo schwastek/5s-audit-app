@@ -61,10 +61,17 @@ builder.Services.AddCors(options =>
         name: "CorsPolicy",
         builder =>
         {
+            // Enable CORS for React client
             builder.WithOrigins("http://localhost:3000")
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .WithExposedHeaders("WWW-Authenticate", "X-Pagination");
+            .WithExposedHeaders("WWW-Authenticate");
+
+            // Enable CORS for Angular client
+            builder.WithOrigins("https://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .WithExposedHeaders("WWW-Authenticate");
         });
 });
 
