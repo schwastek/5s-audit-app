@@ -38,21 +38,6 @@ export class LoginComponent {
     return control.invalid && (control.dirty || control.touched);
   }
 
-  checkIsControlValid(controlName: string) {
-    const control = this.loginForm.get(controlName) as FormControl;
-    return control.valid && (control.dirty || control.touched);
-  }
-
-  getCurrentValidationClassesForControl(controlName: string) {
-    const isInvalid = this.checkIsControlInvalid(controlName);
-    const isValid = this.checkIsControlValid(controlName);
-
-    return {
-      'is-invalid': isInvalid,
-      'is-valid': isValid
-    };
-  }
-
   getCurrentAriaValidationFeedbackForControl(controlName: string) {
     // For invalid fields, ensure that the invalid feedback/error message
     // is associated with the relevant form field using aria-describedby

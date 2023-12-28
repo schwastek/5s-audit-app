@@ -2,8 +2,7 @@
     <div class="mb-3">
         <label for="username" class="form-label">Username</label>
         <!-- Required attribute is not necessary, but it should be retained for accessibility purposes -->
-        <input type="email" class="form-control" id="username" formControlName="username"
-        [ngClass]="getCurrentValidationClassesForControl('username')" [attr.aria-describedby]="getCurrentAriaValidationFeedbackForControl('username')" required>
+        <input type="email" class="form-control" id="username" formControlName="username" [attr.aria-describedby]="getCurrentAriaValidationFeedbackForControl('username')" required>
         <ng-container *ngIf="checkIsControlInvalid('username')">
             <div *ngIf="username.errors?.['required']" [attr.id]="getIdForValidationFeedbackForRule('username', 'required')" class="invalid-feedback">
                 Username is required.
@@ -15,8 +14,7 @@
     </div>
     <div class="mb-3">
         <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="password" formControlName="password"
-        [ngClass]="getCurrentValidationClassesForControl('password')" [attr.aria-describedby]="getCurrentAriaValidationFeedbackForControl('password')" required>
+        <input type="password" class="form-control" id="password" formControlName="password" [attr.aria-describedby]="getCurrentAriaValidationFeedbackForControl('password')" required>
         <ng-container *ngIf="checkIsControlInvalid('password')">
             <div *ngIf="password.errors?.['required']" [attr.id]="getIdForValidationFeedbackForRule('password', 'required')" class="invalid-feedback">
                 Password is required.
