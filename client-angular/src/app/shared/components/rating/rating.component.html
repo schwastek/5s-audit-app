@@ -1,0 +1,39 @@
+<span class="rating-icons">
+    <label [attr.for]="getLabelFor(0)">
+      <span class="visually-hidden">{{ getLabelText(0) }}</span>
+    </label>
+    <input
+      type="radio"
+      value="0"
+      [name]="name"
+      [attr.id]="getLabelFor(0)"
+      class="visually-hidden"
+      [attr.disabled]="isDisabled ? '' : null"
+      [attr.checked]="value === 0 ? '' : null"
+      (change)="onRateChange($event)"
+    >
+  <ng-template ngFor let-starValue [ngForOf]="stars">
+    <label [attr.for]="getLabelFor(starValue)">
+      <span class="rating-icon" [ngClass]="getCssClassesFor(starValue)">
+        <ng-container [ngTemplateOutlet]="starTemplate || starTemplateDefault"></ng-container>
+      </span>
+      <span class="visually-hidden">{{ getLabelText(starValue) }}</span>
+    </label>
+    <input
+      type="radio"
+      [value]="starValue"
+      [name]="name"
+      [attr.id]="getLabelFor(starValue)"
+      class="visually-hidden"
+      [attr.disabled]="isDisabled ? '' : null"
+      [attr.checked]="value === starValue ? '' : null"
+      (change)="onRateChange($event)"
+    >
+  </ng-template>
+</span>
+
+<ng-template #starTemplateDefault>
+    <svg class="rating-icon-svg" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path>
+    </svg>
+</ng-template>

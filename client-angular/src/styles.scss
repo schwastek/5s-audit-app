@@ -3,7 +3,7 @@
 /* Importing Bootstrap SCSS file. */
 @import "./node_modules/bootstrap/scss/bootstrap";
 
-// Style CSS classes automatically added by Angular
+// Form status classes automatically added by Angular
 .ng-invalid.ng-dirty {
   @extend .is-invalid;
 }
@@ -20,3 +20,31 @@
   @extend .is-valid;
 }
 
+// Rating
+.rating-icons {
+  cursor: pointer;
+  display: flex;
+  position: relative;
+}
+
+.rating-icon {
+  display: flex;
+  color: rgba(0, 0, 0, 0.26);
+  pointer-events: none;
+}
+
+.rating-icon-filled {
+  color: #ffb400;
+}
+
+.rating-icon-empty {
+  color: rgba(0, 0, 0, 0.26);
+}
+
+.rating-icon-svg {
+  fill: currentColor;
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  font-size: 1.5rem;
+}
