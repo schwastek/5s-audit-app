@@ -1,6 +1,7 @@
 import {CommonModule, NgTemplateOutlet} from '@angular/common';
 import {Component, ContentChild, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {RatingTemplateDirective} from './templates.directive';
 
 export interface GetLabelTextFn extends Function {
   (starValue: number): string;
@@ -22,7 +23,7 @@ export const RATING_VALUE_ACCESSOR = {
 @Component({
   selector: 'app-rating',
   standalone: true,
-  imports: [CommonModule, NgTemplateOutlet],
+  imports: [CommonModule, NgTemplateOutlet, RatingTemplateDirective],
   templateUrl: './rating.component.html',
   styleUrls: ['./rating.component.scss'],
   providers: [RATING_VALUE_ACCESSOR]
@@ -51,9 +52,9 @@ export class RatingComponent implements ControlValueAccessor, OnInit, OnChanges 
   // Emitted when the rating is changed.
   @Output() rateChange = new EventEmitter<number>();
 
-  // The template to override the star icon.
-  // Put an <ng-template> as the only child of this rating component.
-  @ContentChild(TemplateRef, { static: false }) starTemplate?: TemplateRef<any>;
+  // The template to override the rating icon.
+  // Use `<ng-template [ratingTemplate]>` (with custom directive) as the child of this rating component.
+  @ContentChild(RatingTemplateDirective, { read: TemplateRef, static: false }) ratingTemplate?: TemplateRef<unknown>;
 
   value: number = 0;
   stars: number[] = [];
