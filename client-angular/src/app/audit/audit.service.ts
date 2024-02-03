@@ -13,11 +13,12 @@ export class AuditService {
   
   constructor(private http: HttpClient) { }
 
-  getAudits() {
+  getAudits(): Observable<PaginatedResult<Audit>> {
+    const url = `${this.baseUrl}/audits`;
     const paginationParams = new HttpParams()
       .set('pageSize', 5)
       .set('pageNumber', 1);
 
-    return this.http.get<PaginatedResult<Audit>>(this.baseUrl + 'audits', { params: paginationParams });
+    return this.http.get<PaginatedResult<Audit>>(url, { params: paginationParams });
   }
 }
