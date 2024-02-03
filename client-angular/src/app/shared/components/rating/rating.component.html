@@ -1,17 +1,17 @@
 <span class="rating-icons">
-    <label [attr.for]="getLabelFor(0)">
-      <span class="visually-hidden">{{ getLabelText(0) }}</span>
-    </label>
-    <input
-      type="radio"
-      value="0"
-      [name]="name"
-      [attr.id]="getLabelFor(0)"
-      class="visually-hidden"
-      [attr.disabled]="isDisabled ? '' : null"
-      [attr.checked]="value === 0 ? '' : null"
-      (change)="onRateChange($event)"
-    >
+  <label [attr.for]="getLabelFor(0)">
+    <span class="visually-hidden">{{ getLabelText(0) }}</span>
+  </label>
+  <input
+    type="radio"
+    value="0"
+    [name]="name"
+    [attr.id]="getLabelFor(0)"
+    class="visually-hidden"
+    [attr.disabled]="isDisabled ? '' : null"
+    [attr.checked]="value === 0 ? '' : null"
+    (change)="onRateChange($event)"
+  >
   <ng-template ngFor let-starValue [ngForOf]="stars">
     <label [attr.for]="getLabelFor(starValue)">
       <span class="rating-icon" [ngClass]="getCssClassesFor(starValue)">
