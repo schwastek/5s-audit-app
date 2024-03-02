@@ -1,12 +1,15 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AccountService } from '../account.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class LoginComponent {
   loginForm = new FormGroup({
@@ -26,11 +29,11 @@ export class LoginComponent {
   }
 
   get username() {
-    return this.loginForm.get('username') as FormControl;
+    return this.loginForm.get('username') as FormControl<string | null>;
   }
 
   get password() {
-    return this.loginForm.get('password') as FormControl;
+    return this.loginForm.get('password') as FormControl<string | null>;
   }
 
   checkIsControlInvalid(controlName: string) {
@@ -76,5 +79,9 @@ export class LoginComponent {
         this.isSubmitting = false;
       }
     });
+  }
+
+  delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms));
   }
 }

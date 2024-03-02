@@ -1,32 +1,28 @@
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import {
   HttpRequest,
-  HttpHandler,
   HttpEvent,
-  HttpInterceptor
+  HttpHandlerFn
 } from '@angular/common/http';
 import { Observable, take } from 'rxjs';
-import { AccountService } from 'src/app/account/account.service';
+import { AccountService } from '../../account/account.service';
 
-@Injectable()
-export class JwtInterceptor implements HttpInterceptor {
-  token?: string;
+export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
+  const accountService = inject(AccountService);
+  let token: string | undefined;
 
-  constructor(private accountService: AccountService) {
-    this.accountService.currentUser$.pipe(take(1)).subscribe({
-      next: user => this.token = user?.token
+  accountService.currentUser$.pipe(take(1)).subscribe({
+    next: user => token = user?.token
+  });
+
+  // Clone the request to add the authentication header.
+  if (token) {
+    const authReq = req.clone({
+      headers: req.headers.set('Authorization', `Bearer ${token}`)
     });
+
+    return next(authReq);
   }
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    if (this.token) {
-      const authRequest = request.clone({
-        headers: request.headers.set('Authorization', `Bearer ${this.token}`)
-      });
-      
-      return next.handle(authRequest);
-    }
-
-    return next.handle(request);
-  }
+  return next(req);
 }

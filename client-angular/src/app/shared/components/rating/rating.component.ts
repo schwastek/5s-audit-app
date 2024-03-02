@@ -22,11 +22,11 @@ export const RATING_VALUE_ACCESSOR = {
 // See: https://www.w3.org/WAI/tutorials/forms/custom-controls/#a-star-rating
 @Component({
   selector: 'app-rating',
-  standalone: true,
-  imports: [CommonModule, NgTemplateOutlet, RatingTemplateDirective],
   templateUrl: './rating.component.html',
   styleUrls: ['./rating.component.scss'],
-  providers: [RATING_VALUE_ACCESSOR]
+  providers: [RATING_VALUE_ACCESSOR],
+  standalone: true,
+  imports: [CommonModule, NgTemplateOutlet, RatingTemplateDirective]
 })
 export class RatingComponent implements ControlValueAccessor, OnInit, OnChanges {
 
