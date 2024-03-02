@@ -1,9 +1,9 @@
 ﻿using Api.Contracts.AuditAction.Requests;
-using Api.Exceptions;
+using Api.Contracts.Common;
+using Api.Mappers.MappingService;
 using Features.AuditAction.Delete;
 using Features.AuditAction.Save;
 using Features.AuditAction.Update;
-using Api.Mappers.MappingService;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +35,7 @@ public class ActionsController : ControllerBase
     /// <response code="200">The action for the audit has been created</response>
     /// <response code="404">Audit is not found</response>
     [HttpPost]
-    [ProducesResponseType(typeof(SaveAuditActionCommandResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(SaveAuditActionResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SaveAuditAction([FromBody] SaveAuditActionRequest request)
     {

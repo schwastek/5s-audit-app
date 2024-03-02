@@ -1,16 +1,15 @@
-﻿using System.Text.Json;
+﻿using Core.MappingService;
+using System.Text.Json;
 
 namespace Api.Exceptions;
 
-internal class ErrorDetails
+public class ErrorDetails
 {
-    /// <example>404</example>
     public int StatusCode { get; set; }
-    
-    /// <example>Audit not found</example>
     public string Message { get; set; }
 
-    public ErrorDetails(int statusCode) {
+    public ErrorDetails(int statusCode)
+    {
         StatusCode = statusCode;
         Message = GetDefaultMessageForStatusCode(statusCode);
     }
@@ -35,6 +34,19 @@ internal class ErrorDetails
             404 => "Not found",
             500 => "Internal server error",
             _ => string.Empty
+        };
+    }
+}
+
+public class ErrorDetailsMapper :
+    IMapper<ErrorDetails, Contracts.Common.ErrorDetails>
+{
+    public Contracts.Common.ErrorDetails Map(ErrorDetails src)
+    {
+        return new Contracts.Common.ErrorDetails()
+        {
+            StatusCode = src.StatusCode,
+            Message = src.Message
         };
     }
 }

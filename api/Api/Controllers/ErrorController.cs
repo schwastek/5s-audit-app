@@ -1,4 +1,5 @@
 ﻿using Api.Exceptions;
+using Api.Mappers.MappingService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,10 +13,18 @@ namespace Api.Controllers;
 [ApiExplorerSettings(IgnoreApi = true)]
 public class ErrorController : ControllerBase
 {
+    private readonly IMappingService mapper;
+
+    public ErrorController(IMappingService mapper)
+    {
+        this.mapper = mapper;
+    }
+
     public IActionResult Index(int code)
     {
         var details = new ErrorDetails(code);
+        var response = mapper.Map<ErrorDetails, Contracts.Common.ErrorDetails>(details);
 
-        return new ObjectResult(details);
+        return new ObjectResult(response);
     }
 }

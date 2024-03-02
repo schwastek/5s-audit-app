@@ -1,10 +1,10 @@
-﻿using Core.MediatR;
+﻿using Api.Exceptions;
+using Api.Extensions;
+using Core.MediatR;
 using Core.Pagination;
 using Core.TokenService;
 using Data.DbContext;
 using Data.Options;
-using Api.Exceptions;
-using Api.Extensions;
 using Features.Audit.Get;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -96,17 +96,17 @@ if (app.Environment.IsProduction())
 
 app.UseHttpsRedirection();
 
-// Enable middleware to serve generated Swagger as a JSON endpoint.
-app.UseSwagger();
-
-// Enable middleware to serve swagger - ui(HTML, JS, CSS, etc.)
-app.UseSwaggerUI(c =>
+if (app.Environment.IsDevelopment())
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+    // Enable middleware to serve generated Swagger as a JSON endpoint.
+    app.UseSwagger();
 
-    // Serve UI at `localhost:port` instead of `localhost:port/swagger`
-    c.RoutePrefix = string.Empty;
-});
+    // Enable middleware to serve Swagger UI
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+    });
+}
 
 app.UseCors("CorsPolicy");
 
