@@ -1,11 +1,9 @@
-﻿using Api.Contracts.Question.Dto;
-using Api.Contracts.Question.Requests;
-using Features.Question.List;
+﻿using Api.Contracts.Question.Requests;
 using Api.Mappers.MappingService;
+using Features.Question.List;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
 
@@ -31,7 +29,7 @@ public class QuestionsController : ControllerBase
     /// <returns>A list of questions</returns>
     /// <response code="200">A list of questions</response>
     [HttpGet]
-    [ProducesResponseType(typeof(List<QuestionDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ListQuestionsResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListQuestions()
     {
         var result = await sender.Send(new ListQuestionsQuery());

@@ -1,10 +1,9 @@
 ﻿using Api.Contracts.Audit.Requests;
-using Api.Exceptions;
-using Features.Audit.Dto;
+using Api.Contracts.Common;
+using Api.Mappers.MappingService;
 using Features.Audit.Get;
 using Features.Audit.List;
 using Features.Audit.Save;
-using Api.Mappers.MappingService;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -62,7 +61,7 @@ public class AuditsController : ControllerBase
     /// Creates a new audit
     /// </summary>
     [HttpPost]
-    [ProducesResponseType(typeof(AuditDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(SaveAuditResponse), StatusCodes.Status201Created)]
     public async Task<IActionResult> SaveAudit([FromBody] SaveAuditRequest request)
     {
         var command = mapper.Map<SaveAuditRequest, SaveAuditCommand>(request);
