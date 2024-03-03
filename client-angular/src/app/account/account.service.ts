@@ -16,7 +16,7 @@ export class AccountService {
   constructor(private http: HttpClient, private router: Router) { }
 
   login(email: string | null, password: string | null) {
-    return this.http.post<User>(this.baseUrl + '/account/login', { email, password })
+    return this.http.post<User>(this.baseUrl + '/api/account/login', { email, password })
       .pipe(map(user => {
         localStorage.setItem('token', user.token);
         this.currentUserSource.next(user);
@@ -39,7 +39,7 @@ export class AccountService {
     let headers = new HttpHeaders();
     headers = headers.set('Authorization', `Bearer ${token}`);
 
-    return this.http.get<User>(this.baseUrl + '/account', {headers})
+    return this.http.get<User>(this.baseUrl + '/api/account', {headers})
     .pipe(
       map(user => {
         if (user) {

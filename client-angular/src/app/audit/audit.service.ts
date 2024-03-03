@@ -14,7 +14,7 @@ export class AuditService {
   constructor(private http: HttpClient) { }
 
   getAudits(): Observable<PaginatedResult<Audit>> {
-    const url = `${this.baseUrl}/audits`;
+    const url = `${this.baseUrl}/api/audits`;
     const paginationParams = new HttpParams()
       .set('pageSize', 5)
       .set('pageNumber', 1);

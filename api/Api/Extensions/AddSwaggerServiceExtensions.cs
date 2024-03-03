@@ -15,6 +15,14 @@ public static class AddSwaggerServiceExtensions
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "API V1", Version = "v1" });
 
+            // Generate `operationId` based on the action name which is the method name.
+            // Alternatively, you can add `Name` parameter to [HttpGet].
+            c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
+
+            // camelCase for parameters, "Id" -> "id".
+            // Better for generating TypeScript models and services of request parameters.
+            c.DescribeAllParametersInCamelCase();
+
             // Set the comments path for the Swagger JSON and UI
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
