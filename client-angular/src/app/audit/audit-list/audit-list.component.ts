@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { Audit } from '../../api/models/audit';
+import { Audit } from '../models/audit';
 import { AuditService } from '../audit.service';
-import { PaginatedResult } from '../../api/models/pagination';
+import { PaginatedResult } from '../models/pagination';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
