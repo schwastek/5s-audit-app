@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "generateapimodels": "cross-env NODE_EXTRA_CA_CERTS=./ssl/dotnetdevcert.pem npx ng-openapi-gen --config ng-openapi-gen.json"
+    "generateapimodels": "cross-env NODE_EXTRA_CA_CERTS=./ssl/dotnetdevcert.pem npx ng-openapi-gen --config ng-openapi-gen.json",
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
@@ -26,10 +27,18 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.2.2",
+    "@angular-eslint/builder": "17.2.1",
+    "@angular-eslint/eslint-plugin": "17.2.1",
+    "@angular-eslint/eslint-plugin-template": "17.2.1",
+    "@angular-eslint/schematics": "17.2.1",
+    "@angular-eslint/template-parser": "17.2.1",
     "@angular/cli": "^17.2.2",
     "@angular/compiler-cli": "^17.2.3",
     "@types/jasmine": "~5.1.4",
+    "@typescript-eslint/eslint-plugin": "6.19.0",
+    "@typescript-eslint/parser": "6.19.0",
     "cross-env": "^7.0.3",
+    "eslint": "^8.56.0",
     "jasmine-core": "~5.1.2",
     "karma": "~6.4.3",
     "karma-chrome-launcher": "~3.2.0",
