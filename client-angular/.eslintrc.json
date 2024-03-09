@@ -3,6 +3,9 @@
   "ignorePatterns": [
     "projects/**/*"
   ],
+  "plugins": [
+    "@stylistic"
+  ],
   "overrides": [
     {
       "files": [
@@ -30,7 +33,19 @@
             "prefix": "app",
             "style": "kebab-case"
           }
-        ]
+        ],
+        "@stylistic/arrow-parens": ["error", "always"],
+        "@stylistic/block-spacing": ["error", "always"],
+        "@stylistic/comma-dangle": ["error", "never"],
+        "@stylistic/eol-last": ["error", "always"],
+        "@stylistic/indent": ["error", 2, { "SwitchCase": 1 }],
+        "@stylistic/no-extra-semi": "error",
+        "@stylistic/no-mixed-operators": "error",
+        "@stylistic/no-multiple-empty-lines": ["error", { "max": 2 }],
+        "@stylistic/no-trailing-spaces": "error",
+        "@stylistic/object-curly-spacing": ["error", "always"],
+        "@stylistic/quotes": ["error", "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
+        "@stylistic/semi": ["error", "always"]
       }
     },
     {
