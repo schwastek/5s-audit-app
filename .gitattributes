@@ -1,0 +1,7 @@
+# Normalizes line endings to LF for all text files checked into repository.
+# Leaves local line endings untouched in the working tree.
+* text=auto
+
+# Windows batch files require CRLF
+*.{cmd,[cC][mM][dD]} text eol=crlf
+*.{bat,[bB][aA][tT]} text eol=crlf
