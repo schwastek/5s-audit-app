@@ -2,7 +2,7 @@
 
 namespace Api.Contracts.Common.Requests
 {
-    public abstract class PageableRequest
+    public interface IPageableRequest
     {
         /// <example>1</example>
         public int? PageNumber { get; set; }
@@ -14,20 +14,10 @@ namespace Api.Contracts.Common.Requests
     public interface IPaginatedResult<T>
     {
         IReadOnlyCollection<T> Items { get; }
-        IPaginationMetadata Metadata { get; }
+        PaginationMetadata Metadata { get; }
     }
 
-    public interface IPaginationMetadata
-    {
-        public int CurrentPage { get; }
-        public int TotalPages { get; }
-        public int PageSize { get; }
-        public int TotalCount { get; }
-        public bool HasPreviousPage { get; }
-        public bool HasNextPage { get; }
-    }
-
-    public class PaginationMetadata : IPaginationMetadata
+    public class PaginationMetadata
     {
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }

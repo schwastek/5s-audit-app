@@ -1,6 +1,7 @@
 ﻿using Api.Contracts.Audit.Requests;
 using Api.Mappers.MappingService;
 using Core.MappingService;
+using Core.OrderByService;
 using Core.Pagination;
 using MediatR;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ public class ListAuditsQueryResult : IPaginatedResult<Dto.AuditListItemDto>
 {
     // TODO: Change `null!` to `required` when C# 11
     public IReadOnlyList<Dto.AuditListItemDto> Items { get; init; } = null!;
-    public IPaginationMetadata Metadata { get; init; } = null!;
+    public PaginationMetadata Metadata { get; init; } = null!;
 }
 
 public class ListAuditsRequestMapper :
@@ -35,19 +36,20 @@ public class ListAuditsRequestMapper :
 
     public ListAuditsQuery Map(ListAuditsRequest src)
     {
-        const string defaultOrderBy = "author asc";
+        var pageableQuery = new PageableQuery(src.PageNumber, src.PageSize);
+        var orderByQuery = new OrderByQuery(src.OrderBy);
 
         return new ListAuditsQuery()
         {
-            OrderBy = src.OrderBy ?? defaultOrderBy,
-            PageNumber = PageableRequest.GetPageNumber(src.PageNumber),
-            PageSize = PageableRequest.GetPageSize(src.PageSize)
+            OrderBy = orderByQuery.OrderBy,
+            PageNumber = pageableQuery.PageNumber,
+            PageSize = pageableQuery.PageSize
         };
     }
 
     public ListAuditsResponse Map(ListAuditsQueryResult src)
     {
-        var metadata = mapper.Map<IPaginationMetadata, Api.Contracts.Common.Requests.IPaginationMetadata>(src.Metadata);
+        var metadata = mapper.Map<PaginationMetadata, Api.Contracts.Common.Requests.PaginationMetadata>(src.Metadata);
 
         var auditListItems = src.Items
             .Select(answer => mapper.Map<Dto.AuditListItemDto, Api.Contracts.Audit.Dto.AuditListItemDto>(answer))

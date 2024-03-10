@@ -90,7 +90,7 @@ public static class AddMappersServiceExtensions
 
     private static void AddPaginationMappers(IServiceCollection services)
     {
-        services.AddSingleton<IMapper<Core.Pagination.IPaginationMetadata, Api.Contracts.Common.Requests.IPaginationMetadata>, PaginationMapper>();
+        services.AddSingleton<IMapper<Core.Pagination.PaginationMetadata, Api.Contracts.Common.Requests.PaginationMetadata>, PaginationMapper>();
     }
 
     private static void AddOtherMappers(IServiceCollection services)
