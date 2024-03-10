@@ -3,9 +3,9 @@
 namespace Core.Pagination;
 
 public class PaginationMapper :
-    IMapper<Core.Pagination.IPaginationMetadata, Api.Contracts.Common.Requests.IPaginationMetadata>
+    IMapper<PaginationMetadata, Api.Contracts.Common.Requests.PaginationMetadata>
 {
-    public Api.Contracts.Common.Requests.IPaginationMetadata Map(IPaginationMetadata src)
+    public Api.Contracts.Common.Requests.PaginationMetadata Map(PaginationMetadata src)
     {
         return new Api.Contracts.Common.Requests.PaginationMetadata()
         {
@@ -14,7 +14,7 @@ public class PaginationMapper :
             HasNextPage = src.HasNextPage,
             HasPreviousPage = src.HasPreviousPage,
             TotalCount = src.TotalCount,
-            TotalPages = src.TotalPages,
+            TotalPages = src.TotalPages
         };
     }
 }

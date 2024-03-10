@@ -32,22 +32,22 @@ public class PaginatedResultFactory<T> : IPaginatedResultFactory<T>
 public interface IPaginatedResult<T>
 {
     IReadOnlyList<T> Items { get; }
-    IPaginationMetadata Metadata { get; }
+    PaginationMetadata Metadata { get; }
 }
 
 public class PaginatedResult<T> : IPaginatedResult<T>
 {
     public IReadOnlyList<T> Items { get; }
-    public IPaginationMetadata Metadata { get; }
+    public PaginationMetadata Metadata { get; }
 
-    public PaginatedResult(List<T> items, IPaginationMetadata metadata)
+    public PaginatedResult(List<T> items, PaginationMetadata metadata)
     {
-        Items = items;
+        Items = items.AsReadOnly();
         Metadata = metadata;
     }
 }
 
-public interface IPaginationMetadata
+public class PaginationMetadata
 {
     public int CurrentPage { get; }
     public int TotalPages { get; }
@@ -55,20 +55,6 @@ public interface IPaginationMetadata
     public int TotalCount { get; }
     public bool HasPreviousPage { get; }
     public bool HasNextPage { get; }
-}
-
-public class PaginationMetadata : IPaginationMetadata
-{
-    public int CurrentPage { get; }
-    public int TotalPages { get; }
-    public int PageSize { get; }
-    public int TotalCount { get; }
-    public bool HasPreviousPage { get; }
-    public bool HasNextPage { get; }
-
-    public PaginationMetadata()
-    {
-    }
 
     public PaginationMetadata(int count, IPageableQuery query)
     {
