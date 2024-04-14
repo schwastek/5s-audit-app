@@ -30,6 +30,9 @@ export const RATING_VALUE_ACCESSOR = {
 })
 export class RatingComponent implements ControlValueAccessor, OnInit, OnChanges {
 
+  // The current rating. Useful if the rating component is not controlled by Angular Forms (e.g. via `formControlName`).
+  @Input() rate: number = 0;
+
   // Number of stars.
   @Input() max: number = 5;
 
@@ -56,7 +59,6 @@ export class RatingComponent implements ControlValueAccessor, OnInit, OnChanges 
   // Use `<ng-template [ratingTemplate]>` (with custom directive) as the child of this rating component.
   @ContentChild(RatingTemplateDirective, { read: TemplateRef, static: false }) ratingTemplate?: TemplateRef<unknown>;
 
-  value: number = 0;
   stars: number[] = [];
   name: string = 'rating';
   onChange: Function = (_: any): void => {};
@@ -79,7 +81,7 @@ export class RatingComponent implements ControlValueAccessor, OnInit, OnChanges 
   // Called by the parent form to set a value in the child control.
   writeValue(value: any): void {
     if (!value) value = 0;
-    this.value = value;
+    this.rate = value;
   }
 
   // The child control can notify the parent form that a new value is available via the callback function.
@@ -115,9 +117,9 @@ export class RatingComponent implements ControlValueAccessor, OnInit, OnChanges 
   updateRating(value: number): void {
     if (!this.isInteractive) return;
 
-    this.value = value;
-    this.rateChange.emit(this.value);
-    this.onChange(this.value);
+    this.rate = value;
+    this.rateChange.emit(this.rate);
+    this.onChange(this.rate);
     this.onTouched();
   }
 
@@ -126,7 +128,7 @@ export class RatingComponent implements ControlValueAccessor, OnInit, OnChanges 
     const starEmptyClass = this.starEmptyClass || 'rating-icon-empty';
 
     // Currently selected star >= passed star's value? Fill the passed star.
-    let isFilled = this.value >= value;
+    let isFilled = this.rate >= value;
 
     return {
       [starFilledClass]: isFilled,

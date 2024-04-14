@@ -9,7 +9,7 @@
     [attr.id]="getLabelFor(0)"
     class="visually-hidden"
     [attr.disabled]="isDisabled ? '' : null"
-    [attr.checked]="value === 0 ? '' : null"
+    [attr.checked]="rate === 0 ? '' : null"
     (change)="onRateChange($event)"
   >
   <ng-template ngFor let-starValue [ngForOf]="stars">
@@ -26,7 +26,7 @@
       [attr.id]="getLabelFor(starValue)"
       class="visually-hidden"
       [attr.disabled]="isDisabled ? '' : null"
-      [attr.checked]="value === starValue ? '' : null"
+      [attr.checked]="rate === starValue ? '' : null"
       (change)="onRateChange($event)"
     >
   </ng-template>
