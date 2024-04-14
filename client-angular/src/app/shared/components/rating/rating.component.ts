@@ -56,7 +56,7 @@ export class RatingComponent implements ControlValueAccessor, OnInit, OnChanges 
   @Output() rateChange = new EventEmitter<number>();
 
   // The template to override the rating icon.
-  // Use `<ng-template [ratingTemplate]>` (with custom directive) as the child of this rating component.
+  // Use `<ng-template [ratingTemplate]>` (custom directive) as the child of this rating component.
   @ContentChild(RatingTemplateDirective, { read: TemplateRef, static: false }) ratingTemplate?: TemplateRef<unknown>;
 
   stars: number[] = [];
@@ -69,6 +69,8 @@ export class RatingComponent implements ControlValueAccessor, OnInit, OnChanges 
   }
 
   ngOnInit(): void {
+    // Generate random name for this radio group, e.g. "rating-ez8l7i".
+    this.name = `${this.name}-${Math.random().toString(36).slice(6)}`;
     this.updateNumberOfStars();
   }
 
