@@ -1,9 +1,10 @@
-import {CommonModule, NgTemplateOutlet} from '@angular/common';
-import {Component, ContentChild, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef} from '@angular/core';
-import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {RatingTemplateDirective} from './templates.directive';
+import { CommonModule, NgTemplateOutlet } from '@angular/common';
+import { Component, ContentChild, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { RatingTemplateDirective } from './templates.directive';
+import { noop } from 'rxjs';
 
-export interface GetLabelTextFn extends Function {
+export interface GetLabelTextFn {
   (starValue: number): string;
 }
 
@@ -15,7 +16,7 @@ export const RATING_VALUE_ACCESSOR = {
   provide: NG_VALUE_ACCESSOR,
   useExisting: forwardRef(() => RatingComponent),
   multi: true
-}
+};
 
 // A radio group with its fields visually hidden. It contains six radio buttons by default,
 // one for each star, and another for 0 stars that is checked by default.
@@ -44,7 +45,7 @@ export class RatingComponent implements ControlValueAccessor, OnInit, OnChanges 
   @Input() isReadOnly: boolean = false;
 
   // Returns the label text for the current rating value, e.g. "2 Stars".
-  @Input({alias: 'getLabelText'}) getLabelTextCustomFn?: GetLabelTextFn;
+  @Input() getLabelTextFn?: GetLabelTextFn;
 
   // CSS classes for the element wrapping the rate icon when filled.
   @Input() starFilledClass?: string;
@@ -61,8 +62,8 @@ export class RatingComponent implements ControlValueAccessor, OnInit, OnChanges 
 
   stars: number[] = [];
   name: string = 'rating';
-  onChange: Function = (_: any): void => {};
-  onTouched: Function = (): void => {};
+  onChange: (value: number) => void = noop;
+  onTouched: () => void = noop;
 
   get isInteractive(): boolean {
     return !this.isDisabled && !this.isReadOnly;
@@ -81,18 +82,22 @@ export class RatingComponent implements ControlValueAccessor, OnInit, OnChanges 
   }
 
   // Called by the parent form to set a value in the child control.
-  writeValue(value: any): void {
-    if (!value) value = 0;
-    this.rate = value;
+  writeValue(value: unknown): void {
+    if (typeof value === 'number') {
+      this.rate = value;
+      return;
+    }
+
+    this.rate = 0;
   }
 
   // The child control can notify the parent form that a new value is available via the callback function.
-  registerOnChange(fn: Function): void {
+  registerOnChange(fn: (fn: number) => void): void {
     this.onChange = fn;
   }
 
   // The child control can notify its touched status back to the parent form via the callback function.
-  registerOnTouched(fn: Function): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
@@ -111,7 +116,9 @@ export class RatingComponent implements ControlValueAccessor, OnInit, OnChanges 
     }
   }
 
-  onRateChange($event: Event) {
+  onRateChange($event: Event): void {
+    if (!this.isInteractive) return;
+
     const value: string = ($event.target as HTMLInputElement).value;
     this.updateRating(Number(value));
   }
@@ -130,12 +137,12 @@ export class RatingComponent implements ControlValueAccessor, OnInit, OnChanges 
     const starEmptyClass = this.starEmptyClass || 'rating-icon-empty';
 
     // Currently selected star >= passed star's value? Fill the passed star.
-    let isFilled = this.rate >= value;
+    const isFilled = this.rate >= value;
 
     return {
       [starFilledClass]: isFilled,
       [starEmptyClass]: !isFilled
-    }
+    };
   }
 
   getLabelFor(value: number): string {
@@ -143,8 +150,8 @@ export class RatingComponent implements ControlValueAccessor, OnInit, OnChanges 
   }
 
   getLabelText(value: number): string {
-    if (this.getLabelTextCustomFn) {
-      return this.getLabelTextCustomFn(value);
+    if (this.getLabelTextFn) {
+      return this.getLabelTextFn(value);
     }
 
     const isPlural = value != 1;
