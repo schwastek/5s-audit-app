@@ -1,6 +1,7 @@
 ﻿using Api.Contracts.Audit.Requests;
-using Core.MappingService;
 using Api.Mappers.MappingService;
+using Core.MappingService;
+using FluentValidation;
 using MediatR;
 using System;
 
@@ -16,6 +17,14 @@ public sealed record GetAuditQueryResult
     public Dto.AuditDto Audit { get; init; } = null!;
 }
 
+public sealed class GetAuditRequestValidator : AbstractValidator<GetAuditRequest>
+{
+    public GetAuditRequestValidator()
+    {
+        RuleFor(x => x.Id).NotEmpty();
+    }
+}
+
 public class GetAuditQueryMapper :
     IMapper<GetAuditRequest, GetAuditQuery>,
     IMapper<GetAuditQueryResult, GetAuditResponse>
@@ -26,6 +35,7 @@ public class GetAuditQueryMapper :
     {
         this.mapper = mapper;
     }
+
     public GetAuditQuery Map(GetAuditRequest source)
     {
         var result = new GetAuditQuery()

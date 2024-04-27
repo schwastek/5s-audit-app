@@ -1,6 +1,7 @@
 ﻿using Api.Contracts.Audit.Requests;
 using Api.Contracts.Common;
 using Api.Mappers.MappingService;
+using Api.Mappers.ValidatorService;
 using Features.Audit.Get;
 using Features.Audit.List;
 using Features.Audit.Save;
@@ -18,13 +19,19 @@ namespace Api.Controllers;
 [Produces(MediaTypeNames.Application.Json)]
 public class AuditsController : ControllerBase
 {
-    private readonly ISender sender;
+    private readonly IValidatorService validator;
     private readonly IMappingService mapper;
+    private readonly ISender sender;
 
-    public AuditsController(ISender sender, IMappingService mapper)
+    public AuditsController(
+        IValidatorService validator,
+        IMappingService mapper,
+        ISender sender
+    )
     {
-        this.sender = sender;
+        this.validator = validator;
         this.mapper = mapper;
+        this.sender = sender;
     }
 
     /// <summary>
@@ -50,6 +57,7 @@ public class AuditsController : ControllerBase
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAudit([FromRoute] GetAuditRequest request)
     {
+        await validator.ValidateAndThrowAsync(request, HttpContext.RequestAborted);
         var query = mapper.Map<GetAuditRequest, GetAuditQuery>(request);
         var result = await sender.Send(query);
         var response = mapper.Map<GetAuditQueryResult, GetAuditResponse>(result);
