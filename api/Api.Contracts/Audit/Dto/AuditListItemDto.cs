@@ -8,10 +8,10 @@ namespace Api.Contracts.Audit.Dto
         public Guid AuditId { get; set; }
 
         /// <example>John</example>
-        public string Author { get; set; } = null!;
+        public string Author { get; set; }
 
         /// <example>Warehouse</example>
-        public string Area { get; set; } = null!;
+        public string Area { get; set; }
 
         /// <example>2021-07-19T11:09:34.543Z</example>
         public DateTime StartDate { get; set; }

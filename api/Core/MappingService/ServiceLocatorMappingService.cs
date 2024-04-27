@@ -23,7 +23,7 @@ public class ServiceLocatorMappingService : IMappingService
         // Get registered mapper
         var mapper = serviceProvider.GetService<IMapper<TSource, TDestination>>();
 
-        if (mapper == null)
+        if (mapper is null)
         {
             throw new MapperNotFoundException(typeof(TSource), typeof(TDestination));
         }

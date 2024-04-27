@@ -11,7 +11,7 @@ namespace Api.Contracts.AuditAction.Dto
         public Guid AuditId { get; set; }
 
         /// <example>Clean up</example>
-        public string Description { get; set; } = null!;
+        public string Description { get; set; }
 
         /// <example>false</example>
         public bool IsComplete { get; set; }

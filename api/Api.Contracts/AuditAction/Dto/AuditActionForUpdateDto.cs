@@ -3,9 +3,9 @@
     public class AuditActionForUpdateDto
     {
         /// <example>Clean up (UPDATED)</example>
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
         /// <example>true</example>
-        public bool? IsComplete { get; set; }
+        public bool IsComplete { get; set; }
     }
 }

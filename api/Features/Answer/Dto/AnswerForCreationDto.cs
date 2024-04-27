@@ -18,10 +18,10 @@ public class AnswerForCreationDtoMapper :
     {
         return new AnswerForCreationDto()
         {
-            AnswerId = src.AnswerId ?? Guid.Empty,
-            AnswerText = src.AnswerText ?? string.Empty,
-            AnswerType = src.AnswerType ?? string.Empty,
-            QuestionId = src.QuestionId ?? Guid.Empty
+            AnswerId = src.AnswerId,
+            AnswerText = src.AnswerText,
+            AnswerType = src.AnswerType,
+            QuestionId = src.QuestionId
         };
     }
 }

@@ -5,6 +5,6 @@ namespace Api.Contracts.Question.Requests
 {
     public class ListQuestionsResponse
     {
-        public IReadOnlyCollection<QuestionDto>? Questions { get; set; }
+        public IReadOnlyCollection<QuestionDto> Questions { get; set; }
     }
 }

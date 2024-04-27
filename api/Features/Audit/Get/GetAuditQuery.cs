@@ -40,7 +40,7 @@ public class GetAuditQueryMapper :
     {
         var result = new GetAuditQuery()
         {
-            Id = source.Id ?? Guid.Empty
+            Id = source.Id
         };
 
         return result;

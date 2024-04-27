@@ -3,15 +3,15 @@
     public class RegisterRequest
     {
         /// <example>John</example>
-        public string? DisplayName { get; set; }
+        public string DisplayName { get; set; }
 
         /// <example>john@test.com</example>
-        public string? Email { get; set; }
+        public string Email { get; set; }
 
         /// <example>Pa$$w0rd</example>
-        public string? Password { get; set; }
+        public string Password { get; set; }
 
         /// <example>john</example>
-        public string? Username { get; set; }
+        public string Username { get; set; }
     }
 }

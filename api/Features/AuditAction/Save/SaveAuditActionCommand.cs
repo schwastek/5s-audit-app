@@ -1,6 +1,6 @@
 ﻿using Api.Contracts.AuditAction.Requests;
-using Core.MappingService;
 using Api.Mappers.MappingService;
+using Core.MappingService;
 using MediatR;
 using System;
 
@@ -34,10 +34,10 @@ public class SaveAuditActionCommandMapper :
     {
         return new SaveAuditActionCommand()
         {
-            AuditId = src.AuditId ?? Guid.Empty,
-            ActionId = src.ActionId ?? Guid.Empty,
-            Description = src.Description ?? string.Empty,
-            IsComplete = src.IsComplete ?? false
+            AuditId = src.AuditId,
+            ActionId = src.ActionId,
+            Description = src.Description,
+            IsComplete = src.IsComplete
         };
     }
 

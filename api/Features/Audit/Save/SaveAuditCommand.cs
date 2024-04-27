@@ -48,11 +48,11 @@ public class SaveAuditCommandMapper :
 
         var command = new SaveAuditCommand()
         {
-            AuditId = src.AuditId ?? Guid.Empty,
-            Author = src.Author ?? string.Empty,
+            AuditId = src.AuditId,
+            Author = src.Author,
             Area = src.Area ?? string.Empty,
-            StartDate = src.StartDate ?? DateTime.MinValue,
-            EndDate = src.EndDate ?? DateTime.MinValue,
+            StartDate = src.StartDate,
+            EndDate = src.EndDate,
             Answers = answers,
             Actions = actions
         };

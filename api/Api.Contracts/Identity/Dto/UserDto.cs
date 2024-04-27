@@ -3,12 +3,12 @@
     public class UserDto
     {
         /// <example>John</example>
-        public string? DisplayName { get; set; }
+        public string DisplayName { get; set; }
 
         /// <example>xxxxx.yyyyy.zzzzz</example>
-        public string? Token { get; set; }
+        public string Token { get; set; }
 
         /// <example>john</example>
-        public string? Username { get; set; }
+        public string Username { get; set; }
     }
 }

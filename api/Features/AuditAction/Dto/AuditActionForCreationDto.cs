@@ -18,10 +18,10 @@ public class AuditActionForCreationDtoMapper :
     {
         return new AuditActionForCreationDto()
         {
-            ActionId = src.ActionId ?? Guid.Empty,
-            AuditId = src.AuditId ?? Guid.Empty,
-            Description = src.Description ?? string.Empty,
-            IsComplete = src.IsComplete ?? false
+            ActionId = src.ActionId,
+            AuditId = src.AuditId,
+            Description = src.Description,
+            IsComplete = src.IsComplete
         };
     }
 }

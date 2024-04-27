@@ -5,10 +5,10 @@ namespace Api.Contracts.Common.Requests
     public interface IPageableRequest
     {
         /// <example>1</example>
-        public int? PageNumber { get; set; }
+        public int PageNumber { get; set; }
 
         /// <example>5</example>
-        public int? PageSize { get; set; }
+        public int PageSize { get; set; }
     }
 
     public interface IPaginatedResult<T>
