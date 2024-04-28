@@ -1,7 +1,6 @@
 ﻿using Api.Contracts.Audit.Requests;
 using Api.Mappers.MappingService;
 using Core.MappingService;
-using FluentValidation;
 using MediatR;
 using System;
 
@@ -15,14 +14,6 @@ public sealed record GetAuditQuery : IRequest<GetAuditQueryResult>
 public sealed record GetAuditQueryResult
 {
     public Dto.AuditDto Audit { get; init; } = null!;
-}
-
-public sealed class GetAuditRequestValidator : AbstractValidator<GetAuditRequest>
-{
-    public GetAuditRequestValidator()
-    {
-        RuleFor(x => x.Id).NotEmpty();
-    }
 }
 
 public class GetAuditQueryMapper :
