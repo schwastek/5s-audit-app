@@ -20,6 +20,7 @@ public static class AddValidatorsServiceExtensions
     {
         services.AddScoped<IAuditBusinessRules, AuditBusinessRules>();
         services.AddScoped<IValidator<SaveAuditCommand>, SaveAuditCommandValidator>();
+        services.AddScoped<IValidator<GetAuditQuery>, GetAuditQueryValidator>();
     }
 
     private static void AddIdentityValidators(IServiceCollection services)

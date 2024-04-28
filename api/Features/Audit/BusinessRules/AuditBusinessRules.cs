@@ -1,12 +1,14 @@
 ﻿using Data.DbContext;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Features.Audit.BusinessRules;
 
 public interface IAuditBusinessRules
 {
-    public bool AuditExists(Guid auditId);
+    public Task<bool> AuditExists(Guid auditId, CancellationToken cancellationToken);
 }
 
 public class AuditBusinessRules : IAuditBusinessRules
@@ -18,13 +20,15 @@ public class AuditBusinessRules : IAuditBusinessRules
         this.context = context;
     }
 
-    public bool AuditExists(Guid auditId)
+    public async Task<bool> AuditExists(Guid auditId, CancellationToken cancellationToken)
     {
         if (auditId == Guid.Empty)
         {
-            throw new ArgumentNullException(nameof(auditId));
+            throw new ArgumentException(nameof(auditId));
         }
 
-        return context.Audits.Any(a => a.AuditId == auditId);
+        var result = await context.Audits.AnyAsync(a => a.AuditId == auditId, cancellationToken);
+
+        return result;
     }
 }

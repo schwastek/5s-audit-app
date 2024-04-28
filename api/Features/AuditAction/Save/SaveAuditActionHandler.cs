@@ -13,22 +13,24 @@ public sealed class SaveAuditActionHandler : IRequestHandler<SaveAuditActionComm
 {
     private readonly LeanAuditorContext context;
     private readonly IMappingService mapper;
-    private readonly IAuditBusinessRules auditService;
+    private readonly IAuditBusinessRules auditBusinessRules;
 
     public SaveAuditActionHandler(
         LeanAuditorContext context,
         IMappingService mapper,
-        IAuditBusinessRules auditService
+        IAuditBusinessRules auditBusinessRules
     )
     {
         this.context = context;
         this.mapper = mapper;
-        this.auditService = auditService;
+        this.auditBusinessRules = auditBusinessRules;
     }
 
     public async Task<SaveAuditActionCommandResult> Handle(SaveAuditActionCommand command, CancellationToken cancellationToken)
     {
-        if (!auditService.AuditExists(command.AuditId))
+        // TODO: Move to validator.
+        var auditExists = await auditBusinessRules.AuditExists(command.AuditId, cancellationToken);
+        if (!auditExists)
         {
             throw new NotFoundException($"Audit with ID {command.AuditId} does not exist.");
         }
