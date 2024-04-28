@@ -10,10 +10,10 @@ namespace Api.Contracts.Audit.Requests
         public string OrderBy { get; set; }
 
         /// <inheritdoc/>
-        public int PageNumber { get; set; }
+        public int? PageNumber { get; set; }
 
         /// <inheritdoc/>
-        public int PageSize { get; set; }
+        public int? PageSize { get; set; }
     }
 
     public class ListAuditsResponse : IPaginatedResult<AuditListItemDto>
