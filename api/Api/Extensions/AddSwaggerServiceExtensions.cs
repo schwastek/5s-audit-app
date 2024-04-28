@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Api.Contracts.Common;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,6 +24,9 @@ public static class AddSwaggerServiceExtensions
             // camelCase for parameters, "Id" -> "id".
             // Better for generating TypeScript models and services of request parameters.
             c.DescribeAllParametersInCamelCase();
+
+            // Mark properties as required.
+            c.SchemaFilter<AddSwaggerRequiredSchemaFilter>();
 
             // Set the comments path for the Swagger JSON and UI
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -54,5 +59,24 @@ public static class AddSwaggerServiceExtensions
                 }
             });
         });
+    }
+}
+
+public class AddSwaggerRequiredSchemaFilter : ISchemaFilter
+{
+    public void Apply(OpenApiSchema schema, SchemaFilterContext context)
+    {
+        var properties = context.Type.GetProperties();
+
+        foreach (var property in properties)
+        {
+            var attribute = property.GetCustomAttribute(typeof(SwaggerRequiredAttribute));
+
+            if (attribute is not null)
+            {
+                var propertyNameCamelCase = char.ToLowerInvariant(property.Name[0]) + property.Name.Substring(1);
+                schema.Required.Add(propertyNameCamelCase);
+            }
+        }
     }
 }

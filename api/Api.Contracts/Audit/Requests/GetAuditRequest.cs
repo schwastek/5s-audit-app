@@ -1,4 +1,5 @@
 ﻿using Api.Contracts.Audit.Dto;
+using Api.Contracts.Common;
 using System;
 
 namespace Api.Contracts.Audit.Requests
@@ -11,6 +12,7 @@ namespace Api.Contracts.Audit.Requests
 
     public class GetAuditResponse
     {
+        [SwaggerRequired]
         public AuditDto Audit { get; set; }
     }
 }
