@@ -11,12 +11,12 @@ namespace Api.Contracts.Answer.Dto
         public Guid QuestionId { get; set; }
 
         /// <example>Are all tools in the work area currently in use?</example>
-        public string QuestionText { get; set; }
+        public string QuestionText { get; set; } = null!;
 
         /// <example>number</example>
-        public string AnswerType { get; set; }
+        public string AnswerType { get; set; } = null!;
 
         /// <example>4</example>
-        public string AnswerText { get; set; }
+        public string AnswerText { get; set; } = null!;
     }
 }

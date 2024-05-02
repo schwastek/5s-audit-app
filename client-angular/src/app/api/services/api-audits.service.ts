@@ -20,7 +20,7 @@ import { SaveAudit$Params } from '../fn/audits/save-audit';
 import { SaveAuditResponse } from '../models/save-audit-response';
 
 @Injectable({ providedIn: 'root' })
-export class AuditsService extends BaseService {
+export class ApiAuditsService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }

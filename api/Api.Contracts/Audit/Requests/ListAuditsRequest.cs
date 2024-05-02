@@ -7,7 +7,7 @@ namespace Api.Contracts.Audit.Requests
     public class ListAuditsRequest : IPageableRequest, IOrderByRequest
     {
         /// <inheritdoc/>
-        public string OrderBy { get; set; }
+        public string OrderBy { get; set; } = null!;
 
         /// <inheritdoc/>
         public int? PageNumber { get; set; }
@@ -18,7 +18,7 @@ namespace Api.Contracts.Audit.Requests
 
     public class ListAuditsResponse : IPaginatedResult<AuditListItemDto>
     {
-        public IReadOnlyCollection<AuditListItemDto> Items { get; set; }
-        public PaginationMetadata Metadata { get; set; }
+        public IReadOnlyCollection<AuditListItemDto> Items { get; set; } = null!;
+        public PaginationMetadata Metadata { get; set; } = null!;
     }
 }

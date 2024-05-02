@@ -12,7 +12,7 @@ namespace Api.Contracts.AuditAction.Requests
         public Guid AuditId { get; set; }
 
         /// <example>Clean up</example>
-        public string Description { get; set; }
+        public string Description { get; set; } = null!;
 
         /// <example>false</example>
         public bool IsComplete { get; set; }
@@ -20,6 +20,6 @@ namespace Api.Contracts.AuditAction.Requests
 
     public class SaveAuditActionResponse
     {
-        public AuditActionDto AuditAction { get; set; }
+        public AuditActionDto AuditAction { get; set; } = null!;
     }
 }

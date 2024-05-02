@@ -1,10 +1,10 @@
 /* tslint:disable */
 /* eslint-disable */
 export interface AuditListItemDto {
-  area?: string | null;
-  auditId?: string;
-  author?: string | null;
-  endDate?: string;
-  score?: number;
-  startDate?: string;
+  area: string;
+  auditId: string;
+  author: string;
+  endDate: string;
+  score: number;
+  startDate: string;
 }

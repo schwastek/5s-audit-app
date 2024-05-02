@@ -4,11 +4,11 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
-import { AccountService } from './services/account.service';
-import { ActionsService } from './services/actions.service';
-import { AuditsService } from './services/audits.service';
-import { BuggyService } from './services/buggy.service';
-import { QuestionsService } from './services/questions.service';
+import { ApiAccountService } from './services/api-account.service';
+import { ApiActionsService } from './services/api-actions.service';
+import { ApiAuditsService } from './services/api-audits.service';
+import { ApiBuggyService } from './services/api-buggy.service';
+import { ApiQuestionsService } from './services/api-questions.service';
 
 /**
  * Module that provides all services and configuration.
@@ -18,11 +18,11 @@ import { QuestionsService } from './services/questions.service';
   exports: [],
   declarations: [],
   providers: [
-    AccountService,
-    ActionsService,
-    AuditsService,
-    BuggyService,
-    QuestionsService,
+    ApiAccountService,
+    ApiActionsService,
+    ApiAuditsService,
+    ApiBuggyService,
+    ApiQuestionsService,
     ApiConfiguration
   ],
 })

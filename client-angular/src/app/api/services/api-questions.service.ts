@@ -14,7 +14,7 @@ import { ListQuestions$Params } from '../fn/questions/list-questions';
 import { ListQuestionsResponse } from '../models/list-questions-response';
 
 @Injectable({ providedIn: 'root' })
-export class QuestionsService extends BaseService {
+export class ApiQuestionsService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }

@@ -11,9 +11,9 @@ namespace Api.Contracts.Answer.Dto
         public Guid AnswerId { get; set; }
 
         /// <example>number</example>
-        public string AnswerType { get; set; }
+        public string AnswerType { get; set; } = null!;
 
         /// <example>4</example>
-        public string AnswerText { get; set; }
+        public string AnswerText { get; set; } = null!;
     }
 }

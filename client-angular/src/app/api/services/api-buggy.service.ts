@@ -19,7 +19,7 @@ import { getUnauthorised } from '../fn/buggy/get-unauthorised';
 import { GetUnauthorised$Params } from '../fn/buggy/get-unauthorised';
 
 @Injectable({ providedIn: 'root' })
-export class BuggyService extends BaseService {
+export class ApiBuggyService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }

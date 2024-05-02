@@ -8,7 +8,7 @@ namespace Api.Contracts.AuditAction.Requests
         public Guid ActionId { get; set; }
 
         /// <example>Clean up (UPDATED)</example>
-        public string Description { get; set; }
+        public string Description { get; set; } = null!;
 
         /// <example>true</example>
         public bool IsComplete { get; set; }

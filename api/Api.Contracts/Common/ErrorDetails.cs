@@ -6,6 +6,6 @@
         public int StatusCode { get; set; }
 
         /// <example>Audit not found</example>
-        public string Message { get; set; }
+        public string Message { get; set; } = null!;
     }
 }

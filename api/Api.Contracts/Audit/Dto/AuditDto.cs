@@ -11,10 +11,10 @@ namespace Api.Contracts.Audit.Dto
         public Guid AuditId { get; set; }
 
         /// <example>John</example>
-        public string Author { get; set; }
+        public string Author { get; set; } = null!;
 
         /// <example>Warehouse</example>
-        public string Area { get; set; }
+        public string Area { get; set; } = null!;
 
         /// <example>2021-07-19T11:09:34.543Z</example>
         public DateTime StartDate { get; set; }
@@ -25,8 +25,8 @@ namespace Api.Contracts.Audit.Dto
         /// <example>0.6</example>
         public double Score { get; set; }
 
-        public IReadOnlyCollection<AnswerDto> Answers { get; set; }
+        public IReadOnlyCollection<AnswerDto> Answers { get; set; } = null!;
 
-        public IReadOnlyCollection<AuditActionDto> Actions { get; set; }
+        public IReadOnlyCollection<AuditActionDto> Actions { get; set; } = null!;
     }
 }

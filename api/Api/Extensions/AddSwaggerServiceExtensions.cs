@@ -5,6 +5,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace Api.Extensions;
@@ -25,8 +26,14 @@ public static class AddSwaggerServiceExtensions
             // Better for generating TypeScript models and services of request parameters.
             c.DescribeAllParametersInCamelCase();
 
-            // Mark properties as required.
-            c.SchemaFilter<AddSwaggerRequiredSchemaFilter>();
+            // `string? Name` => `{ "nullable": true }` in Swagger schema file.
+            c.SupportNonNullableReferenceTypes();
+
+            // Enables support for nullable object properties (e.g. nullable Enums).
+            c.UseAllOfToExtendReferenceSchemas();
+
+            // Mark non-nullable properties as required.
+            c.SchemaFilter<RequireNonNullablePropertiesSchemaFilter>();
 
             // Set the comments path for the Swagger JSON and UI
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -64,6 +71,7 @@ public static class AddSwaggerServiceExtensions
 
 public class AddSwaggerRequiredSchemaFilter : ISchemaFilter
 {
+    // TODO: Remove this filter along with attribute.
     public void Apply(OpenApiSchema schema, SchemaFilterContext context)
     {
         var properties = context.Type.GetProperties();
@@ -77,6 +85,21 @@ public class AddSwaggerRequiredSchemaFilter : ISchemaFilter
                 var propertyNameCamelCase = char.ToLowerInvariant(property.Name[0]) + property.Name.Substring(1);
                 schema.Required.Add(propertyNameCamelCase);
             }
+        }
+    }
+}
+
+public class RequireNonNullablePropertiesSchemaFilter : ISchemaFilter
+{
+    public void Apply(OpenApiSchema schema, SchemaFilterContext context)
+    {
+        var nonNullableProperties = schema.Properties
+            .Where(x => !x.Value.Nullable)
+            .Select(x => x.Key);
+
+        foreach (var property in nonNullableProperties)
+        {
+            schema.Required.Add(property);
         }
     }
 }

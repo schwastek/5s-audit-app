@@ -20,7 +20,7 @@ import { Register$Params } from '../fn/account/register';
 import { UserDto } from '../models/user-dto';
 
 @Injectable({ providedIn: 'root' })
-export class AccountService extends BaseService {
+export class ApiAccountService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }

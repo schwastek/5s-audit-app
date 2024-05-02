@@ -1,5 +1,5 @@
-export { AccountService } from './services/account.service';
-export { ActionsService } from './services/actions.service';
-export { AuditsService } from './services/audits.service';
-export { BuggyService } from './services/buggy.service';
-export { QuestionsService } from './services/questions.service';
+export { ApiAccountService } from './services/api-account.service';
+export { ApiActionsService } from './services/api-actions.service';
+export { ApiAuditsService } from './services/api-audits.service';
+export { ApiBuggyService } from './services/api-buggy.service';
+export { ApiQuestionsService } from './services/api-questions.service';

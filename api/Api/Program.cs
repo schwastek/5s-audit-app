@@ -24,6 +24,8 @@ builder.Services.AddControllers(opt =>
     // Require authenticated users. Add a default AuthorizeFilter to all endpoints.
     AuthorizationPolicy policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
     opt.Filters.Add(new AuthorizeFilter(policy));
+
+    opt.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
 });
 builder.Services.AddDbContext<LeanAuditorContext>();
 

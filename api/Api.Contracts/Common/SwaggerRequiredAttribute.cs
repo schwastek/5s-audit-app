@@ -9,5 +9,6 @@ namespace Api.Contracts.Common
     [AttributeUsage(AttributeTargets.Property)]
     public class SwaggerRequiredAttribute : Attribute
     {
+        // TODO: Remove this attribute.
     }
 }

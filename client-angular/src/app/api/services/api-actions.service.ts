@@ -18,7 +18,7 @@ import { updateAction } from '../fn/actions/update-action';
 import { UpdateAction$Params } from '../fn/actions/update-action';
 
 @Injectable({ providedIn: 'root' })
-export class ActionsService extends BaseService {
+export class ApiActionsService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }

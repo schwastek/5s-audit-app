@@ -2,5 +2,5 @@
 /* eslint-disable */
 import { AuditDto } from '../models/audit-dto';
 export interface GetAuditResponse {
-  audit?: AuditDto;
+  audit: AuditDto;
 }
