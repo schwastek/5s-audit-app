@@ -102,7 +102,7 @@ export class RatingComponent implements ControlValueAccessor, OnInit, OnChanges 
   }
 
   // The parent form can enable or disable any of its child controls by calling the `setDisabledState` method.
-  setDisabledState?(isDisabled: boolean): void {
+  setDisabledState(isDisabled: boolean): void {
     this.isDisabled = isDisabled;
   }
 

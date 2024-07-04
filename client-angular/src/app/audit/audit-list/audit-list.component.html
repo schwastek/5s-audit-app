@@ -9,14 +9,16 @@
     </tr>
   </thead>
   <tbody class="text-muted">
-      <tr *ngFor="let audit of audits?.items">
-        <td>{{audit.auditId}}</td>
-        <td>{{audit.startDate}}</td>
-        <td>{{audit.author}}</td>
-        <td>{{audit.score}}</td>
+    @for (audit of audits.items; track audit.auditId) {
+      <tr>
+        <td>{{ audit.auditId }}</td>
+        <td>{{ audit.startDate }}</td>
+        <td>{{ audit.author }}</td>
+        <td>{{ audit.score }}</td>
         <td>
           <a class="btn btn-sm btn-outline-secondary" [routerLink]="['/audits', audit.auditId]">View</a>
         </td>
       </tr>
+    }
   </tbody>
 </table>

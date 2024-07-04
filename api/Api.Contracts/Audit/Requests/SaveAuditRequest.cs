@@ -1,5 +1,4 @@
 ﻿using Api.Contracts.Answer.Dto;
-using Api.Contracts.Audit.Dto;
 using Api.Contracts.AuditAction.Dto;
 using System;
 using System.Collections.Generic;
@@ -30,6 +29,7 @@ namespace Api.Contracts.Audit.Requests
 
     public class SaveAuditResponse
     {
-        public AuditDto Audit { get; set; } = null!;
+        /// <example>d0a5a4ec-7b84-48c7-8028-133f1dd74b06</example>
+        public Guid AuditId { get; set; }
     }
 }

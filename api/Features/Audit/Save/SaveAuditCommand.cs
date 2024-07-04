@@ -1,7 +1,6 @@
 ﻿using Api.Contracts.Audit.Requests;
 using Api.Mappers.MappingService;
 using Core.MappingService;
-using Features.Audit.Dto;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -22,7 +21,7 @@ public sealed record SaveAuditCommand : IRequest<SaveAuditCommandResult>
 
 public sealed record SaveAuditCommandResult
 {
-    public AuditDto Audit { get; init; } = null!;
+    public Guid AuditId { get; init; }
 }
 
 public class SaveAuditCommandMapper :
@@ -50,7 +49,7 @@ public class SaveAuditCommandMapper :
         {
             AuditId = src.AuditId,
             Author = src.Author,
-            Area = src.Area ?? string.Empty,
+            Area = src.Area,
             StartDate = src.StartDate,
             EndDate = src.EndDate,
             Answers = answers,
@@ -62,11 +61,9 @@ public class SaveAuditCommandMapper :
 
     public SaveAuditResponse Map(SaveAuditCommandResult src)
     {
-        var auditDto = _mapper.Map<AuditDto, Api.Contracts.Audit.Dto.AuditDto>(src.Audit);
-
         return new SaveAuditResponse()
         {
-            Audit = auditDto
+            AuditId = src.AuditId
         };
     }
 }

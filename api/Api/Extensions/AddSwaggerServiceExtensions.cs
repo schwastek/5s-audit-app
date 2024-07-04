@@ -93,6 +93,8 @@ public class RequireNonNullablePropertiesSchemaFilter : ISchemaFilter
 {
     public void Apply(OpenApiSchema schema, SchemaFilterContext context)
     {
+        if (schema.Properties is null) return;
+
         var nonNullableProperties = schema.Properties
             .Where(x => !x.Value.Nullable)
             .Select(x => x.Key);

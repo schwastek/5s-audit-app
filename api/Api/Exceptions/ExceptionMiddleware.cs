@@ -31,6 +31,7 @@ public class ExceptionMiddleware
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = GetStatusCode(error);
 
+        // TODO: Display better error message for ValidationException from FluentValidation.
         var responseBody = new ErrorDetails(context.Response.StatusCode, error.Message).ToString();
 
         await context.Response.WriteAsync(responseBody);

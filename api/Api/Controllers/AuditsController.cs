@@ -64,15 +64,14 @@ public class AuditsController : ControllerBase
     /// Creates a new audit
     /// </summary>
     [HttpPost]
-    [ProducesResponseType(typeof(SaveAuditResponse), StatusCodes.Status201Created)]
-    public async Task<IActionResult> SaveAudit([FromBody] SaveAuditRequest request)
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    public async Task<ActionResult<SaveAuditResponse>> SaveAudit([FromBody] SaveAuditRequest request)
     {
         var command = mapper.Map<SaveAuditRequest, SaveAuditCommand>(request);
         var result = await sender.Send(command);
         var response = mapper.Map<SaveAuditCommandResult, SaveAuditResponse>(result);
 
-        // Adds a Location header to the response.
-        // The Location header specifies the URI of the newly created item.
-        return CreatedAtAction(nameof(GetAudit), new { id = result.Audit.AuditId }, result.Audit);
+        // Adds Location header that specifies the URI of the newly created item.
+        return CreatedAtAction(nameof(GetAudit), new { id = response.AuditId }, response);
     }
 }

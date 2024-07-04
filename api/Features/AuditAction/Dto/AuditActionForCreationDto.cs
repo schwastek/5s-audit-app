@@ -8,7 +8,7 @@ public sealed record AuditActionForCreationDto
     public Guid AuditId { get; init; }
     public Guid ActionId { get; init; }
     public string Description { get; init; } = null!;
-    public bool? IsComplete { get; set; }
+    public bool IsComplete { get; set; }
 }
 
 public class AuditActionForCreationDtoMapper :

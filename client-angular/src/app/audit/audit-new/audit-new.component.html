@@ -1,0 +1,49 @@
+<div class="container">
+  <div class="my-3">
+    <div class="row">
+      <div class="col-12">
+        <div class="d-flex align-items-center mb-3 p-3 text-white bg-secondary rounded shadow-sm">
+          <h1 class="h6 lh-1 mb-0 text-white">New audit</h1>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-8">
+        <div class="mb-3 px-3 py-3 bg-body rounded shadow-sm">
+          <form [formGroup]="form">
+            <label for="select-area" className="form-label mb-2">Select area:</label>
+            <select id="select-area" class="form-select mb-4" formControlName="area">
+              @if (areas) {
+                @for (area of areas; track area.id) {
+                  <option [ngValue]="area.key">{{ area.value }}</option>
+                }
+              }
+            </select>
+            <ng-container formArrayName="ratings">
+            @if (questions) {
+              @for (question of questions; track question.questionId) {
+                <div class="d-flex pt-3 border-bottom lh-1 text-muted">
+                  <div class="flex-grow-1">
+                    <p class="pb-3 mb-0 lh-sm">{{ question.questionText }}</p>
+                  </div>
+                  <div>
+                    <app-rating [max]="5" [formControlName]="$index"></app-rating>
+                  </div>
+                </div>
+              }
+            } @else {
+              <p>Could not load questions.</p>
+            }
+            </ng-container>
+            <button type="submit" (click)="onSubmit()" [disabled]="!form.valid" className="btn btn-primary mt-3">Submit</button>
+          </form>
+        </div>
+      </div>
+      <div class="col-4">
+        TODO: Audit actions.
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ form.value | json }}

@@ -1,28 +1,24 @@
-import { Component } from '@angular/core';
-import { Audit } from '../models/audit';
+import { Component, OnInit } from '@angular/core';
 import { AuditService } from '../audit.service';
 import { PaginatedResult } from '../models/pagination';
-import { CommonModule } from '@angular/common';
+import { NgFor } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { AuditListItemDto } from '../../api/models';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-audit-list',
   templateUrl: './audit-list.component.html',
   styleUrls: ['./audit-list.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterLink]
+  imports: [NgFor, RouterLink]
 })
-export class AuditListComponent {
-  audits: PaginatedResult<Audit> = new PaginatedResult<Audit>();
+export class AuditListComponent implements OnInit {
+  public audits = new PaginatedResult<AuditListItemDto>();
 
   constructor(private auditService: AuditService) {}
 
-  ngOnInit() {
-    this.getAudits();
-  }
-
-  getAudits() {
-    this.auditService.getAudits()
-      .subscribe(audits => this.audits = audits);
+  async ngOnInit() {
+    this.audits = await lastValueFrom(this.auditService.getAudits());
   }
 }
