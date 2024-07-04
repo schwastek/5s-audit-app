@@ -1,0 +1,16 @@
+// Form status classes automatically added by Angular
+.ng-invalid.ng-dirty {
+  @extend .is-invalid;
+}
+
+.ng-invalid.ng-touched {
+  @extend .is-invalid;
+}
+
+.ng-valid.ng-dirty {
+  @extend .is-valid;
+}
+
+.ng-valid.ng-touched {
+  @extend .is-valid;
+}
