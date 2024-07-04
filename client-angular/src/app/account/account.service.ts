@@ -27,7 +27,7 @@ export class AccountService {
   logout() {
     localStorage.removeItem('token');
     this.currentUserSource.next(null);
-    this.router.navigateByUrl('/');
+    window.location.href = '/';
   }
 
   loadCurrentUser(token: string | null) {

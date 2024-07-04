@@ -1,0 +1,24 @@
+<nav class="navbar navbar-expand navbar-dark bg-dark" aria-label="Main navigation">
+  <div class="container">
+    <a routerLink="/" class="navbar-brand fw-bold d-flex align-items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="me-1" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255,255,255)">
+        <path d="m2.394 13.742 4.743 3.62 7.616-8.704-1.506-1.316-6.384 7.296-3.257-2.486zm19.359-5.084-1.506-1.316-6.369 7.279-.753-.602-1.25 1.562 2.247 1.798z"></path>
+      </svg>
+      5S Audit App
+    </a>
+    @if (user$ | async; as user) {
+      <div class="d-flex align-items-center">
+        <span class="text-light me-2">Hello, <strong> {{ user.displayName }}</strong></span>
+        <button type="button" (click)="logout()" class="btn btn-outline-light">Logout</button>
+      </div>
+    }
+  </div>
+</nav>
+@if (user$ | async; as user) {
+  <div ngClass="nav-scroller bg-body shadow-sm">
+    <nav class="nav nav-underline container" aria-label="Secondary navigation">
+      <a routerLink="/audits" class="nav-link" routerLinkActive="active">Browse</a>
+      <a routerLink="/audits/new" class="nav-link" routerLinkActive="active">New</a>
+    </nav>
+  </div>
+}
