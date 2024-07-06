@@ -1,32 +1,58 @@
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <!-- Required attribute is not necessary, but it should be retained for accessibility purposes -->
-        <input type="email" class="form-control" id="username" formControlName="username" [attr.aria-describedby]="getCurrentAriaValidationFeedbackForControl('username')" required>
-        <ng-container *ngIf="checkIsControlInvalid('username')">
-            <div *ngIf="username.errors?.['required']" [attr.id]="getIdForValidationFeedbackForRule('username', 'required')" class="invalid-feedback">
-                Username is required.
-            </div>
-            <div *ngIf="username.errors?.['email']" [attr.id]="getIdForValidationFeedbackForRule('username', 'email')" class="invalid-feedback">
-                Invalid username format. Please use a valid email address (e.g. user&#64;example.com).
-            </div>
-        </ng-container>
+<div class="container py-5">
+  <div class="row align-items-center">
+    <div class="col-lg-7 text-center text-lg-start">
+      <h1 class="display-4 fw-bold lh-1 mb-3">5S audits, more efficient operations</h1>
+      <p class="col-lg-10 fs-4">
+        In simple terms, 5S methodology helps keep the workplace organized and clean.<br/>
+        This app allows you perform an audit to ensure the 5S approach is followed.
+      </p>
     </div>
-    <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="password" formControlName="password" [attr.aria-describedby]="getCurrentAriaValidationFeedbackForControl('password')" required>
-        <ng-container *ngIf="checkIsControlInvalid('password')">
-            <div *ngIf="password.errors?.['required']" [attr.id]="getIdForValidationFeedbackForRule('password', 'required')" class="invalid-feedback">
-                Password is required.
-            </div>
-        </ng-container>
-    </div>
-    <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid || isSubmitting">
-        <ng-container *ngIf="!isSubmitting; else submittingTemplate">Sign in</ng-container>
-    </button>
-</form>
 
-<ng-template #submittingTemplate>
-    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-    <span class="sr-only">Signing in...</span>
-</ng-template>
+    <div class="col-md-10 mx-auto col-lg-5">
+      <div class="bg-white p-5 rounded shadow-sm">
+        <h2 class="mb-4">Sign in</h2>
+        @if (errorMessage) {
+          <div class="alert alert-danger" role="alert">
+            {{ errorMessage }}
+          </div>
+        }
+        <form [formGroup]="form" (ngSubmit)="handleSubmit()">
+          <div class="form-group mb-3">
+            <!-- Required attribute is not necessary, but it should be retained for accessibility purposes -->
+            <label for="username" class="form-label">Username</label>
+            <input type="email" class="form-control" id="username" formControlName="username" placeholder="Enter email" [attr.aria-describedby]="getAriaValidationFeedback('username')" required />
+            @if (username.errors?.['required']) {
+              <div class="invalid-feedback" [attr.id]="getIdForValidationFeedback('username', 'required')">
+                Username is required.
+              </div>
+            }
+            @if (username.errors?.['email']) {
+              <div class="invalid-feedback" [attr.id]="getIdForValidationFeedback('username', 'email')">
+                Invalid username format. Please use a valid email address.
+              </div>
+            }
+          </div>
+          <div class="form-group mb-3">
+            <label htmlFor="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" formControlName="password" placeholder="Password" [attr.aria-describedby]="getAriaValidationFeedback('password')" required />
+            @if (password.errors?.['required']) {
+              <div class="invalid-feedback" [attr.id]="getIdForValidationFeedback('password', 'required')">
+                Password is required.
+              </div>
+            }
+          </div>
+          <div class="form-group">
+            @if (isSubmitting) {
+              <button type="submit" class="btn btn-primary w-100" disabled>
+                <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                <span class="sr-only">Signing in...</span>
+              </button>
+            } @else {
+              <button type="submit" class="btn btn-primary w-100" [disabled]="form.invalid || isSubmitting">Sign in</button>
+            }
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

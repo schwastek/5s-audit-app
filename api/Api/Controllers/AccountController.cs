@@ -52,6 +52,8 @@ public class AccountController : ControllerBase
     {
         User user = await _userManager.FindByEmailAsync(request.Email);
 
+        // TODO: Return proper error message.
+
         if (user == null) return Unauthorized();
 
         var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
