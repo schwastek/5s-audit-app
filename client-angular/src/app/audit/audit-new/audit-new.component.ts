@@ -63,7 +63,6 @@ export class AuditNewComponent implements OnInit {
     };
 
     this.auditService.saveAudit(audit).subscribe((response) => {
-      console.log(response);
       this.router.navigate(['audits', response.auditId]);
     });
   }
