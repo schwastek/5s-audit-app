@@ -33,7 +33,7 @@ public class AuditsController : ControllerBase
     /// <summary>
     /// Gets list of audits
     /// </summary>
-    [HttpGet(Name = nameof(ListAudits))]
+    [HttpGet]
     [ProducesResponseType(typeof(ListAuditsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ListAudits([FromQuery] ListAuditsRequest request)

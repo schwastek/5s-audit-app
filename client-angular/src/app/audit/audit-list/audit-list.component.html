@@ -1,24 +1,36 @@
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">ID</th>
-      <th scope="col">Date</th>
-      <th scope="col">Author</th>
-      <th scope="col">Score</th>
-      <th scope="col">Actions</th>
-    </tr>
-  </thead>
-  <tbody class="text-muted">
-    @for (audit of audits.items; track audit.auditId) {
-      <tr>
-        <td>{{ audit.auditId }}</td>
-        <td>{{ audit.startDate }}</td>
-        <td>{{ audit.author }}</td>
-        <td>{{ audit.score }}</td>
-        <td>
-          <a class="btn btn-sm btn-outline-secondary" [routerLink]="['/audits', audit.auditId]">View</a>
-        </td>
-      </tr>
+<div class="container">
+  <div class="my-3 px-3 py-3 bg-body rounded shadow-sm">
+    @if (isLoading) {
+      <p class="pb-2 mb-0">Loading...</p>
+    } @else if (error) {
+      <div class="alert alert-danger my-0" role="alert">
+        {{ error }}
+      </div>
+    } @else if (audits) {
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Date</th>
+            <th scope="col">Author</th>
+            <th scope="col">Score</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="text-muted">
+          @for (audit of audits.items; track audit.auditId) {
+            <tr>
+              <td>{{ audit.auditId }}</td>
+              <td>{{ audit.startDate }}</td>
+              <td>{{ audit.author }}</td>
+              <td>{{ audit.score }}</td>
+              <td>
+                <a class="btn btn-sm btn-outline-secondary" [routerLink]="['/audits', audit.auditId]">View</a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
     }
-  </tbody>
-</table>
+  </div>
+</div>
