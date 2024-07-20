@@ -13,7 +13,7 @@ import { deleteAction } from '../fn/actions/delete-action';
 import { DeleteAction$Params } from '../fn/actions/delete-action';
 import { saveAuditAction } from '../fn/actions/save-audit-action';
 import { SaveAuditAction$Params } from '../fn/actions/save-audit-action';
-import { SaveAuditActionResponse } from '../models/save-audit-action-response';
+import { ApiSaveAuditActionResponse } from '../models/api-save-audit-action-response';
 import { updateAction } from '../fn/actions/update-action';
 import { UpdateAction$Params } from '../fn/actions/update-action';
 
@@ -36,7 +36,7 @@ export class ApiActionsService extends BaseService {
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  saveAuditAction$Response(params?: SaveAuditAction$Params, context?: HttpContext): Observable<StrictHttpResponse<SaveAuditActionResponse>> {
+  saveAuditAction$Response(params?: SaveAuditAction$Params, context?: HttpContext): Observable<StrictHttpResponse<ApiSaveAuditActionResponse>> {
     return saveAuditAction(this.http, this.rootUrl, params, context);
   }
 
@@ -50,9 +50,9 @@ export class ApiActionsService extends BaseService {
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  saveAuditAction(params?: SaveAuditAction$Params, context?: HttpContext): Observable<SaveAuditActionResponse> {
+  saveAuditAction(params?: SaveAuditAction$Params, context?: HttpContext): Observable<ApiSaveAuditActionResponse> {
     return this.saveAuditAction$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SaveAuditActionResponse>): SaveAuditActionResponse => r.body)
+      map((r: StrictHttpResponse<ApiSaveAuditActionResponse>): ApiSaveAuditActionResponse => r.body)
     );
   }
 

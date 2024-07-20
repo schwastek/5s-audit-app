@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface ProblemDetails {
+export interface ApiProblemDetails {
   detail?: string | null;
   instance?: string | null;
   status?: number | null;

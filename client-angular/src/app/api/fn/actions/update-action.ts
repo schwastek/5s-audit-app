@@ -6,11 +6,11 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { UpdateAuditActionRequest } from '../../models/update-audit-action-request';
+import { ApiUpdateAuditActionRequest } from '../../models/api-update-audit-action-request';
 
 export interface UpdateAction$Params {
   actionId: string;
-      body?: UpdateAuditActionRequest
+      body?: ApiUpdateAuditActionRequest
 }
 
 export function updateAction(http: HttpClient, rootUrl: string, params: UpdateAction$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {

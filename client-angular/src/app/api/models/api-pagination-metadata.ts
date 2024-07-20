@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface PaginationMetadata {
+export interface ApiPaginationMetadata {
   currentPage: number;
   hasNextPage: boolean;
   hasPreviousPage: boolean;

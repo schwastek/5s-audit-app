@@ -11,13 +11,13 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { getAudit } from '../fn/audits/get-audit';
 import { GetAudit$Params } from '../fn/audits/get-audit';
-import { GetAuditResponse } from '../models/get-audit-response';
+import { ApiGetAuditResponse } from '../models/api-get-audit-response';
 import { listAudits } from '../fn/audits/list-audits';
 import { ListAudits$Params } from '../fn/audits/list-audits';
-import { ListAuditsResponse } from '../models/list-audits-response';
+import { ApiListAuditsResponse } from '../models/api-list-audits-response';
 import { saveAudit } from '../fn/audits/save-audit';
 import { SaveAudit$Params } from '../fn/audits/save-audit';
-import { SaveAuditResponse } from '../models/save-audit-response';
+import { ApiSaveAuditResponse } from '../models/api-save-audit-response';
 
 @Injectable({ providedIn: 'root' })
 export class ApiAuditsService extends BaseService {
@@ -38,7 +38,7 @@ export class ApiAuditsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listAudits$Response(params?: ListAudits$Params, context?: HttpContext): Observable<StrictHttpResponse<ListAuditsResponse>> {
+  listAudits$Response(params?: ListAudits$Params, context?: HttpContext): Observable<StrictHttpResponse<ApiListAuditsResponse>> {
     return listAudits(this.http, this.rootUrl, params, context);
   }
 
@@ -52,9 +52,9 @@ export class ApiAuditsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listAudits(params?: ListAudits$Params, context?: HttpContext): Observable<ListAuditsResponse> {
+  listAudits(params?: ListAudits$Params, context?: HttpContext): Observable<ApiListAuditsResponse> {
     return this.listAudits$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ListAuditsResponse>): ListAuditsResponse => r.body)
+      map((r: StrictHttpResponse<ApiListAuditsResponse>): ApiListAuditsResponse => r.body)
     );
   }
 
@@ -71,7 +71,7 @@ export class ApiAuditsService extends BaseService {
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  saveAudit$Response(params?: SaveAudit$Params, context?: HttpContext): Observable<StrictHttpResponse<SaveAuditResponse>> {
+  saveAudit$Response(params?: SaveAudit$Params, context?: HttpContext): Observable<StrictHttpResponse<ApiSaveAuditResponse>> {
     return saveAudit(this.http, this.rootUrl, params, context);
   }
 
@@ -85,9 +85,9 @@ export class ApiAuditsService extends BaseService {
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  saveAudit(params?: SaveAudit$Params, context?: HttpContext): Observable<SaveAuditResponse> {
+  saveAudit(params?: SaveAudit$Params, context?: HttpContext): Observable<ApiSaveAuditResponse> {
     return this.saveAudit$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SaveAuditResponse>): SaveAuditResponse => r.body)
+      map((r: StrictHttpResponse<ApiSaveAuditResponse>): ApiSaveAuditResponse => r.body)
     );
   }
 
@@ -104,7 +104,7 @@ export class ApiAuditsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAudit$Response(params: GetAudit$Params, context?: HttpContext): Observable<StrictHttpResponse<GetAuditResponse>> {
+  getAudit$Response(params: GetAudit$Params, context?: HttpContext): Observable<StrictHttpResponse<ApiGetAuditResponse>> {
     return getAudit(this.http, this.rootUrl, params, context);
   }
 
@@ -118,9 +118,9 @@ export class ApiAuditsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAudit(params: GetAudit$Params, context?: HttpContext): Observable<GetAuditResponse> {
+  getAudit(params: GetAudit$Params, context?: HttpContext): Observable<ApiGetAuditResponse> {
     return this.getAudit$Response(params, context).pipe(
-      map((r: StrictHttpResponse<GetAuditResponse>): GetAuditResponse => r.body)
+      map((r: StrictHttpResponse<ApiGetAuditResponse>): ApiGetAuditResponse => r.body)
     );
   }
 

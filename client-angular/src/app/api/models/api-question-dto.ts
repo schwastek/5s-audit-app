@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface QuestionDto {
+export interface ApiQuestionDto {
   questionId: string;
   questionText: string;
 }

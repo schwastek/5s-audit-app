@@ -1,8 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface SaveAuditActionRequest {
+export interface ApiUpdateAuditActionRequest {
   actionId: string;
-  auditId: string;
   description: string;
   isComplete: boolean;
 }

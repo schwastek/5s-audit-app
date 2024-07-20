@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface ErrorDetails {
+export interface ApiErrorDetails {
   message: string;
   statusCode: number;
 }

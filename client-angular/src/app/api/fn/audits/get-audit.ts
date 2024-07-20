@@ -6,13 +6,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { GetAuditResponse } from '../../models/get-audit-response';
+import { ApiGetAuditResponse } from '../../models/api-get-audit-response';
 
 export interface GetAudit$Params {
   id: string;
 }
 
-export function getAudit(http: HttpClient, rootUrl: string, params: GetAudit$Params, context?: HttpContext): Observable<StrictHttpResponse<GetAuditResponse>> {
+export function getAudit(http: HttpClient, rootUrl: string, params: GetAudit$Params, context?: HttpContext): Observable<StrictHttpResponse<ApiGetAuditResponse>> {
   const rb = new RequestBuilder(rootUrl, getAudit.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
@@ -23,7 +23,7 @@ export function getAudit(http: HttpClient, rootUrl: string, params: GetAudit$Par
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<GetAuditResponse>;
+      return r as StrictHttpResponse<ApiGetAuditResponse>;
     })
   );
 }

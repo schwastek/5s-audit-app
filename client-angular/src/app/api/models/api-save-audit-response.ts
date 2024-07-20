@@ -1,5 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface SaveAuditResponse {
+export interface ApiSaveAuditResponse {
   auditId: string;
 }

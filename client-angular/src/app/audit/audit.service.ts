@@ -4,7 +4,7 @@ import { PaginatedResult } from './models/pagination';
 import { Area } from './models/area';
 import { ApiAuditsService, ApiQuestionsService } from '../api/services';
 import { ListAudits$Params } from '../api/fn/audits/list-audits';
-import { AuditListItemDto, SaveAuditRequest } from '../api/models';
+import { ApiAuditListItemDto, ApiSaveAuditRequest } from '../api/models';
 import { Nullable } from '../shared/ts-helpers/ts-helpers';
 import { isDefined } from '../shared/utilities/utilities';
 
@@ -17,7 +17,7 @@ export class AuditService {
     private apiQuestionsService: ApiQuestionsService
   ) { }
 
-  getAudits(pageNumber?: number | null): Observable<PaginatedResult<AuditListItemDto>> {
+  getAudits(pageNumber?: number | null): Observable<PaginatedResult<ApiAuditListItemDto>> {
     const params: ListAudits$Params = {
       pageSize: 10,
       pageNumber: pageNumber ?? 1
@@ -25,7 +25,7 @@ export class AuditService {
 
     const result = this.apiAuditsService.listAudits(params).pipe(
       map((response) => {
-        return new PaginatedResult<AuditListItemDto>(response.items, response.metadata);
+        return new PaginatedResult<ApiAuditListItemDto>(response.items, response.metadata);
       })
     );
 
@@ -57,7 +57,7 @@ export class AuditService {
     );
   }
 
-  saveAudit(audit: SaveAuditRequest) {
+  saveAudit(audit: ApiSaveAuditRequest) {
     return this.apiAuditsService.saveAudit({ body: audit });
   }
 }

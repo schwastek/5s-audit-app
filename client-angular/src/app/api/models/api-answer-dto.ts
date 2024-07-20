@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface AnswerDto {
+export interface ApiAnswerDto {
   answerId: string;
   answerText: string;
   answerType: string;

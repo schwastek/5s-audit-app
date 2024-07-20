@@ -1,9 +1,9 @@
-import { AnswerDto, AuditDto } from '../../api/models';
+import { ApiAnswerDto, ApiAuditDto } from '../../api/models';
 
-export interface AuditDtoWithAnswerNumber extends AuditDto {
+export interface AuditDtoWithAnswerNumber extends ApiAuditDto {
   answers: AnswerDtoWithAnswerNumber[];
 }
 
-export interface AnswerDtoWithAnswerNumber extends AnswerDto {
+export interface AnswerDtoWithAnswerNumber extends ApiAnswerDto {
   answerNumber: number;
 }

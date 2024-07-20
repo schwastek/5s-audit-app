@@ -6,7 +6,7 @@ import { lastValueFrom } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RatingComponent } from '../../shared/components/rating/rating.component';
 import { RatingTemplateDirective } from '../../shared/components/rating/templates.directive';
-import { AnswerForCreationDto, QuestionDto } from '../../api/models';
+import { ApiAnswerForCreationDto, ApiQuestionDto } from '../../api/models';
 import { v4 as uuidv4 } from 'uuid';
 import { Router } from '@angular/router';
 
@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
 })
 export class AuditNewComponent implements OnInit {
   areas: Area[] | null = null;
-  questions: QuestionDto[] | null = null;
+  questions: ApiQuestionDto[] | null = null;
 
   area = new FormControl<string>('assembly', { validators: [Validators.required], nonNullable: true });
   rating = new FormControl<number>(3, { validators: [Validators.required], nonNullable: true });
@@ -31,7 +31,7 @@ export class AuditNewComponent implements OnInit {
   });
 
   private readonly startDate = new Date().toISOString();
-  private readonly answers: AnswerForCreationDto[] = [];
+  private readonly answers: ApiAnswerForCreationDto[] = [];
 
   constructor(
     private auditService: AuditService,

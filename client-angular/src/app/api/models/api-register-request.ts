@@ -1,7 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface UserDto {
+export interface ApiRegisterRequest {
   displayName: string;
-  token: string;
+  email: string;
+  password: string;
   username: string;
 }

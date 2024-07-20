@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface LoginRequest {
+export interface ApiLoginRequest {
   email: string;
   password: string;
 }

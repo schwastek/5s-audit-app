@@ -6,7 +6,7 @@ import { RatingComponent } from '../../shared/components/rating/rating.component
 import { FormsModule } from '@angular/forms';
 import { Nullable } from '../../shared/ts-helpers/ts-helpers';
 import { AnswerDtoWithAnswerNumber, AuditDtoWithAnswerNumber } from '../models/audit-dto-with-answer-number';
-import { AnswerDto } from '../../api/models';
+import { ApiAnswerDto } from '../../api/models';
 
 @Component({
   selector: 'app-audit-detail',
@@ -43,7 +43,7 @@ export class AuditDetailComponent implements OnInit {
     return transformedAudit;
   }
 
-  private convertStringsToNumbers(answers: Nullable<AnswerDto[]>): AnswerDtoWithAnswerNumber[] | undefined {
+  private convertStringsToNumbers(answers: Nullable<ApiAnswerDto[]>): AnswerDtoWithAnswerNumber[] | undefined {
     const result = answers?.map((answer) => {
       const transformedAnswer = answer as AnswerDtoWithAnswerNumber;
       const number = Number(answer.answerText);

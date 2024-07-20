@@ -6,7 +6,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ListAuditsResponse } from '../../models/list-audits-response';
+import { ApiListAuditsResponse } from '../../models/api-list-audits-response';
 
 export interface ListAudits$Params {
   orderBy?: string;
@@ -14,7 +14,7 @@ export interface ListAudits$Params {
   pageSize?: number;
 }
 
-export function listAudits(http: HttpClient, rootUrl: string, params?: ListAudits$Params, context?: HttpContext): Observable<StrictHttpResponse<ListAuditsResponse>> {
+export function listAudits(http: HttpClient, rootUrl: string, params?: ListAudits$Params, context?: HttpContext): Observable<StrictHttpResponse<ApiListAuditsResponse>> {
   const rb = new RequestBuilder(rootUrl, listAudits.PATH, 'get');
   if (params) {
     rb.query('orderBy', params.orderBy, {});
@@ -27,7 +27,7 @@ export function listAudits(http: HttpClient, rootUrl: string, params?: ListAudit
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<ListAuditsResponse>;
+      return r as StrictHttpResponse<ApiListAuditsResponse>;
     })
   );
 }

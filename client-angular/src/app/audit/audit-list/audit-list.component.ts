@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuditService } from '../audit.service';
 import { PaginatedResult } from '../models/pagination';
 import { RouterLink } from '@angular/router';
-import { AuditListItemDto } from '../../api/models';
+import { ApiAuditListItemDto } from '../../api/models';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
@@ -15,7 +15,7 @@ import { PaginationComponent } from '../../shared/components/pagination/paginati
   imports: [RouterLink, PaginationComponent]
 })
 export class AuditListComponent implements OnInit {
-  audits: PaginatedResult<AuditListItemDto> | null = null;
+  audits: PaginatedResult<ApiAuditListItemDto> | null = null;
   error: string | null = null;
   isLoading: boolean | null = false;
 

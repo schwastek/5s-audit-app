@@ -17,7 +17,7 @@ import { refreshToken } from '../fn/account/refresh-token';
 import { RefreshToken$Params } from '../fn/account/refresh-token';
 import { register } from '../fn/account/register';
 import { Register$Params } from '../fn/account/register';
-import { UserDto } from '../models/user-dto';
+import { ApiUserDto } from '../models/api-user-dto';
 
 @Injectable({ providedIn: 'root' })
 export class ApiAccountService extends BaseService {
@@ -38,7 +38,7 @@ export class ApiAccountService extends BaseService {
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  login$Response(params?: Login$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDto>> {
+  login$Response(params?: Login$Params, context?: HttpContext): Observable<StrictHttpResponse<ApiUserDto>> {
     return login(this.http, this.rootUrl, params, context);
   }
 
@@ -52,9 +52,9 @@ export class ApiAccountService extends BaseService {
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  login(params?: Login$Params, context?: HttpContext): Observable<UserDto> {
+  login(params?: Login$Params, context?: HttpContext): Observable<ApiUserDto> {
     return this.login$Response(params, context).pipe(
-      map((r: StrictHttpResponse<UserDto>): UserDto => r.body)
+      map((r: StrictHttpResponse<ApiUserDto>): ApiUserDto => r.body)
     );
   }
 
@@ -71,7 +71,7 @@ export class ApiAccountService extends BaseService {
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  register$Response(params?: Register$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDto>> {
+  register$Response(params?: Register$Params, context?: HttpContext): Observable<StrictHttpResponse<ApiUserDto>> {
     return register(this.http, this.rootUrl, params, context);
   }
 
@@ -85,9 +85,9 @@ export class ApiAccountService extends BaseService {
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  register(params?: Register$Params, context?: HttpContext): Observable<UserDto> {
+  register(params?: Register$Params, context?: HttpContext): Observable<ApiUserDto> {
     return this.register$Response(params, context).pipe(
-      map((r: StrictHttpResponse<UserDto>): UserDto => r.body)
+      map((r: StrictHttpResponse<ApiUserDto>): ApiUserDto => r.body)
     );
   }
 
@@ -104,7 +104,7 @@ export class ApiAccountService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getCurrentUser$Response(params?: GetCurrentUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDto>> {
+  getCurrentUser$Response(params?: GetCurrentUser$Params, context?: HttpContext): Observable<StrictHttpResponse<ApiUserDto>> {
     return getCurrentUser(this.http, this.rootUrl, params, context);
   }
 
@@ -118,9 +118,9 @@ export class ApiAccountService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getCurrentUser(params?: GetCurrentUser$Params, context?: HttpContext): Observable<UserDto> {
+  getCurrentUser(params?: GetCurrentUser$Params, context?: HttpContext): Observable<ApiUserDto> {
     return this.getCurrentUser$Response(params, context).pipe(
-      map((r: StrictHttpResponse<UserDto>): UserDto => r.body)
+      map((r: StrictHttpResponse<ApiUserDto>): ApiUserDto => r.body)
     );
   }
 
@@ -137,7 +137,7 @@ export class ApiAccountService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  refreshToken$Response(params?: RefreshToken$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDto>> {
+  refreshToken$Response(params?: RefreshToken$Params, context?: HttpContext): Observable<StrictHttpResponse<ApiUserDto>> {
     return refreshToken(this.http, this.rootUrl, params, context);
   }
 
@@ -151,9 +151,9 @@ export class ApiAccountService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  refreshToken(params?: RefreshToken$Params, context?: HttpContext): Observable<UserDto> {
+  refreshToken(params?: RefreshToken$Params, context?: HttpContext): Observable<ApiUserDto> {
     return this.refreshToken$Response(params, context).pipe(
-      map((r: StrictHttpResponse<UserDto>): UserDto => r.body)
+      map((r: StrictHttpResponse<ApiUserDto>): ApiUserDto => r.body)
     );
   }
 

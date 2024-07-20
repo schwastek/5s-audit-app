@@ -6,14 +6,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SaveAuditActionRequest } from '../../models/save-audit-action-request';
-import { SaveAuditActionResponse } from '../../models/save-audit-action-response';
+import { ApiSaveAuditActionRequest } from '../../models/api-save-audit-action-request';
+import { ApiSaveAuditActionResponse } from '../../models/api-save-audit-action-response';
 
 export interface SaveAuditAction$Params {
-      body?: SaveAuditActionRequest
+      body?: ApiSaveAuditActionRequest
 }
 
-export function saveAuditAction(http: HttpClient, rootUrl: string, params?: SaveAuditAction$Params, context?: HttpContext): Observable<StrictHttpResponse<SaveAuditActionResponse>> {
+export function saveAuditAction(http: HttpClient, rootUrl: string, params?: SaveAuditAction$Params, context?: HttpContext): Observable<StrictHttpResponse<ApiSaveAuditActionResponse>> {
   const rb = new RequestBuilder(rootUrl, saveAuditAction.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/*+json');
@@ -24,7 +24,7 @@ export function saveAuditAction(http: HttpClient, rootUrl: string, params?: Save
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SaveAuditActionResponse>;
+      return r as StrictHttpResponse<ApiSaveAuditActionResponse>;
     })
   );
 }

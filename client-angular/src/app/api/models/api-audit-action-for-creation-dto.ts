@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface AuditActionForCreationDto {
+export interface ApiAuditActionForCreationDto {
   actionId: string;
   auditId: string;
   description: string;

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface AuditListItemDto {
+export interface ApiAuditListItemDto {
   area: string;
   auditId: string;
   author: string;

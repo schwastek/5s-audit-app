@@ -11,7 +11,7 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { listQuestions } from '../fn/questions/list-questions';
 import { ListQuestions$Params } from '../fn/questions/list-questions';
-import { ListQuestionsResponse } from '../models/list-questions-response';
+import { ApiListQuestionsResponse } from '../models/api-list-questions-response';
 
 @Injectable({ providedIn: 'root' })
 export class ApiQuestionsService extends BaseService {
@@ -32,7 +32,7 @@ export class ApiQuestionsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listQuestions$Response(params?: ListQuestions$Params, context?: HttpContext): Observable<StrictHttpResponse<ListQuestionsResponse>> {
+  listQuestions$Response(params?: ListQuestions$Params, context?: HttpContext): Observable<StrictHttpResponse<ApiListQuestionsResponse>> {
     return listQuestions(this.http, this.rootUrl, params, context);
   }
 
@@ -46,9 +46,9 @@ export class ApiQuestionsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listQuestions(params?: ListQuestions$Params, context?: HttpContext): Observable<ListQuestionsResponse> {
+  listQuestions(params?: ListQuestions$Params, context?: HttpContext): Observable<ApiListQuestionsResponse> {
     return this.listQuestions$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ListQuestionsResponse>): ListQuestionsResponse => r.body)
+      map((r: StrictHttpResponse<ApiListQuestionsResponse>): ApiListQuestionsResponse => r.body)
     );
   }
 
