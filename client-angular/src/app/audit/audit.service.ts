@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable, map, of } from 'rxjs';
-import { PaginatedResult } from './models/pagination';
+import { PaginatedResult } from '../shared/models/pagination';
 import { Area } from './models/area';
 import { ApiAuditsService, ApiQuestionsService } from '../api/services';
 import { ListAudits$Params } from '../api/fn/audits/list-audits';
 import { ApiAuditListItemDto, ApiSaveAuditRequest } from '../api/models';
-import { Nullable } from '../shared/ts-helpers/ts-helpers';
+import { Nullable } from '../shared/utilities/ts-helpers';
 import { isDefined } from '../shared/utilities/utilities';
 
 @Injectable({

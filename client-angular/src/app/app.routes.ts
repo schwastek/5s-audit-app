@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './account/login/login.component';
 import { AuditListComponent } from './audit/audit-list/audit-list.component';
-import { authGuard } from './core/guards/auth.guard';
+import { authGuard } from './shared/guards/auth.guard';
 import { AuditDetailComponent } from './audit/audit-detail/audit-detail.component';
 import { AuditNewComponent } from './audit/audit-new/audit-new.component';
 

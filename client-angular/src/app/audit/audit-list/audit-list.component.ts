@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuditService } from '../audit.service';
-import { PaginatedResult } from '../models/pagination';
+import { PaginatedResult } from '../../shared/models/pagination';
 import { RouterLink } from '@angular/router';
 import { ApiAuditListItemDto } from '../../api/models';
 import { firstValueFrom } from 'rxjs';

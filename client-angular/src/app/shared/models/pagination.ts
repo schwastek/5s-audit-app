@@ -1,5 +1,5 @@
 import { ApiPaginationMetadata } from '../../api/models';
-import { Nullable } from '../../shared/ts-helpers/ts-helpers';
+import { Nullable } from '../utilities/ts-helpers';
 
 export class PaginationMetadata implements ApiPaginationMetadata
 {

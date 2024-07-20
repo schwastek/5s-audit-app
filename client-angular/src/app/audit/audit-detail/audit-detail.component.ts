@@ -4,7 +4,7 @@ import { lastValueFrom } from 'rxjs';
 import { NgFor, NgIf } from '@angular/common';
 import { RatingComponent } from '../../shared/components/rating/rating.component';
 import { FormsModule } from '@angular/forms';
-import { Nullable } from '../../shared/ts-helpers/ts-helpers';
+import { Nullable } from '../../shared/utilities/ts-helpers';
 import { AnswerDtoWithAnswerNumber, AuditDtoWithAnswerNumber } from '../models/audit-dto-with-answer-number';
 import { ApiAnswerDto } from '../../api/models';
 
