@@ -16,6 +16,6 @@ export const appConfig: ApplicationConfig = {
       // The interceptors are chained together in the order they are listed.
       withInterceptors([authInterceptor])
     ),
-    importProvidersFrom(ApiModule.forRoot({ rootUrl: environment.apiUrl }),)
+    importProvidersFrom(ApiModule.forRoot({ rootUrl: environment.apiUrl }))
   ]
 };

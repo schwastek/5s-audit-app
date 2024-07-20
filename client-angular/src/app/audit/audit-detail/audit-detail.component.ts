@@ -27,7 +27,7 @@ export class AuditDetailComponent implements OnInit {
     this.audit = await this.getAudit(this.id);
   }
 
-  answerTrackBy(index: number, answer: AnswerDtoWithAnswerNumber) {
+  answerTrackBy(_: number, answer: AnswerDtoWithAnswerNumber) {
     return answer.answerId;
   }
 

@@ -12,7 +12,7 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
   let token: string | undefined;
 
   accountService.currentUser$.pipe(take(1)).subscribe({
-    next: user => token = user?.token
+    next: (user) => token = user?.token
   });
 
   // Clone the request to add the authentication header.

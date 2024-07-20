@@ -5,7 +5,6 @@ import { Area } from '../models/area';
 import { lastValueFrom } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RatingComponent } from '../../shared/components/rating/rating.component';
-import { RatingTemplateDirective } from '../../shared/components/rating/templates.directive';
 import { ApiAnswerForCreationDto, ApiQuestionDto } from '../../api/models';
 import { v4 as uuidv4 } from 'uuid';
 import { Router } from '@angular/router';
@@ -15,7 +14,7 @@ import { Router } from '@angular/router';
   templateUrl: './audit-new.component.html',
   styleUrls: ['./audit-new.component.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RatingComponent, RatingTemplateDirective]
+  imports: [CommonModule, ReactiveFormsModule, RatingComponent]
 })
 export class AuditNewComponent implements OnInit {
   areas: Area[] | null = null;

@@ -17,11 +17,11 @@ export class AccountService {
 
   login(email: string | null, password: string | null) {
     return this.http.post<User>(this.baseUrl + '/api/account/login', { email, password })
-      .pipe(map(user => {
+      .pipe(map((user) => {
         localStorage.setItem('token', user.token);
         this.currentUserSource.next(user);
       })
-    );
+      );
   }
 
   logout() {
@@ -39,24 +39,24 @@ export class AccountService {
     let headers = new HttpHeaders();
     headers = headers.set('Authorization', `Bearer ${token}`);
 
-    return this.http.get<User>(this.baseUrl + '/api/account', {headers})
-    .pipe(
-      map(user => {
-        if (user) {
-          localStorage.setItem('token', user.token);
-          this.currentUserSource.next(user);
-          return user;
-        } else {
-          return null;
-        }
-      }),
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          this.router.navigateByUrl('/login');
-        }
+    return this.http.get<User>(this.baseUrl + '/api/account', { headers })
+      .pipe(
+        map((user) => {
+          if (user) {
+            localStorage.setItem('token', user.token);
+            this.currentUserSource.next(user);
+            return user;
+          } else {
+            return null;
+          }
+        }),
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.router.navigateByUrl('/login');
+          }
 
-        return throwError(() => new Error(error.message));
-      })
-    )
+          return throwError(() => new Error(error.message));
+        })
+      );
   }
 }
