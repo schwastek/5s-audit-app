@@ -17,10 +17,10 @@ export class AuditService {
     private apiQuestionsService: ApiQuestionsService
   ) { }
 
-  getAudits(): Observable<PaginatedResult<AuditListItemDto>> {
+  getAudits(pageNumber?: number | null): Observable<PaginatedResult<AuditListItemDto>> {
     const params: ListAudits$Params = {
-      pageSize: 5,
-      pageNumber: 1
+      pageSize: 10,
+      pageNumber: pageNumber ?? 1
     };
 
     const result = this.apiAuditsService.listAudits(params).pipe(

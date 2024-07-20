@@ -31,6 +31,14 @@
           }
         </tbody>
       </table>
+
+      <div class="d-flex justify-content-center mt-5">
+        <app-pagination
+          [currentPage]="audits.metadata.currentPage"
+          [totalPages]="audits.metadata.totalPages"
+          (pageChange)="onPageChange($event)"
+        ></app-pagination>
+      </div>
     }
   </div>
 </div>
