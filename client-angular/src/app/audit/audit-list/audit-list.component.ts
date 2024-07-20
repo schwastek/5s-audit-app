@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { AuditService } from '../audit.service';
 import { PaginatedResult } from '../../shared/models/pagination';
 import { RouterLink } from '@angular/router';
-import { ApiAuditListItemDto } from '../../api/models';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
+import { AuditListItemDto } from '../models/audit.models';
 
 @Component({
   selector: 'app-audit-list',
@@ -15,7 +15,7 @@ import { PaginationComponent } from '../../shared/components/pagination/paginati
   imports: [RouterLink, PaginationComponent]
 })
 export class AuditListComponent implements OnInit {
-  audits: PaginatedResult<ApiAuditListItemDto> | null = null;
+  audits: PaginatedResult<AuditListItemDto> | null = null;
   error: string | null = null;
   isLoading: boolean | null = false;
 
@@ -26,10 +26,6 @@ export class AuditListComponent implements OnInit {
   }
 
   async getAudits(pageNumber: number) {
-    // TODO: Format date as "1994-07-23".
-    // TODO: Format score as percentage.
-    // TODO: Apply `substring(0, 8)` to audit ID.
-
     try {
       this.isLoading = true;
       this.audits = await firstValueFrom(this.auditService.getAudits(pageNumber));

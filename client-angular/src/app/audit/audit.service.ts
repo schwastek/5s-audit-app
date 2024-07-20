@@ -4,9 +4,11 @@ import { PaginatedResult } from '../shared/models/pagination';
 import { Area } from './models/area';
 import { ApiAuditsService, ApiQuestionsService } from '../api/services';
 import { ListAudits$Params } from '../api/fn/audits/list-audits';
-import { ApiAuditListItemDto, ApiSaveAuditRequest } from '../api/models';
+import { ApiSaveAuditRequest } from '../api/models';
 import { Nullable } from '../shared/utilities/ts-helpers';
 import { isDefined } from '../shared/utilities/utilities';
+import { AuditListItemDto } from './models/audit.models';
+import { formatAsPercentage, formatDate, getShortGuid } from '../shared/utilities/formatters';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +19,7 @@ export class AuditService {
     private apiQuestionsService: ApiQuestionsService
   ) { }
 
-  getAudits(pageNumber?: number | null): Observable<PaginatedResult<ApiAuditListItemDto>> {
+  getAudits(pageNumber?: number | null): Observable<PaginatedResult<AuditListItemDto>> {
     const params: ListAudits$Params = {
       pageSize: 10,
       pageNumber: pageNumber ?? 1
@@ -25,7 +27,16 @@ export class AuditService {
 
     const result = this.apiAuditsService.listAudits(params).pipe(
       map((response) => {
-        return new PaginatedResult<ApiAuditListItemDto>(response.items, response.metadata);
+        const items = response.items.map((item) => {
+          return {
+            ...item,
+            auditIdShort: getShortGuid(item.auditId),
+            startDateFormatted: formatDate(item.startDate),
+            scorePercentage: formatAsPercentage(item.score)
+          } as AuditListItemDto;
+        });
+
+        return new PaginatedResult<AuditListItemDto>(items, response.metadata);
       })
     );
 

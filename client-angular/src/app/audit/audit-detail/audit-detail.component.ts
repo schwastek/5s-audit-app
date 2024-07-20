@@ -5,7 +5,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { RatingComponent } from '../../shared/components/rating/rating.component';
 import { FormsModule } from '@angular/forms';
 import { Nullable } from '../../shared/utilities/ts-helpers';
-import { AnswerDtoWithAnswerNumber, AuditDtoWithAnswerNumber } from '../models/audit-dto-with-answer-number';
+import { AnswerDtoWithAnswerNumber, AuditDtoWithAnswerNumber } from '../models/audit.models';
 import { ApiAnswerDto } from '../../api/models';
 
 @Component({

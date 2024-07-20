@@ -7,7 +7,7 @@
         {{ error }}
       </div>
     } @else if (audits) {
-      <table class="table">
+      <table class="table table-hover">
         <thead>
           <tr>
             <th scope="col">ID</th>
@@ -20,11 +20,11 @@
         <tbody class="text-muted">
           @for (audit of audits.items; track audit.auditId) {
             <tr>
-              <td>{{ audit.auditId }}</td>
-              <td>{{ audit.startDate }}</td>
-              <td>{{ audit.author }}</td>
-              <td>{{ audit.score }}</td>
-              <td>
+              <td class="cell-audit-id">{{ audit.auditIdShort }}</td>
+              <td class="cell-start-date">{{ audit.startDateFormatted }}</td>
+              <td class="cell-author">{{ audit.author }}</td>
+              <td class="cell-score">{{ audit.scorePercentage }}</td>
+              <td class="cell-actions">
                 <a class="btn btn-sm btn-outline-secondary" [routerLink]="['/audits', audit.auditId]">View</a>
               </td>
             </tr>
