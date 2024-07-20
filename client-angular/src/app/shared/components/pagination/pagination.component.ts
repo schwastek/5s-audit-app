@@ -10,10 +10,20 @@ import { NgClass } from '@angular/common';
   styleUrl: './pagination.component.scss'
 })
 export class PaginationComponent implements OnInit, OnChanges {
+
+  // The currently selected page.
   @Input() currentPage = 1;
+
+  // Total number of pages.
   @Input() totalPages = 1;
+
+  // Number of pages to display on each side of the current page.
   @Input() pageSiblings = 2;
+
+  // The maximum number of pages to display.
   @Input() visiblePages = 5;
+
+  // An event fired when the page is changed.
   @Output() pageChange = new EventEmitter<number>();
 
   // By default, page navigation is displayed as: < [1] >.
