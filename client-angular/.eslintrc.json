@@ -34,6 +34,18 @@
             "style": "kebab-case"
           }
         ],
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            "args": "all",
+            "argsIgnorePattern": "^_",
+            "caughtErrors": "all",
+            "caughtErrorsIgnorePattern": "^_",
+            "destructuredArrayIgnorePattern": "^_",
+            "varsIgnorePattern": "^_",
+            "ignoreRestSiblings": true
+          }
+        ],
         "@stylistic/arrow-parens": ["error", "always"],
         "@stylistic/block-spacing": ["error", "always"],
         "@stylistic/comma-dangle": ["error", "never"],

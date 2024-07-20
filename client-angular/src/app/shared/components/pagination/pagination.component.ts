@@ -19,16 +19,12 @@ export class PaginationComponent implements OnInit, OnChanges {
   // By default, page navigation is displayed as: < [1] >.
   pages: number[] = [1];
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.pages = this.calculatePageNumbers(this.currentPage, this.totalPages, this.pageSiblings, this.visiblePages);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
-    console.log('currentPage', this.currentPage);
-    console.log('totalPages', this.totalPages);
+  ngOnChanges(_: SimpleChanges) {
     this.pages = this.calculatePageNumbers(this.currentPage, this.totalPages, this.pageSiblings, this.visiblePages);
-    console.log('pages', this.pages);
   }
 
   handlePageChange(pageNumber: number, event: Event) {
