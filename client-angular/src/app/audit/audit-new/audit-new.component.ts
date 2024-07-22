@@ -8,13 +8,14 @@ import { RatingComponent } from '../../shared/components/rating/rating.component
 import { ApiAnswerForCreationDto, ApiQuestionDto } from '../../api/models';
 import { v4 as uuidv4 } from 'uuid';
 import { Router } from '@angular/router';
+import { AuditActionComponent } from '../audit-action/audit-action.component';
 
 @Component({
   selector: 'app-audit-new',
   templateUrl: './audit-new.component.html',
   styleUrls: ['./audit-new.component.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RatingComponent]
+  imports: [CommonModule, ReactiveFormsModule, RatingComponent, AuditActionComponent]
 })
 export class AuditNewComponent implements OnInit {
   areas: Area[] | null = null;

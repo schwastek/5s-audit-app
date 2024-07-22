@@ -1,0 +1,30 @@
+<div class="mb-3">
+  <button type="button" class="btn btn-primary" (click)="handleOpenForm()">Add action</button>
+</div>
+
+@if (isEditMode) {
+  <form (ngSubmit)="handleSubmit()">
+    <label for="auditActionDescription" class="form-label">Action description (description.length / descriptionMaxLength):</label>
+    <textarea class="form-control" id="auditActionDescription" rows="5" value="description" change="handleChange()" [maxLength]="descriptionMaxLength"></textarea>
+    <div class="my-2 mb-4">
+      <button type="submit" class="btn btn-primary me-1">Save</button>
+      <button type="button" class="btn btn-danger" (click)="handleCloseForm()">Cancel</button>
+    </div>
+  </form>
+}
+
+<ul class="list-group">
+  <li class="list-group-item py-3">
+    <div class="d-flex align-items-center justify-content-between">
+      <p class="mb-0 text-break pe-2">action.description</p>
+      <div class="btn-group" role="group" aria-label="Actions">
+        <button type="button" class="btn btn-sm btn-outline-danger fill-danger" (click)="handleDeleteAction('action.actionId', $event)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M15 2H9c-1.103 0-2 .897-2 2v2H3v2h2v12c0 1.103.897 2 2 2h10c1.103 0 2-.897 2-2V8h2V6h-4V4c0-1.103-.897-2-2-2zM9 4h6v2H9V4zm8 16H7V8h10v12z"></path>
+          </svg>
+          <span class="visually-hidden">Delete</span>
+        </button>
+      </div>
+    </div>
+  </li>
+</ul>
