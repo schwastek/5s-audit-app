@@ -1,15 +1,29 @@
 import { Component } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-audit-action',
   standalone: true,
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './audit-action.component.html',
   styleUrl: './audit-action.component.scss'
 })
 export class AuditActionComponent {
-  isEditMode: boolean = true;
-  descriptionMaxLength: number = 280;
+  isEditMode = false;
+  descriptionMaxLength = 280;
+
+  // Form
+  description = new FormControl<string | null>(null, { validators: [Validators.required] });
+  form = new FormGroup({
+    description: this.description
+  });
+
+  descriptionLength$ = this.description.valueChanges.pipe((
+    map((description) => description?.length ?? 0)
+  ));
+  descriptionLength = toSignal(this.descriptionLength$, { initialValue: 0 });
 
   handleDeleteAction(actionId: string, event: Event) {
   }

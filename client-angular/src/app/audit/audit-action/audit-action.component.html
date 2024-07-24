@@ -3,11 +3,11 @@
 </div>
 
 @if (isEditMode) {
-  <form (ngSubmit)="handleSubmit()">
-    <label for="auditActionDescription" class="form-label">Action description (description.length / descriptionMaxLength):</label>
-    <textarea class="form-control" id="auditActionDescription" rows="5" value="description" change="handleChange()" [maxLength]="descriptionMaxLength"></textarea>
+  <form [formGroup]="form" (ngSubmit)="handleSubmit()">
+    <label for="auditActionDescription" class="form-label">Action description ({{ descriptionLength() }} / {{ descriptionMaxLength }}):</label>
+    <textarea class="form-control" id="auditActionDescription" formControlName="description" rows="5" value="description" change="handleChange()" [maxLength]="descriptionMaxLength"></textarea>
     <div class="my-2 mb-4">
-      <button type="submit" class="btn btn-primary me-1">Save</button>
+      <button type="submit" class="btn btn-primary me-1" [disabled]="form.invalid">Save</button>
       <button type="button" class="btn btn-danger" (click)="handleCloseForm()">Cancel</button>
     </div>
   </form>
