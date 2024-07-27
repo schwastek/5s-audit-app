@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable, map, of } from 'rxjs';
 import { PaginatedResult } from '../shared/models/pagination';
 import { Area } from './models/area';
-import { ApiAuditsService, ApiQuestionsService } from '../api/services';
+import { ApiActionsService, ApiAuditsService, ApiQuestionsService } from '../api/services';
 import { ListAudits$Params } from '../api/fn/audits/list-audits';
-import { ApiSaveAuditRequest } from '../api/models';
+import { ApiSaveAuditActionRequest, ApiSaveAuditRequest } from '../api/models';
 import { Nullable } from '../shared/utilities/ts-helpers';
 import { isDefined } from '../shared/utilities/utilities';
 import { AuditListItemDto } from './models/audit.models';
@@ -16,7 +16,8 @@ import { formatAsPercentage, formatDate, getShortGuid } from '../shared/utilitie
 export class AuditService {
   constructor(
     private apiAuditsService: ApiAuditsService,
-    private apiQuestionsService: ApiQuestionsService
+    private apiQuestionsService: ApiQuestionsService,
+    private apiActionService: ApiActionsService
   ) { }
 
   getAudits(pageNumber?: number | null): Observable<PaginatedResult<AuditListItemDto>> {
@@ -70,5 +71,9 @@ export class AuditService {
 
   saveAudit(audit: ApiSaveAuditRequest) {
     return this.apiAuditsService.saveAudit({ body: audit });
+  }
+
+  saveAction(auditAction: ApiSaveAuditActionRequest) {
+    return this.apiActionService.saveAuditAction({ body: auditAction });
   }
 }

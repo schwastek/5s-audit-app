@@ -1,0 +1,4 @@
+<form [formGroup]="form" [attr.id]="id()">
+  <label for="auditActionDescription" class="form-label">Action description ({{ descriptionLength() }} / {{ descriptionMaxLength }}):</label>
+  <textarea class="form-control" id="auditActionDescription" formControlName="description" rows="5" [maxLength]="descriptionMaxLength"></textarea>
+</form>
