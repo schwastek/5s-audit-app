@@ -1,20 +1,25 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { map } from 'rxjs';
+import { LoadingButtonDirective } from '../../../shared/components/loading-button/loading-button.directive';
 
 @Component({
   selector: 'app-audit-action-form',
   standalone: true,
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LoadingButtonDirective
   ],
   templateUrl: './form.component.html'
 })
 export class AuditActionFormComponent {
 
   // Inputs
-  id = input.required<string>();
+  isSaving = input<boolean>(false);
+
+  // Events
+  save = output<string>();
 
   // Form
   description = new FormControl<string>('', { nonNullable: true, validators: [Validators.required] });
@@ -30,4 +35,12 @@ export class AuditActionFormComponent {
 
   // Configuration
   readonly descriptionMaxLength = 280;
+
+  get isDisabledSave() {
+    return this.form.invalid || this.isSaving();
+  }
+
+  onSave() {
+    this.save.emit(this.description.value);
+  }
 }

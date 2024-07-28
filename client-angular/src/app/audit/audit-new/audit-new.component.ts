@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuditService } from '../audit.service';
 import { Area } from '../models/area';
 import { firstValueFrom } from 'rxjs';
 import { RatingComponent } from '../../shared/components/rating/rating.component';
-import { ApiAnswerForCreationDto, ApiQuestionDto } from '../../api/models';
+import { ApiAnswerForCreationDto, ApiQuestionDto, ApiSaveAuditActionRequest } from '../../api/models';
 import { v4 as uuidv4 } from 'uuid';
 import { Router } from '@angular/router';
 import { AuditActionNewComponent } from '../audit-action/new/new.component';
@@ -21,7 +21,6 @@ import { AuditActionNewComponent } from '../audit-action/new/new.component';
   ]
 })
 export class AuditNewComponent implements OnInit {
-
   readonly auditId = uuidv4();
   private readonly startDate = new Date().toISOString();
 
@@ -41,6 +40,9 @@ export class AuditNewComponent implements OnInit {
 
   // Configuration
   private readonly defaultAnswer = 3;
+
+  // Actions
+  auditActions = signal<ApiSaveAuditActionRequest[]>([]);
 
   constructor(
     private auditService: AuditService,
@@ -70,8 +72,7 @@ export class AuditNewComponent implements OnInit {
       startDate: this.startDate,
       endDate: new Date().toISOString(),
       answers: this.answers,
-      // TODO: Read actions.
-      actions: []
+      actions: this.auditActions()
     };
 
     this.auditService.saveAudit(audit).subscribe((response) => {
