@@ -2,6 +2,10 @@ export function isDefined(value: unknown): boolean {
   return value !== undefined && value !== null;
 }
 
+export function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 // Helper method for creating a range of numbers
 // range(1, 5) => [1, 2, 3, 4, 5]
 export function range(from: number, to: number, step = 1): number[] {
