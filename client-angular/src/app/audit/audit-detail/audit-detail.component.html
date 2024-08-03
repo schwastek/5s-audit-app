@@ -1,9 +1,15 @@
 <div class="container">
   <div class="my-3">
     <div class="row">
+      <div class="col-12">
+        <div class="d-flex align-items-center mb-3 p-3 text-white bg-secondary rounded shadow-sm">
+          <h1 class="h6 lh-1 mb-0 text-white">Audit details</h1>
+        </div>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-8">
         <div class="px-3 py-3 bg-body rounded shadow-sm">
-          <h2 class="h4 border-bottom pb-2 mb-3">Audit details</h2>
             @if (audit) {
               <div class="mb-3 row">
                 <div class="col-2">
@@ -34,6 +40,11 @@
               </div>
             }
         </div>
+      </div>
+      <div class="col-4">
+        @if (audit) {
+          <app-audit-action [auditId]="audit.auditId" [actions]="audit.actions" [isEditForm]="true" />
+        }
       </div>
     </div>
   </div>

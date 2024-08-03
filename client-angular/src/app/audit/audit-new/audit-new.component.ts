@@ -7,7 +7,7 @@ import { RatingComponent } from '../../shared/components/rating/rating.component
 import { ApiAnswerForCreationDto, ApiQuestionDto, ApiSaveAuditActionRequest } from '../../api/models';
 import { v4 as uuidv4 } from 'uuid';
 import { Router } from '@angular/router';
-import { AuditActionNewComponent } from '../audit-action/new/new.component';
+import { AuditActionComponent } from '../audit-action/audit-action.component';
 
 @Component({
   selector: 'app-audit-new',
@@ -17,7 +17,7 @@ import { AuditActionNewComponent } from '../audit-action/new/new.component';
   imports: [
     ReactiveFormsModule,
     RatingComponent,
-    AuditActionNewComponent
+    AuditActionComponent
   ]
 })
 export class AuditNewComponent implements OnInit {
@@ -27,6 +27,7 @@ export class AuditNewComponent implements OnInit {
   areas: Area[] | null = null;
   questions: ApiQuestionDto[] | null = null;
   private answers: ApiAnswerForCreationDto[] = [];
+  auditActions = signal<ApiSaveAuditActionRequest[]>([]);
 
   // Form
   area = new FormControl<string>('assembly', { validators: [Validators.required], nonNullable: true });
@@ -40,9 +41,6 @@ export class AuditNewComponent implements OnInit {
 
   // Configuration
   private readonly defaultAnswer = 3;
-
-  // Actions
-  auditActions = signal<ApiSaveAuditActionRequest[]>([]);
 
   constructor(
     private auditService: AuditService,

@@ -2,10 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AuditService } from '../audit.service';
 import { lastValueFrom } from 'rxjs';
 import { RatingComponent } from '../../shared/components/rating/rating.component';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { Nullable } from '../../shared/utilities/ts-helpers';
 import { AnswerDtoWithAnswerNumber, AuditDtoWithAnswerNumber } from '../models/audit.models';
 import { ApiAnswerDto } from '../../api/models';
+import { AuditActionComponent } from '../audit-action/audit-action.component';
 
 @Component({
   selector: 'app-audit-detail',
@@ -13,8 +14,9 @@ import { ApiAnswerDto } from '../../api/models';
   styleUrls: ['./audit-detail.component.scss'],
   standalone: true,
   imports: [
-    FormsModule,
-    RatingComponent
+    ReactiveFormsModule,
+    RatingComponent,
+    AuditActionComponent
   ]
 })
 export class AuditDetailComponent implements OnInit {

@@ -4,7 +4,7 @@ import { PaginatedResult } from '../shared/models/pagination';
 import { Area } from './models/area';
 import { ApiActionsService, ApiAuditsService, ApiQuestionsService } from '../api/services';
 import { ListAudits$Params } from '../api/fn/audits/list-audits';
-import { ApiSaveAuditActionRequest, ApiSaveAuditRequest } from '../api/models';
+import { ApiSaveAuditActionRequest, ApiSaveAuditRequest, ApiUpdateAuditActionRequest } from '../api/models';
 import { Nullable } from '../shared/utilities/ts-helpers';
 import { isDefined } from '../shared/utilities/utilities';
 import { AuditListItemDto } from './models/audit.models';
@@ -73,7 +73,15 @@ export class AuditService {
     return this.apiAuditsService.saveAudit({ body: audit });
   }
 
-  saveAction(auditAction: ApiSaveAuditActionRequest) {
+  saveAuditAction(auditAction: ApiSaveAuditActionRequest) {
     return this.apiActionService.saveAuditAction({ body: auditAction });
+  }
+
+  updateAuditAction(auditAction: ApiUpdateAuditActionRequest) {
+    return this.apiActionService.updateAction({ actionId: auditAction.actionId, body: auditAction });
+  }
+
+  deleteAuditAction(actionId: string) {
+    return this.apiActionService.deleteAction({ actionId });
   }
 }

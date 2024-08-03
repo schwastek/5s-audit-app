@@ -9,7 +9,7 @@
     </div>
     <div class="row">
       <div class="col-8">
-        <div class="mb-3 px-3 py-3 bg-body rounded shadow-sm">
+        <div class="px-3 py-3 bg-body rounded shadow-sm">
           <form [formGroup]="form">
             <label for="select-area" class="form-label mb-2">Select area:</label>
             <select id="select-area" class="form-select mb-4" formControlName="area">
@@ -40,7 +40,7 @@
         </div>
       </div>
       <div class="col-4">
-        <app-audit-action-new [auditId]="auditId" [(actions)]="auditActions" />
+        <app-audit-action [auditId]="auditId" [(actions)]="auditActions" [isEditForm]="false" />
       </div>
     </div>
   </div>

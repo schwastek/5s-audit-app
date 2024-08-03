@@ -1,9 +1,0 @@
-<app-audit-action-form (save)="onSave($event)" [isSaving]="isSaving" />
-
-<ul class="list-group">
-  @for (action of actions(); track action.actionId) {
-    <app-audit-action-single [action]="action">
-      <app-audit-action-button-delete (click)="onDelete(action.actionId)" />
-    </app-audit-action-single>
-  }
-</ul>
