@@ -14,18 +14,17 @@
                 </div>
               </div>
 
-              <ng-container>
-                @for (answer of audit.answers; track answer.answerId) {
-                  <div class="d-flex pt-3 border-bottom lh-1 text-muted">
-                    <div class="flex-grow-1">
-                      <p class="pb-3 mb-0 lh-sm">{{ answer.questionText }}</p>
-                    </div>
-                    <div>
-                      <app-rating [rate]="answer.answerNumber" [max]="5" [isReadOnly]="true"></app-rating>
-                    </div>
+              @for (answer of audit.answers; track answer.answerId) {
+                <div class="d-flex pt-3 border-bottom lh-1 text-muted">
+                  <div class="flex-grow-1">
+                    <p class="pb-3 mb-0 lh-sm">{{ answer.questionText }}</p>
                   </div>
-                }
-              </ng-container>
+                  <div>
+                    <app-rating [rate]="answer.answerNumber" [max]="5" [isReadOnly]="true"></app-rating>
+                  </div>
+                </div>
+              }
+
             }
             @else {
               <div class="row">
