@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AuditService } from '../audit.service';
 import { lastValueFrom } from 'rxjs';
-import { NgFor, NgIf } from '@angular/common';
 import { RatingComponent } from '../../shared/components/rating/rating.component';
 import { FormsModule } from '@angular/forms';
 import { Nullable } from '../../shared/utilities/ts-helpers';
@@ -13,7 +12,10 @@ import { ApiAnswerDto } from '../../api/models';
   templateUrl: './audit-detail.component.html',
   styleUrls: ['./audit-detail.component.scss'],
   standalone: true,
-  imports: [NgIf, NgFor, FormsModule, RatingComponent]
+  imports: [
+    FormsModule,
+    RatingComponent
+  ]
 })
 export class AuditDetailComponent implements OnInit {
   @Input() id?: string;
@@ -25,10 +27,6 @@ export class AuditDetailComponent implements OnInit {
 
   async ngOnInit() {
     this.audit = await this.getAudit(this.id);
-  }
-
-  answerTrackBy(_: number, answer: AnswerDtoWithAnswerNumber) {
-    return answer.answerId;
   }
 
   async getAudit(id: Nullable<string>) {
