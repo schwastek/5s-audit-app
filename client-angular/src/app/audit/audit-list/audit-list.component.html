@@ -1,48 +1,50 @@
 <div class="container">
   <div class="my-3 px-3 py-3 bg-body rounded shadow-sm">
-    @if (isLoading) {
-      <p class="pb-2 mb-0">Loading...</p>
-    }
-
     @if (error) {
-      <div class="alert alert-danger my-0" role="alert">
+      <div class="alert alert-danger" role="alert">
         {{ error }}
       </div>
     }
 
-    @if (audits$ | async; as audits) {
-      <table class="table table-hover">
-        <thead>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Date</th>
+          <th scope="col">Author</th>
+          <th scope="col">Score</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="text-muted">
+        @if (isLoading) {
           <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Date</th>
-            <th scope="col">Author</th>
-            <th scope="col">Score</th>
-            <th scope="col">Actions</th>
+            <td colspan="5">
+              <p class="my-0 py-2 text-center">Loading...</p>
+            </td>
           </tr>
-        </thead>
-        <tbody class="text-muted">
-          @for (audit of audits.items; track audit.auditId) {
-            <tr>
-              <td class="cell-audit-id">{{ audit.auditIdShort }}</td>
-              <td class="cell-start-date">{{ audit.startDateFormatted }}</td>
-              <td class="cell-author">{{ audit.author }}</td>
-              <td class="cell-score">{{ audit.scorePercentage }}</td>
-              <td class="cell-actions">
-                <a class="btn btn-sm btn-outline-secondary" [routerLink]="['/audits', audit.auditId]">View</a>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+        }
 
-      <div class="d-flex justify-content-center mt-5">
-        <app-pagination
-          [currentPage]="audits.metadata.currentPage"
-          [totalPages]="audits.metadata.totalPages"
-          (pageChange)="onPageChange($event)"
-        ></app-pagination>
-      </div>
-    }
+        @for (audit of audits.items; track audit.auditId) {
+          <tr>
+            <td class="cell-audit-id">{{ audit.auditIdShort }}</td>
+            <td class="cell-start-date">{{ audit.startDateFormatted }}</td>
+            <td class="cell-author">{{ audit.author }}</td>
+            <td class="cell-score">{{ audit.scorePercentage }}</td>
+            <td class="cell-actions">
+              <a class="btn btn-sm btn-outline-secondary" [routerLink]="['/audits', audit.auditId]">View</a>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <div class="d-flex justify-content-center mt-5">
+      <app-pagination
+        [currentPage]="audits.metadata.currentPage"
+        [totalPages]="audits.metadata.totalPages"
+        (pageChange)="onPageChange($event)"
+      ></app-pagination>
+    </div>
   </div>
 </div>
