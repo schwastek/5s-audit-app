@@ -2,11 +2,15 @@
   <div class="my-3 px-3 py-3 bg-body rounded shadow-sm">
     @if (isLoading) {
       <p class="pb-2 mb-0">Loading...</p>
-    } @else if (error) {
+    }
+
+    @if (error) {
       <div class="alert alert-danger my-0" role="alert">
         {{ error }}
       </div>
-    } @else if (audits) {
+    }
+
+    @if (audits$ | async; as audits) {
       <table class="table table-hover">
         <thead>
           <tr>
