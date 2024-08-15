@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AccountService } from '../account.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -52,40 +52,5 @@ export class LoginComponent implements OnInit {
 
     this.isSubmitting = false;
     this.form.enable();
-  }
-
-  isControlInvalid(controlName: string): boolean {
-    const control = this.form.get(controlName) as FormControl;
-
-    return control.invalid && (control.dirty || control.touched);
-  }
-
-  getAriaValidationFeedback(controlName: string) {
-    // For invalid fields, ensure that the invalid feedback/error message
-    // is associated with the relevant form field using aria-describedby
-    // (noting that this attribute allows more than one id to be referenced).
-    const isInvalid = this.isControlInvalid(controlName);
-    const feedback: string[] = [];
-
-    if (isInvalid) {
-      const control = this.form.get(controlName) as AbstractControl;
-      const controlErrors = control.errors ?? {};
-      Object.keys(controlErrors).forEach((ruleName) => {
-        const id = this.getIdForValidationFeedback(controlName, ruleName);
-        feedback.push(id);
-      });
-    }
-
-    const result = feedback.length > 0 ? feedback.join(' ') : null;
-
-    return result;
-  }
-
-  getIdForValidationFeedback(controlName: string, ruleName: string) {
-    controlName = controlName.toLowerCase();
-    ruleName = ruleName.toLowerCase();
-
-    // => 'validation-feedback-for-username-required'
-    return `validation-feedback-for-${controlName}-${ruleName}`;
   }
 }
