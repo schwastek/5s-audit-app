@@ -12,7 +12,6 @@ import { AuditActionComponent } from '../audit-action/audit-action.component';
 @Component({
   selector: 'app-audit-new',
   templateUrl: './audit-new.component.html',
-  styleUrls: ['./audit-new.component.scss'],
   standalone: true,
   imports: [
     ReactiveFormsModule,

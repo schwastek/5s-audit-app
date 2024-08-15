@@ -6,8 +6,7 @@ import { NgClass } from '@angular/common';
   selector: 'app-pagination',
   standalone: true,
   imports: [NgClass],
-  templateUrl: './pagination.component.html',
-  styleUrl: './pagination.component.scss'
+  templateUrl: './pagination.component.html'
 })
 export class PaginationComponent implements OnInit, OnChanges {
 

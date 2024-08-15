@@ -24,7 +24,6 @@ export const RATING_VALUE_ACCESSOR = {
 @Component({
   selector: 'app-rating',
   templateUrl: './rating.component.html',
-  styleUrls: ['./rating.component.scss'],
   providers: [RATING_VALUE_ACCESSOR],
   standalone: true,
   imports: [CommonModule, NgTemplateOutlet, RatingTemplateDirective]

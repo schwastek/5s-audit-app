@@ -10,16 +10,20 @@ import { AuditListItemDto } from '../models/audit.models';
 @Component({
   selector: 'app-audit-list',
   templateUrl: './audit-list.component.html',
-  styleUrls: ['./audit-list.component.scss'],
   standalone: true,
-  imports: [RouterLink, PaginationComponent]
+  imports: [
+    RouterLink,
+    PaginationComponent
+  ]
 })
 export class AuditListComponent implements OnInit {
   audits: PaginatedResult<AuditListItemDto> | null = null;
   error: string | null = null;
   isLoading: boolean | null = false;
 
-  constructor(private auditService: AuditService) {}
+  constructor(
+    private auditService: AuditService
+  ) {}
 
   async ngOnInit() {
     await this.getAudits(1);
