@@ -54,7 +54,7 @@ export class AuditNewComponent implements OnInit {
     this.updateAnswers();
   }
 
-  async onSubmit() {
+  async onSave() {
 
     // Generate IDs here to ensure each submission has unique IDs.
     // If saving fails and user resubmits, new IDs will prevent errors from duplicate IDs in DB.

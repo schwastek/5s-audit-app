@@ -1,8 +1,8 @@
-<form [formGroup]="form">
+<form [formGroup]="form" (ngSubmit)="onSave()">
   <label for="auditActionDescription" class="form-label">Action description ({{ descriptionLength() }} / {{ descriptionMaxLength }}):</label>
   <textarea class="form-control" id="auditActionDescription" formControlName="description" rows="5" [maxLength]="descriptionMaxLength"></textarea>
   <div class="my-2 mb-4">
-    <button type="submit" appLoadingButton class="btn btn-primary me-1" (click)="onSave()" [disabled]="this.form.invalid || this.isSaving()" [loading]="isSaving()">Save</button>
+    <button type="submit" appLoadingButton class="btn btn-primary me-1" [disabled]="this.form.invalid || this.isSaving()" [loading]="isSaving()">Save</button>
   </div>
 </form>
 

@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.activatedRoute.snapshot.queryParamMap.get('returnUrl') || '/audits';
   }
 
-  handleSubmit() {
+  onSubmit() {
     this.isSubmitting = true;
     this.errorMessage = null;
 

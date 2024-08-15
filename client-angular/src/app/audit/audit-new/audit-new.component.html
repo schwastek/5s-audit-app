@@ -10,7 +10,7 @@
     <div class="row">
       <div class="col-8">
         <div class="px-3 py-3 bg-body rounded shadow-sm">
-          <form [formGroup]="form">
+          <form [formGroup]="form" (ngSubmit)="onSave()">
             <label for="select-area" class="form-label mb-2">Select area:</label>
             <select id="select-area" class="form-select mb-4" formControlName="area">
               @if (areas) {
@@ -35,7 +35,7 @@
               <p>Could not load questions.</p>
             }
             </ng-container>
-            <button type="submit" (click)="onSubmit()" [disabled]="!form.valid" class="btn btn-primary mt-3">Submit</button>
+            <button type="submit" [disabled]="!form.valid" class="btn btn-primary mt-3">Save</button>
           </form>
         </div>
       </div>

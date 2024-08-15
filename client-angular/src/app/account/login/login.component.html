@@ -15,7 +15,7 @@
             {{ errorMessage }}
           </div>
         }
-        <form [formGroup]="form" (ngSubmit)="handleSubmit()">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="form-group mb-3">
             <!-- Required attribute is not necessary, but it should be retained for accessibility purposes -->
             <label for="username" class="form-label">Username</label>
