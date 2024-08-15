@@ -17,10 +17,11 @@ export class AccountService {
 
   login(email: string | null, password: string | null) {
     return this.http.post<User>(this.baseUrl + '/api/account/login', { email, password })
-      .pipe(map((user) => {
-        localStorage.setItem('token', user.token);
-        this.currentUserSource.next(user);
-      })
+      .pipe(
+        map((user) => {
+          localStorage.setItem('token', user.token);
+          this.currentUserSource.next(user);
+        })
       );
   }
 
