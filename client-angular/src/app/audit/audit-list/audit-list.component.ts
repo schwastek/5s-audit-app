@@ -29,8 +29,6 @@ export class AuditListComponent implements OnInit {
 
   private getAudits(pageNumber: number) {
     this.isLoading = true;
-    // Items are hidden during page changes until loading is complete.
-    this.audits.items = [];
 
     this.auditService.getAudits(pageNumber).subscribe({
       next: (audits) => {

@@ -6,6 +6,12 @@
       </div>
     }
 
+    @if (isLoading) {
+      <div class="alert alert-warning" role="alert">
+        Loading...
+      </div>
+    }
+
     <table class="table table-hover">
       <thead>
         <tr>
@@ -17,14 +23,6 @@
         </tr>
       </thead>
       <tbody class="text-muted">
-        @if (isLoading) {
-          <tr>
-            <td colspan="5">
-              <p class="my-0 py-2 text-center">Loading...</p>
-            </td>
-          </tr>
-        }
-
         @for (audit of audits.items; track audit.auditId) {
           <tr>
             <td class="cell-audit-id">{{ audit.auditIdShort }}</td>
@@ -32,7 +30,7 @@
             <td class="cell-author">{{ audit.author }}</td>
             <td class="cell-score">{{ audit.scorePercentage }}</td>
             <td class="cell-actions">
-              <a class="btn btn-sm btn-outline-secondary" [routerLink]="['/audits', audit.auditId]">View</a>
+              <a class="btn btn-sm btn-outline-secondary" [routerLink]="['/audits', audit.auditId]" [class.disabled]="isLoading">View</a>
             </td>
           </tr>
         }
