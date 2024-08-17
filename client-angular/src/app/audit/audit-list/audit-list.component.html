@@ -6,7 +6,7 @@
       </div>
     }
 
-    @if (isLoading) {
+    @if (isLoading()) {
       <div class="alert alert-warning" role="alert">
         Loading...
       </div>
@@ -30,7 +30,7 @@
             <td class="cell-author">{{ audit.author }}</td>
             <td class="cell-score">{{ audit.scorePercentage }}</td>
             <td class="cell-actions">
-              <a class="btn btn-sm btn-outline-secondary" [routerLink]="['/audits', audit.auditId]" [class.disabled]="isLoading">View</a>
+              <a class="btn btn-sm btn-outline-secondary" [routerLink]="['/audits', audit.auditId]" [class.disabled]="isLoading()">View</a>
             </td>
           </tr>
         }
@@ -39,7 +39,7 @@
 
     <div class="d-flex justify-content-center mt-5">
       <app-pagination
-        [disabled]="isLoading"
+        [disabled]="isLoading()"
         [currentPage]="audits.metadata.currentPage"
         [totalPages]="audits.metadata.totalPages"
         (pageChange)="onPageChange($event)"

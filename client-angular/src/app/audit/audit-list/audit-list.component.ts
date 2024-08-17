@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
 import { AuditListItemDto } from '../models/audit.models';
 import { AsyncPipe } from '@angular/common';
+import { LoadingService } from '../../shared/loading.service';
 
 @Component({
   selector: 'app-audit-list',
@@ -14,21 +15,25 @@ import { AsyncPipe } from '@angular/common';
     AsyncPipe,
     RouterLink,
     PaginationComponent
-  ]
+  ],
+  providers: [LoadingService]
 })
 export class AuditListComponent implements OnInit {
   public audits = new PaginatedResult<AuditListItemDto>();
   public error: string | null = null;
-  public isLoading = false;
+  public isLoading = this.loadingService.isLoading;
 
-  constructor(private auditService: AuditService) {}
+  constructor(
+    private auditService: AuditService,
+    private loadingService: LoadingService
+  ) {}
 
   ngOnInit() {
     this.getAudits(1);
   }
 
   private getAudits(pageNumber: number) {
-    this.isLoading = true;
+    this.loadingService.start();
 
     this.auditService.getAudits(pageNumber).subscribe({
       next: (audits) => {
@@ -36,11 +41,11 @@ export class AuditListComponent implements OnInit {
       },
       error: () => {
         this.error = 'Failed to fetch audits.';
-        this.isLoading = false;
+        this.loadingService.complete();
       },
       complete: () => {
         this.error = null;
-        this.isLoading = false;
+        this.loadingService.complete();
       }
     });
   }
