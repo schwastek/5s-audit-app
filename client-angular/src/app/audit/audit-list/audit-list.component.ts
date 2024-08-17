@@ -5,7 +5,8 @@ import { RouterLink } from '@angular/router';
 import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
 import { AuditListItemDto } from '../models/audit.models';
 import { AsyncPipe } from '@angular/common';
-import { LoadingService } from '../../shared/loading.service';
+import { LoadingService } from '../../shared/loading/loading.service';
+import { LoadingComponent } from '../../shared/loading/loading.component';
 
 @Component({
   selector: 'app-audit-list',
@@ -14,7 +15,8 @@ import { LoadingService } from '../../shared/loading.service';
   imports: [
     AsyncPipe,
     RouterLink,
-    PaginationComponent
+    PaginationComponent,
+    LoadingComponent
   ],
   providers: [LoadingService]
 })
