@@ -29,24 +29,25 @@ export class AuditListComponent implements OnInit {
 
   private getAudits(pageNumber: number) {
     this.isLoading = true;
+    // Items are hidden during page changes until loading is complete.
+    this.audits.items = [];
 
     this.auditService.getAudits(pageNumber).subscribe({
       next: (audits) => {
         this.audits = audits;
       },
-      error: (_) => {
+      error: () => {
         this.error = 'Failed to fetch audits.';
         this.isLoading = false;
       },
       complete: () => {
+        this.error = null;
         this.isLoading = false;
       }
     });
   }
 
   onPageChange(pageNumber: number) {
-    // Items are hidden during page changes until loading is complete.
-    this.audits.items = [];
     this.getAudits(pageNumber);
   }
 }
