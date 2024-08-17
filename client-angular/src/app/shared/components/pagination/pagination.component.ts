@@ -1,14 +1,16 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { range } from '../../utilities/utilities';
-import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-pagination',
   standalone: true,
-  imports: [NgClass],
+  imports: [],
   templateUrl: './pagination.component.html'
 })
 export class PaginationComponent implements OnInit, OnChanges {
+
+  // If `true`, pagination links will be disabled.
+  @Input() disabled = false;
 
   // The currently selected page.
   @Input() currentPage = 1;
@@ -39,6 +41,8 @@ export class PaginationComponent implements OnInit, OnChanges {
   handlePageChange(pageNumber: number, event: Event) {
     // Prevent reloading the page.
     event.preventDefault();
+
+    if (this.disabled) return;
 
     this.currentPage = pageNumber;
     this.pages = this.calculatePageNumbers(this.currentPage, this.totalPages, this.pageSiblings, this.visiblePages);

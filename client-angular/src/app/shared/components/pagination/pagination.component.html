@@ -1,20 +1,20 @@
 <nav aria-label="Page navigation">
   <ul class="pagination">
-    <li class="page-item" [class.disabled]="currentPage === 1" aria-label="First">
+    <li class="page-item" [class.disabled]="(currentPage === 1) || disabled" aria-label="First">
       <a class="page-link" href (click)="handlePageChange(1, $event)" aria-hidden="true">&laquo;&laquo;</a>
     </li>
-    <li class="page-item" [class.disabled]="currentPage === 1">
+    <li class="page-item" [class.disabled]="(currentPage === 1) || disabled">
       <a class="page-link" href (click)="handleMoveLeft($event)">Previous</a>
     </li>
     @for (page of pages; track $index) {
-      <li class="page-item" [class.active]="currentPage === page" [attr.aria-current]="currentPage === page ? 'page' : null">
+      <li class="page-item" [class.active]="(currentPage === page)" [class.disabled]="disabled" [attr.aria-current]="currentPage === page ? 'page' : null">
         <a class="page-link" href (click)="handlePageChange(page, $event)">{{ page }}</a>
       </li>
     }
-    <li class="page-item" [class.disabled]="currentPage === totalPages">
+    <li class="page-item" [class.disabled]="(currentPage === totalPages) || disabled">
       <a class="page-link" href (click)="handleMoveRight($event)">Next</a>
     </li>
-    <li class="page-item" [class.disabled]="currentPage === totalPages" aria-label="Last">
+    <li class="page-item" [class.disabled]="(currentPage === totalPages) || disabled" aria-label="Last">
       <a class="page-link" href (click)="handlePageChange(totalPages, $event)" aria-hidden="true">&raquo;&raquo;</a>
     </li>
   </ul>
