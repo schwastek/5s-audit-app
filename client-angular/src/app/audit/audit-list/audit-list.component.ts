@@ -36,6 +36,7 @@ export class AuditListComponent implements OnInit {
 
   private getAudits(pageNumber: number) {
     this.loadingService.start();
+    this.error = null;
 
     this.auditService.getAudits(pageNumber).subscribe({
       next: (audits) => {
@@ -43,6 +44,7 @@ export class AuditListComponent implements OnInit {
       },
       error: () => {
         this.error = 'Failed to fetch audits.';
+        this.audits.items = [];
         this.loadingService.complete();
       },
       complete: () => {
