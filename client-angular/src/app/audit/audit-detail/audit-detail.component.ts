@@ -26,8 +26,10 @@ export class AuditDetailComponent implements OnInit {
     private auditService: AuditService
   ) {}
 
-  async ngOnInit() {
-    this.audit = await this.getAudit(this.id);
+  ngOnInit() {
+    this.getAudit(this.id).then((audit) => {
+      this.audit = audit;
+    });
   }
 
   async getAudit(id: Nullable<string>) {

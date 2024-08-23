@@ -46,12 +46,12 @@ export class AuditNewComponent implements OnInit {
     private router: Router
   ) { }
 
-  async ngOnInit() {
-    await this.getAreas();
-    await this.getQuestions();
-    this.addRatingControls();
-    this.createInitialAnswers();
-    this.updateAnswers();
+  ngOnInit() {
+    this.getAreas();
+    this.getQuestions()
+      .then(() => this.createInitialAnswers())
+      .then(() => this.addRatings())
+      .then(() => this.updateAnswersWhenRatingChanges());
   }
 
   async onSave() {
@@ -85,18 +85,11 @@ export class AuditNewComponent implements OnInit {
     this.questions = await firstValueFrom(this.auditService.getQuestions());
   }
 
-  private addRatingControls() {
-    this.questions?.forEach(() => {
-      const ratingControl = new FormControl<number>(this.defaultAnswer, { nonNullable: true });
-      this.ratings.push(ratingControl);
-    });
-  }
-
   private createInitialAnswers() {
     const answers: ApiAnswerForCreationDto[] = [];
 
     // Create initial answers to be updated and saved when submitting the form.
-    this.questions?.forEach((question) => {
+    this.questions!.forEach((question) => {
       answers.push({
         answerId: '<ID_GENERATED_LATER>',
         questionId: question.questionId,
@@ -108,10 +101,15 @@ export class AuditNewComponent implements OnInit {
     this.answers = answers;
   }
 
-  private updateAnswers() {
+  private addRatings() {
+    this.questions!.forEach(() => {
+      const ratingControl = new FormControl<number>(this.defaultAnswer, { nonNullable: true });
+      this.ratings.push(ratingControl);
+    });
+  }
 
-    // Ratings and answers are based on questions.
-    // They share the same index.
+  private updateAnswersWhenRatingChanges() {
+    // Ratings and answers are based on questions. They share the same index.
     this.ratings.valueChanges.subscribe((ratings) => {
       this.answers.forEach((answer, i) => {
         answer.answerText = ratings[i].toString();
