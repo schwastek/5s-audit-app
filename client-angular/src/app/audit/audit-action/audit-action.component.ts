@@ -4,7 +4,7 @@ import { AuditService } from '../audit.service';
 import { v4 as uuidv4 } from 'uuid';
 import { firstValueFrom, map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoadingButtonDirective } from '../../shared/components/loading-button/loading-button.directive';
 import { ValidationMessagesComponent } from '../../shared/components/validation-messages/validation-messages.component';
 
@@ -50,8 +50,8 @@ export class AuditActionComponent {
     private auditService: AuditService
   ) { }
 
-  async onSave() {
-    if (this.form.invalid) return;
+  async onSave(form: FormGroupDirective) {
+    if (form.invalid) return;
 
     this.isSaving.set(true);
 
@@ -73,7 +73,9 @@ export class AuditActionComponent {
 
     this.isSaving.set(false);
 
-    this.form.reset();
+    // Use `resetForm()` to reset `submitted` flag and remove the `ng-submitted` class from the form.
+    // `FormGroup` has only the `reset()` method. The `resetForm()` method is available only on `FormGroupDirective`.
+    form.resetForm();
   }
 
   async onDelete(actionId: string) {
