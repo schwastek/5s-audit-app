@@ -6,7 +6,7 @@ import { Directive, effect, ElementRef, inject, input } from '@angular/core';
   standalone: true
 })
 export class LoadingButtonDirective {
-  loading = input<boolean>(false);
+  loading = input<boolean>(false, { alias: 'appLoadingButton' });
   host = inject(ElementRef);
   document: Document = inject(DOCUMENT);
 
@@ -25,7 +25,7 @@ export class LoadingButtonDirective {
   }
 
   showIcon() {
-    const iconElement = this.document.querySelector('.spinner-border');
+    const iconElement = this.htmlElement.querySelector('.spinner-border');
 
     if (iconElement) {
       iconElement.classList.remove('d-none');
@@ -35,7 +35,7 @@ export class LoadingButtonDirective {
   }
 
   createIcon() {
-    const created = this.document.querySelector('.spinner-border');
+    const created = this.htmlElement.querySelector('.spinner-border');
 
     if (!created) {
       const iconElement = this.document.createElement('span');
@@ -48,7 +48,7 @@ export class LoadingButtonDirective {
   }
 
   hideIcon() {
-    const iconElement = this.document.querySelector('.spinner-border');
+    const iconElement = this.htmlElement.querySelector('.spinner-border');
 
     if (iconElement) {
       iconElement.classList.add('d-none');

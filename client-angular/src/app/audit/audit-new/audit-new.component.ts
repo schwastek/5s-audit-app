@@ -8,6 +8,7 @@ import { ApiAnswerForCreationDto, ApiQuestionDto, ApiSaveAuditActionRequest } fr
 import { v4 as uuidv4 } from 'uuid';
 import { Router } from '@angular/router';
 import { AuditActionComponent } from '../audit-action/audit-action.component';
+import { LoadingButtonDirective } from '../../shared/components/loading-button/loading-button.directive';
 
 @Component({
   selector: 'app-audit-new',
@@ -16,7 +17,8 @@ import { AuditActionComponent } from '../audit-action/audit-action.component';
   imports: [
     ReactiveFormsModule,
     RatingComponent,
-    AuditActionComponent
+    AuditActionComponent,
+    LoadingButtonDirective
   ]
 })
 export class AuditNewComponent implements OnInit {
@@ -38,6 +40,9 @@ export class AuditNewComponent implements OnInit {
     ratings: this.ratings
   });
 
+  // Form status
+  isSaving = signal(false);
+
   // Configuration
   private readonly defaultAnswer = 3;
 
@@ -55,6 +60,9 @@ export class AuditNewComponent implements OnInit {
   }
 
   async onSave() {
+    if (this.form.invalid) return;
+
+    this.isSaving.set(true);
 
     // Generate IDs here to ensure each submission has unique IDs.
     // If saving fails and user resubmits, new IDs will prevent errors from duplicate IDs in DB.
@@ -73,6 +81,7 @@ export class AuditNewComponent implements OnInit {
     };
 
     this.auditService.saveAudit(audit).subscribe((response) => {
+      this.isSaving.set(false);
       this.router.navigate(['audits', response.auditId]);
     });
   }

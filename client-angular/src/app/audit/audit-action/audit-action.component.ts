@@ -44,7 +44,7 @@ export class AuditActionComponent {
   isSaving = signal(false);
 
   // Actions - Status (one status per action)
-  isUpdating = signal(new Map<string, boolean>());
+  private isUpdatingMap = signal(new Map<string, boolean>());
 
   constructor(
     private auditService: AuditService
@@ -134,8 +134,12 @@ export class AuditActionComponent {
     this.updateStatus(action.actionId, false);
   }
 
+  isUpdating(actionId: string) {
+    return this.isUpdatingMap().get(actionId) ?? false;
+  }
+
   private updateStatus(actionId: string, status: boolean) {
-    this.isUpdating.update((statuses) => {
+    this.isUpdatingMap.update((statuses) => {
       statuses.set(actionId, status);
       return new Map(statuses);
     });

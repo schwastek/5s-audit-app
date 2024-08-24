@@ -35,7 +35,7 @@
               <p>Could not load questions.</p>
             }
             </ng-container>
-            <button type="submit" [disabled]="!form.valid" class="btn btn-primary mt-3">Save</button>
+            <button type="submit" id="saveForm" class="btn btn-primary mt-3" [disabled]="form.invalid || isSaving()" [appLoadingButton]="isSaving()">Save</button>
           </form>
         </div>
       </div>
