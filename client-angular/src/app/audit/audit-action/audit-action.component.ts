@@ -6,13 +6,15 @@ import { firstValueFrom, map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoadingButtonDirective } from '../../shared/components/loading-button/loading-button.directive';
+import { ValidationMessagesComponent } from '../../shared/components/validation-messages/validation-messages.component';
 
 @Component({
   selector: 'app-audit-action',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    LoadingButtonDirective
+    LoadingButtonDirective,
+    ValidationMessagesComponent
   ],
   templateUrl: './audit-action.component.html'
 })

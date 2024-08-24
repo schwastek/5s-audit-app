@@ -3,11 +3,15 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AccountService } from '../account.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ValidationMessagesComponent } from '../../shared/components/validation-messages/validation-messages.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [
+    ReactiveFormsModule,
+    ValidationMessagesComponent
+  ],
   templateUrl: './login.component.html'
 })
 export class LoginComponent implements OnInit {

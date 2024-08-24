@@ -1,0 +1,14 @@
+@if (errors(); as errors) {
+  @if (errors['required']) {
+    Required field.
+  }
+  @if (errors['email']) {
+    Invalid email format.
+  }
+  @if (errors['minlength']) {
+    Minimum length is {{ errors['minlength'].requiredLength }} characters.
+  }
+  @if (errors['maxlength']) {
+    Maximum length is {{ errors['maxlength'].requiredLength }} characters.
+  }
+}

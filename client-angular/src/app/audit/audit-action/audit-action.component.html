@@ -1,6 +1,7 @@
 <form [formGroup]="form" (ngSubmit)="onSave()">
   <label for="auditActionDescription" class="form-label">Action description ({{ descriptionLength() }} / {{ descriptionMaxLength }}):</label>
-  <textarea class="form-control" id="auditActionDescription" formControlName="description" rows="5" [maxLength]="descriptionMaxLength"></textarea>
+  <textarea class="form-control" id="auditActionDescription" formControlName="description" rows="5"></textarea>
+  <app-validation-messages [errors]="description.errors" />
   <div class="my-2 mb-4">
     <button type="submit" appLoadingButton class="btn btn-primary me-1" [disabled]="this.form.invalid || this.isSaving()" [loading]="isSaving()">Save</button>
   </div>

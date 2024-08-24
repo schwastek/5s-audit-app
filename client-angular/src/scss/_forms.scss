@@ -1,4 +1,4 @@
-// Form status classes automatically added by Angular
+// Apply Bootstrap validation styling to classes automatically added by Angular.
 .ng-invalid.ng-dirty {
   @extend .is-invalid;
 }
@@ -13,4 +13,24 @@
 
 .ng-valid.ng-touched {
   @extend .is-valid;
+}
+
+// Apply error styles if user submits form without interacting with it.
+.ng-submitted .ng-invalid.ng-pristine {
+  @extend .is-invalid;
+}
+
+.ng-submitted .ng-invalid.ng-untouched {
+  @extend .is-invalid;
+}
+
+// Display errors only when field is invalid AND (dirty OR touched).
+.ng-invalid.ng-dirty~.invalid-feedback,
+.ng-invalid.ng-touched~.invalid-feedback {
+  display: block;
+}
+
+// Display errors if user submits form without interacting with it.
+.ng-submitted.ng-invalid .invalid-feedback {
+  display: block;
 }
