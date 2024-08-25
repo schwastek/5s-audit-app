@@ -5,7 +5,7 @@
 5S audits promote more efficient operations. In simple terms, 5S methodology helps keep the workplace organized and clean. 
 This app allows you perform an audit to ensure the 5S approach is followed.
 
-This application is still in a early stage of development. See [Roadmap](#roadmpap).
+This application is still in development. See [Roadmap](#roadmpap).
 
 ### Features
 
@@ -17,6 +17,7 @@ This application is still in a early stage of development. See [Roadmap](#roadmp
 ### Built with
 
 * [React.js](https://reactjs.org/) - frontend (client)
+* [Angular](https://angular.dev/) - frontend (another client)
 * [.NET](https://dotnet.microsoft.com/en-us/download) - backend (API)
 
 ## Getting started
@@ -66,15 +67,20 @@ dotnet ef --version
 ```sh
 git clone https://github.com/schwastek/5s-audit-app.git
 ```
-2. Install npm packages
+2. Install npm packages of React
 ```sh
 cd client
-npm install
+npm clean-install
+```
+3. Or install npm packages of Angular
+```sh
+cd client-angular
+npm clean-install
 ```
 
 ### Running application
 
-When you start ASP.NET Core web API, it won't launch React client app automatically.  
+When you start ASP.NET Core web API, it won't launch React or Angular client app automatically.  
 **Both frontend and backend must be started manually.**
 
 Run React frontend app:
@@ -84,18 +90,11 @@ cd client
 npm start
 ```
 
-You should see console output similar to the following:
+Or run Angular frontend app:
 
 ```sh
-Compiled successfully!
-
-You can now view client in the browser.
-
-  Local:            http://localhost:3000        
-  On Your Network:  http://192.168.56.1:3000     
-
-Note that the development build is not optimized.
-To create a production build, use npm run build.
+cd client-angular
+npm start
 ```
 
 Run ASP.NET Core web API:
@@ -105,16 +104,7 @@ cd Api
 dotnet run
 ```
 
-The console output shows messages similar to the following:
-
-```sh
-Now listening on: https://localhost:5000
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Development
-Content root path: C:\5sAuditApp\Api
-```
-
-In a web browser, navigate to http://localhost:3000.
+In a web browser, navigate to http://localhost:3000 (React) or https://localhost:4200 (Angular).
 
 Log in with email and password:
 
@@ -182,10 +172,6 @@ Update-Database -Project Api.Data -StartupProject Api.Data -Args '--environment 
 - [ ] Registration
 - [ ] Action comments
 - [ ] Image upload
-- [x] Swagger (OpenAPI) documentation
-- [x] Unit / Integration tests
-- [ ] TypeScript
-- [ ] Cache
 
 ## License
 
@@ -200,3 +186,4 @@ Resources I find helpful and would like to give credit to:
 * Resca, S. (2019). _Hands-On RESTful Web Services with ASP.NET Core 3_. Packt Publishing. - [Book](https://www.packtpub.com/product/hands-on-restful-web-services-with-asp-net-core-3/9781789537611) • [GitHub](https://github.com/PacktPublishing/Hands-On-RESTful-Web-Services-with-ASP.NET-Core-3)
 * Rippon, C. (2019). _ASP.NET Core 3 and React_. Packt Publishing. - [Book](https://www.packtpub.com/product/asp-net-core-3-and-react/9781789950229) • [GitHub](https://github.com/PacktPublishing/ASP.NET-Core-3-and-React)
 * Cummings, N. (2019). _Complete guide to building an app with .Net Core and React_. Udemy. - [Course](https://www.udemy.com/course/complete-guide-to-building-an-app-with-net-core-and-react/) • [GitHub](https://github.com/TryCatchLearn/Reactivities)
+* Code Maze (2023). _Ultimate ASP.NET Core Web API_. - [Book](https://code-maze.com/ultimate-aspnetcore-webapi-second-edition/)
