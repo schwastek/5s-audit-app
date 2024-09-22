@@ -1,6 +1,6 @@
 ﻿using Api.Contracts.Identity.Dto;
 using Api.Contracts.Identity.Requests;
-using Core.TokenService;
+using Core.Identity;
 using Domain;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;

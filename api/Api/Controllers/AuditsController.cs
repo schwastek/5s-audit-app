@@ -1,6 +1,6 @@
 ﻿using Api.Contracts.Audit.Requests;
 using Api.Contracts.Common;
-using Api.Mappers.MappingService;
+using Core.MappingService;
 using Features.Audit.Get;
 using Features.Audit.List;
 using Features.Audit.Save;

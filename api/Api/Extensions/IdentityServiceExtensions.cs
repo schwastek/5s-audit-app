@@ -1,4 +1,4 @@
-﻿using Core.TokenService;
+﻿using Core.Identity;
 using Data.DbContext;
 using Domain;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

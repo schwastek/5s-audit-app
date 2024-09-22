@@ -1,4 +1,4 @@
-﻿using Api.Mappers.MappingService;
+﻿using Core.MappingService;
 using Data.DbContext;
 using MediatR;
 using System.Linq;

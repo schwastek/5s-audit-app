@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Core.TokenService;
+namespace Core.Identity;
 
 public class TokenService
 {
@@ -34,7 +34,7 @@ public class TokenService
         SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddMinutes(10),
+            Expires = DateTime.UtcNow.AddHours(10),
             SigningCredentials = credentials
         };
 

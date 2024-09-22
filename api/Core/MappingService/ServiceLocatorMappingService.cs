@@ -1,8 +1,7 @@
-﻿using Core.MappingService;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Api.Mappers.MappingService;
+namespace Core.MappingService;
 
 public interface IMappingService
 {

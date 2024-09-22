@@ -1,7 +1,7 @@
 ﻿using Core.Exceptions;
+using Core.MappingService;
 using Data.DbContext;
 using Features.Audit.Dto;
-using Api.Mappers.MappingService;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;

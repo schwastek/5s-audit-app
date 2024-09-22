@@ -1,5 +1,5 @@
 ﻿using Api.Exceptions;
-using Api.Mappers.MappingService;
+using Core.MappingService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

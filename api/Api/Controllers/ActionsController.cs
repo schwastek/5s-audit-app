@@ -1,6 +1,6 @@
 ﻿using Api.Contracts.AuditAction.Requests;
 using Api.Contracts.Common;
-using Api.Mappers.MappingService;
+using Core.MappingService;
 using Features.AuditAction.Delete;
 using Features.AuditAction.Save;
 using Features.AuditAction.Update;

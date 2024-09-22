@@ -1,4 +1,4 @@
-﻿namespace Core.TokenService;
+﻿namespace Core.Identity;
 
 public class JwtOptions
 {

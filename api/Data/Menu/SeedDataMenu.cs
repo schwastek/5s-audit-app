@@ -45,7 +45,7 @@ internal class SeedDataMenu : BaseMenu
 
         Console.WriteLine("Clearing identity data...");
         await IdentityDataSeeder.ClearAsync(_context);
-        
+
         Console.WriteLine("Seeding identity data...");
         await IdentityDataSeeder.SeedAsync(_userManager);
 

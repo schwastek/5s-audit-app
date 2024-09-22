@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Api.Mappers.MappingService;
+namespace Core.MappingService;
 
 public sealed class MapperNotFoundException : Exception
 {
