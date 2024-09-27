@@ -7,9 +7,9 @@ namespace Features.AuditAction.Update;
 
 public sealed record UpdateAuditActionCommand : IRequest
 {
-    public Guid ActionId { get; set; }
-    public string Description { get; init; } = null!;
-    public bool IsComplete { get; set; }
+    public required Guid ActionId { get; set; }
+    public required string Description { get; init; }
+    public required bool IsComplete { get; set; }
 }
 
 public class UpdateAuditActionCommandMapper : IMapper<UpdateAuditActionRequest, UpdateAuditActionCommand>

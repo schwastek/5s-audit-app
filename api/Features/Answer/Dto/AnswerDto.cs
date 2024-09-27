@@ -5,11 +5,11 @@ namespace Features.Answer.Dto;
 
 public sealed record AnswerDto
 {
-    public Guid AnswerId { get; init; }
-    public Guid QuestionId { get; init; }
-    public string QuestionText { get; set; } = null!;
-    public string AnswerType { get; set; } = null!;
-    public string AnswerText { get; set; } = null!;
+    public required Guid AnswerId { get; init; }
+    public required Guid QuestionId { get; init; }
+    public required string QuestionText { get; set; }
+    public required string AnswerType { get; set; }
+    public required string AnswerText { get; set; }
 }
 
 public class AnswerDtoMapper :

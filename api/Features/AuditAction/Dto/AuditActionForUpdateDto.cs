@@ -2,6 +2,6 @@
 
 public sealed record AuditActionForUpdateDto
 {
-    public string Description { get; init; } = null!;
-    public bool IsComplete { get; set; }
+    public required string Description { get; init; }
+    public required bool IsComplete { get; set; }
 }

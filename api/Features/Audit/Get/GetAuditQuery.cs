@@ -1,5 +1,6 @@
 ﻿using Api.Contracts.Audit.Requests;
 using Core.MappingService;
+using Features.Audit.Dto;
 using MediatR;
 using System;
 
@@ -12,7 +13,7 @@ public sealed record GetAuditQuery : IRequest<GetAuditQueryResult>
 
 public sealed record GetAuditQueryResult
 {
-    public Dto.AuditDto Audit { get; init; } = null!;
+    public required AuditDto Audit { get; init; }
 }
 
 public class GetAuditQueryMapper :
@@ -38,7 +39,7 @@ public class GetAuditQueryMapper :
 
     public GetAuditResponse Map(GetAuditQueryResult src)
     {
-        var auditDto = mapper.Map<Dto.AuditDto, Api.Contracts.Audit.Dto.AuditDto>(src.Audit);
+        var auditDto = mapper.Map<AuditDto, Api.Contracts.Audit.Dto.AuditDto>(src.Audit);
 
         return new GetAuditResponse()
         {

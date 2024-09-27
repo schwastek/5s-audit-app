@@ -7,14 +7,14 @@ namespace Features.Audit.Dto;
 
 public sealed record AuditDto
 {
-    public Guid AuditId { get; init; }
-    public string Author { get; init; } = null!;
-    public string Area { get; init; } = null!;
-    public DateTime StartDate { get; init; }
-    public DateTime EndDate { get; init; }
-    public double Score { get; init; }
-    public IReadOnlyList<Answer.Dto.AnswerDto> Answers { get; init; } = null!;
-    public IReadOnlyList<AuditAction.Dto.AuditActionDto> Actions { get; init; } = null!;
+    public required Guid AuditId { get; init; }
+    public required string Author { get; init; }
+    public required string Area { get; init; }
+    public required DateTime StartDate { get; init; }
+    public required DateTime EndDate { get; init; }
+    public required double Score { get; init; }
+    public required IReadOnlyList<Answer.Dto.AnswerDto> Answers { get; init; }
+    public required IReadOnlyList<AuditAction.Dto.AuditActionDto> Actions { get; init; }
 }
 
 public class AuditDtoMapper :

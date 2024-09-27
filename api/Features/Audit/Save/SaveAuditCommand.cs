@@ -9,13 +9,13 @@ namespace Features.Audit.Save;
 
 public sealed record SaveAuditCommand : IRequest<SaveAuditCommandResult>
 {
-    public Guid AuditId { get; init; }
-    public string Author { get; init; } = null!;
-    public string Area { get; init; } = null!;
-    public DateTime StartDate { get; init; }
-    public DateTime EndDate { get; init; }
-    public ICollection<Answer.Dto.AnswerForCreationDto> Answers { get; init; } = null!;
-    public ICollection<AuditAction.Dto.AuditActionForCreationDto> Actions { get; init; } = null!;
+    public required Guid AuditId { get; init; }
+    public required string Author { get; init; }
+    public required string Area { get; init; }
+    public required DateTime StartDate { get; init; }
+    public required DateTime EndDate { get; init; }
+    public required ICollection<Answer.Dto.AnswerForCreationDto> Answers { get; init; }
+    public required ICollection<AuditAction.Dto.AuditActionForCreationDto> Actions { get; init; }
 }
 
 public sealed record SaveAuditCommandResult

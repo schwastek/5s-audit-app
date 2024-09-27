@@ -1,5 +1,6 @@
 ﻿using Api.Contracts.AuditAction.Requests;
 using Core.MappingService;
+using Features.AuditAction.Dto;
 using MediatR;
 using System;
 
@@ -7,15 +8,15 @@ namespace Features.AuditAction.Save;
 
 public sealed record SaveAuditActionCommand : IRequest<SaveAuditActionCommandResult>
 {
-    public Guid AuditId { get; init; }
-    public Guid ActionId { get; init; }
-    public string Description { get; init; } = null!;
-    public bool IsComplete { get; set; }
+    public required Guid AuditId { get; init; }
+    public required Guid ActionId { get; init; }
+    public required string Description { get; init; }
+    public required bool IsComplete { get; set; }
 }
 
 public sealed record SaveAuditActionCommandResult
 {
-    public Dto.AuditActionDto AuditAction { get; init; } = null!;
+    public required AuditActionDto AuditAction { get; init; }
 }
 
 public class SaveAuditActionCommandMapper :
@@ -42,7 +43,7 @@ public class SaveAuditActionCommandMapper :
 
     public SaveAuditActionResponse Map(SaveAuditActionCommandResult src)
     {
-        var auditAction = mapper.Map<Dto.AuditActionDto, Api.Contracts.AuditAction.Dto.AuditActionDto>(src.AuditAction);
+        var auditAction = mapper.Map<AuditActionDto, Api.Contracts.AuditAction.Dto.AuditActionDto>(src.AuditAction);
 
         return new SaveAuditActionResponse()
         {

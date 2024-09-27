@@ -5,10 +5,10 @@ namespace Features.AuditAction.Dto;
 
 public sealed record AuditActionForCreationDto
 {
-    public Guid AuditId { get; init; }
-    public Guid ActionId { get; init; }
-    public string Description { get; init; } = null!;
-    public bool IsComplete { get; set; }
+    public required Guid AuditId { get; init; }
+    public required Guid ActionId { get; init; }
+    public required string Description { get; init; }
+    public required bool IsComplete { get; set; }
 }
 
 public class AuditActionForCreationDtoMapper :

@@ -5,12 +5,12 @@ namespace Features.Audit.Dto;
 
 public class AuditListItemDto
 {
-    public Guid AuditId { get; set; }
-    public string Author { get; set; } = null!;
-    public string Area { get; set; } = null!;
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
-    public double Score { get; set; }
+    public required Guid AuditId { get; set; }
+    public required string Author { get; set; }
+    public required string Area { get; set; }
+    public required DateTime StartDate { get; set; }
+    public required DateTime EndDate { get; set; }
+    public required double Score { get; set; }
 }
 
 public class AuditListItemDtoMapper :

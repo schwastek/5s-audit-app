@@ -5,8 +5,8 @@ namespace Features.Question.Dto;
 
 public sealed record QuestionDto
 {
-    public Guid QuestionId { get; set; }
-    public string QuestionText { get; set; } = null!;
+    public required Guid QuestionId { get; set; }
+    public required string QuestionText { get; set; }
 }
 
 public class QuestionMapper :

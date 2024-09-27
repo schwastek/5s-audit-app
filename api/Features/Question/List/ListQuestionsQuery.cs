@@ -1,5 +1,6 @@
 ﻿using Api.Contracts.Question.Requests;
 using Core.MappingService;
+using Features.Question.Dto;
 using MediatR;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ public sealed record ListQuestionsQuery : IRequest<ListQuestionsQueryResult>;
 
 public sealed record ListQuestionsQueryResult
 {
-    public IReadOnlyList<Dto.QuestionDto> Questions { get; init; } = null!;
+    public required IReadOnlyList<QuestionDto> Questions { get; init; }
 }
 
 public class ListQuestionsQueryMapper : IMapper<ListQuestionsQueryResult, ListQuestionsResponse>
@@ -25,7 +26,7 @@ public class ListQuestionsQueryMapper : IMapper<ListQuestionsQueryResult, ListQu
     public ListQuestionsResponse Map(ListQuestionsQueryResult src)
     {
         var questions = src.Questions
-            .Select(question => mapper.Map<Dto.QuestionDto, Api.Contracts.Question.Dto.QuestionDto>(question))
+            .Select(question => mapper.Map<QuestionDto, Api.Contracts.Question.Dto.QuestionDto>(question))
             .ToList()
             .AsReadOnly();
 

@@ -2,6 +2,7 @@
 using Core.MappingService;
 using Core.OrderByService;
 using Core.Pagination;
+using Features.Audit.Dto;
 using MediatR;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,16 +11,15 @@ namespace Features.Audit.List;
 
 public sealed record ListAuditsQuery : IRequest<ListAuditsQueryResult>, IPageableQuery, IOrderByQuery
 {
-    public int PageNumber { get; init; }
-    public int PageSize { get; init; }
-    public string OrderBy { get; init; } = null!;
+    public required int PageNumber { get; init; }
+    public required int PageSize { get; init; }
+    public required string OrderBy { get; init; }
 }
 
-public class ListAuditsQueryResult : IPaginatedResult<Dto.AuditListItemDto>
+public class ListAuditsQueryResult : IPaginatedResult<AuditListItemDto>
 {
-    // TODO: Change `null!` to `required` when C# 11
-    public IReadOnlyList<Dto.AuditListItemDto> Items { get; init; } = null!;
-    public PaginationMetadata Metadata { get; init; } = null!;
+    public required IReadOnlyList<AuditListItemDto> Items { get; init; }
+    public required PaginationMetadata Metadata { get; init; }
 }
 
 public class ListAuditsRequestMapper :
@@ -51,7 +51,7 @@ public class ListAuditsRequestMapper :
         var metadata = mapper.Map<PaginationMetadata, Api.Contracts.Common.Requests.PaginationMetadata>(src.Metadata);
 
         var auditListItems = src.Items
-            .Select(answer => mapper.Map<Dto.AuditListItemDto, Api.Contracts.Audit.Dto.AuditListItemDto>(answer))
+            .Select(answer => mapper.Map<AuditListItemDto, Api.Contracts.Audit.Dto.AuditListItemDto>(answer))
             .ToList();
 
         return new ListAuditsResponse()
