@@ -1,4 +1,6 @@
-﻿using Api.Contracts.Identity.Requests;
+﻿using Api.Contracts.Audit.Requests;
+using Api.Contracts.Identity.Requests;
+using Api.Contracts.Internal.Audit;
 using Core.Identity;
 using Features.Audit.BusinessRules;
 using Features.Audit.Get;
@@ -20,6 +22,8 @@ public static class AddValidatorsServiceExtensions
     {
         services.AddScoped<IAuditBusinessRules, AuditBusinessRules>();
         services.AddScoped<IValidator<SaveAuditCommand>, SaveAuditCommandValidator>();
+
+        services.AddScoped<IValidator<GetAuditRequest>, GetAuditRequestValidator>();
         services.AddScoped<IValidator<GetAuditQuery>, GetAuditQueryValidator>();
     }
 

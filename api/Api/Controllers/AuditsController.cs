@@ -4,6 +4,7 @@ using Core.MappingService;
 using Features.Audit.Get;
 using Features.Audit.List;
 using Features.Audit.Save;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,14 +21,17 @@ public class AuditsController : ControllerBase
 {
     private readonly IMappingService mapper;
     private readonly ISender sender;
+    private readonly IValidator<GetAuditRequest> getAuditRequestValidator;
 
     public AuditsController(
         IMappingService mapper,
-        ISender sender
+        ISender sender,
+        IValidator<GetAuditRequest> getAuditRequestValidator
     )
     {
         this.mapper = mapper;
         this.sender = sender;
+        this.getAuditRequestValidator = getAuditRequestValidator;
     }
 
     /// <summary>
@@ -53,6 +57,7 @@ public class AuditsController : ControllerBase
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAudit([FromRoute] GetAuditRequest request)
     {
+        await getAuditRequestValidator.ValidateAndThrowAsync(request, HttpContext.RequestAborted);
         var query = mapper.Map<GetAuditRequest, GetAuditQuery>(request);
         var result = await sender.Send(query);
         var response = mapper.Map<GetAuditQueryResult, GetAuditResponse>(result);
