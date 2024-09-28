@@ -1,10 +1,10 @@
 ﻿using Api.Contracts.Audit.Requests;
 using Api.Contracts.Common;
 using Core.MappingService;
+using Core.ValidatorService;
 using Features.Audit.Get;
 using Features.Audit.List;
 using Features.Audit.Save;
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,19 +19,19 @@ namespace Api.Controllers;
 [Produces(MediaTypeNames.Application.Json)]
 public class AuditsController : ControllerBase
 {
+    private readonly IValidatorService validator;
     private readonly IMappingService mapper;
     private readonly ISender sender;
-    private readonly IValidator<GetAuditRequest> getAuditRequestValidator;
 
     public AuditsController(
+        IValidatorService validator,
         IMappingService mapper,
-        ISender sender,
-        IValidator<GetAuditRequest> getAuditRequestValidator
+        ISender sender
     )
     {
+        this.validator = validator;
         this.mapper = mapper;
         this.sender = sender;
-        this.getAuditRequestValidator = getAuditRequestValidator;
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ public class AuditsController : ControllerBase
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAudit([FromRoute] GetAuditRequest request)
     {
-        await getAuditRequestValidator.ValidateAndThrowAsync(request, HttpContext.RequestAborted);
+        await validator.ValidateAndThrowAsync(request, HttpContext.RequestAborted);
         var query = mapper.Map<GetAuditRequest, GetAuditQuery>(request);
         var result = await sender.Send(query);
         var response = mapper.Map<GetAuditQueryResult, GetAuditResponse>(result);

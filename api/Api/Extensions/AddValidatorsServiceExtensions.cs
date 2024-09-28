@@ -2,6 +2,7 @@
 using Api.Contracts.Identity.Requests;
 using Api.Contracts.Internal.Audit;
 using Core.Identity;
+using Core.ValidatorService;
 using Features.Audit.BusinessRules;
 using Features.Audit.Get;
 using Features.Audit.Save;
@@ -14,6 +15,9 @@ public static class AddValidatorsServiceExtensions
 {
     public static void AddValidators(this IServiceCollection services)
     {
+        // Universal service.
+        services.AddScoped<IValidatorService, ServiceLocatorValidatorService>();
+
         AddAuditValidators(services);
         AddIdentityValidators(services);
     }
