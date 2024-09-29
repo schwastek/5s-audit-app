@@ -52,7 +52,7 @@ public class AuditsController : ControllerBase
     /// <summary>
     /// Gets audit by ID
     /// </summary>
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id}")]
     [ProducesResponseType(typeof(GetAuditResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAudit([FromRoute] GetAuditRequest request)
