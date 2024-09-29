@@ -29,6 +29,8 @@ public static class AddValidatorsServiceExtensions
 
         services.AddScoped<IValidator<GetAuditRequest>, GetAuditRequestValidator>();
         services.AddScoped<IValidator<GetAuditQuery>, GetAuditQueryValidator>();
+
+        services.AddScoped<IValidator<SaveAuditRequest>, SaveAuditRequestValidator>();
     }
 
     private static void AddIdentityValidators(IServiceCollection services)

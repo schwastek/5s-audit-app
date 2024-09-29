@@ -72,6 +72,7 @@ public class AuditsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<SaveAuditResponse>> SaveAudit([FromBody] SaveAuditRequest request)
     {
+        await validator.ValidateAndThrowAsync(request, HttpContext.RequestAborted);
         var command = mapper.Map<SaveAuditRequest, SaveAuditCommand>(request);
         var result = await sender.Send(command);
         var response = mapper.Map<SaveAuditCommandResult, SaveAuditResponse>(result);
