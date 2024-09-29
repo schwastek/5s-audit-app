@@ -25,7 +25,15 @@ builder.Services.AddControllers(opt =>
     AuthorizationPolicy policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
     opt.Filters.Add(new AuthorizeFilter(policy));
 
+    // In enabled Nullable context, the validation system treats non-nullable parameters or bound properties
+    // as if they had a [Required(AllowEmptyStrings = true)] attribute.
+    // A missing value for Name in a JSON or form post results in a validation error. Disable it.
     opt.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+}).ConfigureApiBehaviorOptions(opt =>
+{
+    // Disable automatic HTTP 400 responses for invalid model binding or model validation.
+    // Both model binding and model validation occur before the execution of a controller action.
+    opt.SuppressModelStateInvalidFilter = true;
 });
 builder.Services.AddDbContext<LeanAuditorContext>();
 
