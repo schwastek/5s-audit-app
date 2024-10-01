@@ -10,4 +10,6 @@ public static class ErrorCodes
     public const string EndDateIsRequired = "EndDateIsRequired";
     public const string AnswersIsRequired = "AnswersIsRequired";
     public const string ActionsIsRequired = "ActionsIsRequired";
+    public const string ActionIdIsRequired = "ActionIdIsRequired";
+    public const string DescriptionIsRequired = "DescriptionIsRequired";
 }
