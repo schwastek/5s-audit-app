@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Features.AuditAction.Save;
 
-public sealed class SaveAuditActionHandler : IRequestHandler<SaveAuditActionCommand, SaveAuditActionCommandResult>
+public sealed class SaveAuditActionCommandHandler : IRequestHandler<SaveAuditActionCommand, SaveAuditActionCommandResult>
 {
     private readonly LeanAuditorContext context;
     private readonly IMappingService mapper;
     private readonly IAuditBusinessRules auditBusinessRules;
 
-    public SaveAuditActionHandler(
+    public SaveAuditActionCommandHandler(
         LeanAuditorContext context,
         IMappingService mapper,
         IAuditBusinessRules auditBusinessRules
