@@ -7,6 +7,7 @@ using Core.ValidatorService;
 using Features.Audit.BusinessRules;
 using Features.Audit.Get;
 using Features.Audit.Save;
+using Features.AuditAction.Save;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,19 +21,25 @@ public static class AddValidatorsServiceExtensions
         services.AddScoped<IValidatorService, ServiceLocatorValidatorService>();
 
         AddAuditValidators(services);
+        AddAuditActionValidators(services);
         AddIdentityValidators(services);
     }
 
     private static void AddAuditValidators(IServiceCollection services)
     {
         services.AddScoped<IAuditBusinessRules, AuditBusinessRules>();
-        services.AddScoped<IValidator<SaveAuditCommand>, SaveAuditCommandValidator>();
 
         services.AddScoped<IValidator<GetAuditRequest>, GetAuditRequestValidator>();
         services.AddScoped<IValidator<GetAuditQuery>, GetAuditQueryValidator>();
 
         services.AddScoped<IValidator<SaveAuditRequest>, SaveAuditRequestValidator>();
+        services.AddScoped<IValidator<SaveAuditCommand>, SaveAuditCommandValidator>();
+    }
+
+    private static void AddAuditActionValidators(IServiceCollection services)
+    {
         services.AddScoped<IValidator<SaveAuditActionRequest>, SaveAuditActionRequestValidator>();
+        services.AddScoped<IValidator<SaveAuditActionCommand>, SaveAuditActionCommandValidator>();
     }
 
     private static void AddIdentityValidators(IServiceCollection services)

@@ -1,5 +1,4 @@
-﻿using Core.Exceptions;
-using Core.MappingService;
+﻿using Core.MappingService;
 using Data.DbContext;
 using Features.Audit.BusinessRules;
 using Features.AuditAction.Dto;
@@ -28,13 +27,6 @@ public sealed class SaveAuditActionCommandHandler : IRequestHandler<SaveAuditAct
 
     public async Task<SaveAuditActionCommandResult> Handle(SaveAuditActionCommand command, CancellationToken cancellationToken)
     {
-        // TODO: Move to validator.
-        var auditExists = await auditBusinessRules.AuditExists(command.AuditId, cancellationToken);
-        if (!auditExists)
-        {
-            throw new NotFoundException($"Audit with ID {command.AuditId} does not exist.");
-        }
-
         // Add to DB
         var auditAction = new Domain.AuditAction()
         {
