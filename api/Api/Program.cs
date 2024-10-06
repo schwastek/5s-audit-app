@@ -1,5 +1,4 @@
-﻿using Api.Exceptions;
-using Api.Extensions;
+﻿using Api.Extensions;
 using Core.Identity;
 using Core.MediatR;
 using Core.Pagination;
@@ -94,16 +93,16 @@ builder.Services.AddHsts(options =>
     options.Preload = true;
 });
 
+// Add global exception handling
+builder.Services.AddExceptionHandlers();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
 
+app.UseExceptionHandler();
+
 app.UseSecurityHeaders();
-
-app.UseMiddleware<ExceptionMiddleware>();
-
-// Handle unexisting endpoints (this middleware doesn't catch exceptions)
-app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 if (app.Environment.IsProduction())
 {

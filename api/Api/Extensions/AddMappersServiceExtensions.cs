@@ -1,7 +1,6 @@
 ﻿using Api.Contracts.Audit.Requests;
 using Api.Contracts.AuditAction.Requests;
 using Api.Contracts.Question.Requests;
-using Api.Exceptions;
 using Core.MappingService;
 using Core.Pagination;
 using Features.Answer.Dto;
@@ -30,7 +29,6 @@ public static class AddMappersServiceExtensions
         AddAnswerMappers(services);
         AddQuestionMappers(services);
         AddPaginationMappers(services);
-        AddOtherMappers(services);
     }
 
     private static void AddAuditMappers(IServiceCollection services)
@@ -90,10 +88,5 @@ public static class AddMappersServiceExtensions
     private static void AddPaginationMappers(IServiceCollection services)
     {
         services.AddSingleton<IMapper<Core.Pagination.PaginationMetadata, Api.Contracts.Common.Requests.PaginationMetadata>, PaginationMapper>();
-    }
-
-    private static void AddOtherMappers(IServiceCollection services)
-    {
-        services.AddSingleton<IMapper<ErrorDetails, Contracts.Common.ErrorDetails>, ErrorDetailsMapper>();
     }
 }
