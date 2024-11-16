@@ -77,12 +77,13 @@ public class ActionsController : ControllerBase
     /// <param name="request"></param>
     /// <response code="204">The action has been updated</response>
     /// <response code="404">The action is not found</response>
-    [HttpPut("{actionId:guid}")]
+    [HttpPut("{actionId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateAction([FromRoute] Guid actionId, [FromBody] UpdateAuditActionRequest request)
+    public async Task<IActionResult> UpdateAuditAction([FromRoute] Guid actionId, [FromBody] UpdateAuditActionRequest request)
     {
         request.ActionId = actionId;
+        await validator.ValidateAndThrowAsync(request);
         var command = mapper.Map<UpdateAuditActionRequest, UpdateAuditActionCommand>(request);
         await sender.Send(command);
 

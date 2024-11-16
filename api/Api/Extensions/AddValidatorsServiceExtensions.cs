@@ -11,6 +11,7 @@ using Features.Audit.Save;
 using Features.AuditAction.BusinessRules;
 using Features.AuditAction.Delete;
 using Features.AuditAction.Save;
+using Features.AuditAction.Update;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -47,6 +48,9 @@ public static class AddValidatorsServiceExtensions
         services.AddScoped<IValidator<SaveAuditActionCommand>, SaveAuditActionCommandValidator>();
 
         services.AddScoped<IValidator<DeleteAuditActionCommand>, DeleteAuditActionCommandValidator>();
+
+        services.AddScoped<IValidator<UpdateAuditActionRequest>, UpdateAuditActionRequestValidator>();
+        services.AddScoped<IValidator<UpdateAuditActionCommand>, UpdateAuditActionCommandValidator>();
     }
 
     private static void AddIdentityValidators(IServiceCollection services)

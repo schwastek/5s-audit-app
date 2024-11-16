@@ -19,7 +19,7 @@ public class UpdateAuditActionCommandMapper : IMapper<UpdateAuditActionRequest, 
         return new UpdateAuditActionCommand()
         {
             ActionId = src.ActionId,
-            Description = src.Description,
+            Description = src.Description!,
             IsComplete = src.IsComplete
         };
     }
