@@ -60,10 +60,10 @@ public class ActionsController : ControllerBase
     /// <param name="actionId" example="ac1a0251-46cf-452b-9911-cfc998ea41a9"></param>
     /// <response code="204">The action has been deleted</response>
     /// <response code="404">The action is not found</response>
-    [HttpDelete("{actionId:guid}")]
+    [HttpDelete("{actionId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteAction([FromRoute] Guid actionId)
+    public async Task<IActionResult> DeleteAuditAction([FromRoute] Guid actionId)
     {
         await sender.Send(new DeleteAuditActionCommand { ActionId = actionId });
 

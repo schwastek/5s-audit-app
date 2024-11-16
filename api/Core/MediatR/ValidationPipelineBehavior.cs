@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Core.MediatR;
 
 public class ValidationPipelineBehavior<TRequest, TResponse>
-    : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    : IPipelineBehavior<TRequest, TResponse> where TRequest : class
 {
     private readonly IEnumerable<IValidator<TRequest>> validators;
 

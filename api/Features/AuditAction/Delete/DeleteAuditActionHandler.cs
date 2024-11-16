@@ -1,6 +1,6 @@
-﻿using Core.Exceptions;
-using Data.DbContext;
+﻿using Data.DbContext;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,12 +17,7 @@ public sealed class DeleteAuditActionHandler : IRequestHandler<DeleteAuditAction
 
     public async Task Handle(DeleteAuditActionCommand command, CancellationToken cancellationToken)
     {
-        var auditAction = await context.AuditActions.FindAsync(new object?[] { command.ActionId }, cancellationToken: cancellationToken);
-
-        if (auditAction is null)
-        {
-            throw new NotFoundException($"Action with ID {command.ActionId} does not exist.");
-        }
+        var auditAction = await context.AuditActions.SingleAsync(x => x.AuditActionId == command.ActionId, cancellationToken);
 
         context.Remove(auditAction);
         await context.SaveChangesAsync(cancellationToken);

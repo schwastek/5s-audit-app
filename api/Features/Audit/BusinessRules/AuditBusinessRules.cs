@@ -24,7 +24,7 @@ public class AuditBusinessRules : IAuditBusinessRules
     {
         if (auditId == Guid.Empty)
         {
-            throw new ArgumentException(nameof(auditId));
+            return false;
         }
 
         var result = await context.Audits.AnyAsync(a => a.AuditId == auditId, cancellationToken);

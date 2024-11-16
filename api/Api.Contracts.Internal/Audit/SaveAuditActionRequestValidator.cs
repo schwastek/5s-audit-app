@@ -2,7 +2,6 @@
 using Core.ValidatorService;
 using Domain;
 using FluentValidation;
-using System;
 
 namespace Api.Contracts.Internal.Audit;
 
@@ -11,11 +10,11 @@ public class SaveAuditActionRequestValidator : CustomAbstractValidator<SaveAudit
     public SaveAuditActionRequestValidator()
     {
         RuleFor(x => x.ActionId)
-            .NotEqual(Guid.Empty)
+            .NotEmpty()
             .WithErrorCode(ErrorCodes.ActionIdIsRequired);
 
         RuleFor(x => x.AuditId)
-            .NotEqual(Guid.Empty)
+            .NotEmpty()
             .WithErrorCode(ErrorCodes.AuditIdIsRequired);
 
         RuleFor(x => x.Description)

@@ -7,6 +7,8 @@ using Core.ValidatorService;
 using Features.Audit.BusinessRules;
 using Features.Audit.Get;
 using Features.Audit.Save;
+using Features.AuditAction.BusinessRules;
+using Features.AuditAction.Delete;
 using Features.AuditAction.Save;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,8 +40,12 @@ public static class AddValidatorsServiceExtensions
 
     private static void AddAuditActionValidators(IServiceCollection services)
     {
+        services.AddScoped<IAuditActionBusinessRules, AuditActionBusinessRules>();
+
         services.AddScoped<IValidator<SaveAuditActionRequest>, SaveAuditActionRequestValidator>();
         services.AddScoped<IValidator<SaveAuditActionCommand>, SaveAuditActionCommandValidator>();
+
+        services.AddScoped<IValidator<DeleteAuditActionCommand>, DeleteAuditActionCommandValidator>();
     }
 
     private static void AddIdentityValidators(IServiceCollection services)

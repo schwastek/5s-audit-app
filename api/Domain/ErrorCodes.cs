@@ -13,4 +13,5 @@ public static class ErrorCodes
     public const string ActionIdIsRequired = "ActionIdIsRequired";
     public const string DescriptionIsRequired = "DescriptionIsRequired";
     public const string AuditActionDescriptionIsTooLong = "AuditActionDescriptionIsTooLong";
+    public const string AuditActionDoesNotExist = "AuditActionDoesNotExist";
 }
