@@ -3,7 +3,7 @@ using Core.ValidatorService;
 using Domain;
 using FluentValidation;
 
-namespace Api.Contracts.Internal.Audit;
+namespace Api.Contracts.Internal.AuditAction;
 
 public class SaveAuditActionRequestValidator : CustomAbstractValidator<SaveAuditActionRequest>
 {

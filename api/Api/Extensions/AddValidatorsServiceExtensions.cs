@@ -2,6 +2,7 @@
 using Api.Contracts.AuditAction.Requests;
 using Api.Contracts.Identity.Requests;
 using Api.Contracts.Internal.Audit;
+using Api.Contracts.Internal.AuditAction;
 using Core.Identity;
 using Core.ValidatorService;
 using Features.Audit.BusinessRules;
