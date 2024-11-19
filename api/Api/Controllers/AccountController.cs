@@ -1,8 +1,8 @@
 ﻿using Api.Contracts.Identity.Dto;
 using Api.Contracts.Identity.Requests;
 using Core.Identity;
+using Core.ValidatorService;
 using Domain;
-using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -24,19 +24,19 @@ public class AccountController : ControllerBase
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly TokenService _tokenService;
-    private readonly IValidator<RegisterRequest> _registerRequestValidator;
+    private readonly IValidatorService _validator;
 
     public AccountController(
         UserManager<User> userManager,
         SignInManager<User> signInManager,
         TokenService tokenService,
-        IValidator<RegisterRequest> registerRequestValidator
+        IValidatorService validator
     )
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _tokenService = tokenService;
-        _registerRequestValidator = registerRequestValidator;
+        _validator = validator;
     }
 
     /// <summary>
@@ -82,18 +82,7 @@ public class AccountController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<UserDto>> Register(RegisterRequest request)
     {
-        _registerRequestValidator.ValidateAndThrow(request);
-
-        if (await _userManager.Users.AnyAsync(x => x.Email == request.Email))
-        {
-            ModelState.AddModelError("email", "Email taken");
-            return ValidationProblem();
-        }
-        if (await _userManager.Users.AnyAsync(x => x.UserName == request.Username))
-        {
-            ModelState.AddModelError("username", "Username taken");
-            return ValidationProblem();
-        }
+        await _validator.ValidateAndThrowAsync(request, HttpContext.RequestAborted);
 
         User user = new()
         {

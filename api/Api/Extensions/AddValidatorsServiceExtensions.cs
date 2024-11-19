@@ -1,10 +1,11 @@
 ﻿using Api.Contracts.Audit.Requests;
 using Api.Contracts.AuditAction.Requests;
 using Api.Contracts.Identity.Requests;
+using Api.Contracts.Internal.Account;
 using Api.Contracts.Internal.Audit;
 using Api.Contracts.Internal.AuditAction;
-using Core.Identity;
 using Core.ValidatorService;
+using Features.Account.BusinessRules;
 using Features.Audit.BusinessRules;
 using Features.Audit.Get;
 using Features.Audit.Save;
@@ -55,6 +56,8 @@ public static class AddValidatorsServiceExtensions
 
     private static void AddIdentityValidators(IServiceCollection services)
     {
+        services.AddScoped<IAccountBusinessRules, AccountBusinessRules>();
+
         services.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();
     }
 }
