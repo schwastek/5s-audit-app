@@ -23,7 +23,8 @@ public static class IdentityServiceExtensions
             .AddEntityFrameworkStores<LeanAuditorContext>()
             .AddSignInManager<SignInManager<User>>();
 
-        var jwtOptions = config.GetSection(JwtOptions.Section).Get<JwtOptions>();
+        var jwtOptions = new JwtOptions();
+        config.GetSection(JwtOptions.Section).Bind(jwtOptions);
         SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.TokenKey));
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

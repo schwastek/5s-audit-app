@@ -52,16 +52,15 @@ public class AccountController : ControllerBase
     {
         await _validator.ValidateAndThrowAsync(request, HttpContext.RequestAborted);
 
-        var user = await _userManager.FindByEmailAsync(request.Email);
+        var user = await _userManager.FindByEmailAsync(request.Email!);
+        if (user is null) return Unauthorized();
 
-        if (user == null) return Unauthorized();
-
-        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
+        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password!, false);
 
         if (result.Succeeded)
         {
             await SetRefreshToken(user);
-            UserDto userDto = CreateUserObject(user);
+            var userDto = CreateUserObject(user);
 
             return Ok(userDto);
         }
@@ -84,19 +83,19 @@ public class AccountController : ControllerBase
     {
         await _validator.ValidateAndThrowAsync(request, HttpContext.RequestAborted);
 
-        User user = new()
+        var user = new User()
         {
             DisplayName = request.DisplayName,
             Email = request.Email,
             UserName = request.Username
         };
 
-        IdentityResult result = await _userManager.CreateAsync(user, request.Password);
+        var result = await _userManager.CreateAsync(user, request.Password!);
 
         if (result.Succeeded)
         {
             await SetRefreshToken(user);
-            UserDto userDto = CreateUserObject(user);
+            var userDto = CreateUserObject(user);
 
             return Ok(userDto);
         }
@@ -113,9 +112,14 @@ public class AccountController : ControllerBase
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
-        User user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+        var email = User.FindFirstValue(ClaimTypes.Email);
+        if (email is null) return Unauthorized();
+
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user is null) return Unauthorized();
+
         await SetRefreshToken(user);
-        UserDto userDto = CreateUserObject(user);
+        var userDto = CreateUserObject(user);
 
         return Ok(userDto);
     }
@@ -129,22 +133,23 @@ public class AccountController : ControllerBase
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<UserDto>> RefreshToken()
     {
-        var refreshToken = Request.Cookies["refreshToken"];
+        var name = User.FindFirstValue(ClaimTypes.Name);
+        if (name is null) return Unauthorized();
+
         var user = await _userManager.Users
             .Include(r => r.RefreshTokens)
-            .FirstOrDefaultAsync(x => x.UserName == User.FindFirstValue(ClaimTypes.Name));
+            .FirstOrDefaultAsync(x => x.UserName == name);
+        if (user is null) return Unauthorized();
 
-        if (user == null) return Unauthorized();
-
+        var refreshToken = Request.Cookies["refreshToken"];
         var oldToken = user.RefreshTokens.SingleOrDefault(x => x.Token == refreshToken);
-
-        if (oldToken != null && !oldToken.IsActive)
+        if (oldToken is not null && !oldToken.IsActive)
         {
             return Unauthorized();
         }
 
         // Generate new JWT
-        UserDto userDto = CreateUserObject(user);
+        var userDto = CreateUserObject(user);
 
         return Ok(userDto);
     }
@@ -169,9 +174,9 @@ public class AccountController : ControllerBase
     {
         return new UserDto
         {
-            DisplayName = user.DisplayName,
+            DisplayName = user.DisplayName!,
             Token = _tokenService.CreateToken(user),
-            Username = user.UserName
+            Username = user.UserName!
         };
     }
 }
