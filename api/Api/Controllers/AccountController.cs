@@ -50,9 +50,9 @@ public class AccountController : ControllerBase
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<UserDto>> Login(LoginRequest request)
     {
-        User user = await _userManager.FindByEmailAsync(request.Email);
+        await _validator.ValidateAndThrowAsync(request, HttpContext.RequestAborted);
 
-        // TODO: Return proper error message.
+        var user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user == null) return Unauthorized();
 

@@ -59,5 +59,6 @@ public static class AddValidatorsServiceExtensions
         services.AddScoped<IAccountBusinessRules, AccountBusinessRules>();
 
         services.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();
+        services.AddScoped<IValidator<LoginRequest>, LoginRequestValidator>();
     }
 }
