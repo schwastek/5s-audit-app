@@ -10,10 +10,6 @@ public sealed class UpdateAuditActionCommandValidator : AbstractValidator<Update
     {
         RuleFor(x => x.ActionId)
             .MustAsync(auditActionBusinessRules.AuditActionExists)
-            .WithErrorCode(ErrorCodes.AuditActionDoesNotExist);
-
-        RuleFor(x => x.Description)
-            .MaximumLength(auditActionBusinessRules.DescriptionMaxLength)
-            .WithErrorCode(ErrorCodes.AuditActionDescriptionIsTooLong);
+            .WithErrorCode(ErrorCodes.AuditAction.DoesNotExist);
     }
 }

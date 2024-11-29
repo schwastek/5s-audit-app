@@ -15,18 +15,20 @@ namespace Data.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "5.0.8");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
-            modelBuilder.Entity("Api.Domain.Answer", b =>
+            modelBuilder.Entity("Domain.Answer", b =>
                 {
                     b.Property<Guid>("AnswerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AnswerText")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AnswerType")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("AuditId")
@@ -44,10 +46,9 @@ namespace Data.Migrations
                     b.ToTable("Answers", (string)null);
                 });
 
-            modelBuilder.Entity("Api.Domain.Audit", b =>
+            modelBuilder.Entity("Domain.Audit", b =>
                 {
                     b.Property<Guid>("AuditId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Area")
@@ -69,10 +70,9 @@ namespace Data.Migrations
                     b.ToTable("Audits", (string)null);
                 });
 
-            modelBuilder.Entity("Api.Domain.AuditAction", b =>
+            modelBuilder.Entity("Domain.AuditAction", b =>
                 {
                     b.Property<Guid>("AuditActionId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("AuditId")
@@ -84,7 +84,9 @@ namespace Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsComplete")
-                        .HasColumnType("INTEGER");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(false);
 
                     b.HasKey("AuditActionId");
 
@@ -93,13 +95,14 @@ namespace Data.Migrations
                     b.ToTable("AuditActions", (string)null);
                 });
 
-            modelBuilder.Entity("Api.Domain.Question", b =>
+            modelBuilder.Entity("Domain.Question", b =>
                 {
                     b.Property<Guid>("QuestionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("QuestionText")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("QuestionId");
@@ -107,7 +110,7 @@ namespace Data.Migrations
                     b.ToTable("Questions", (string)null);
                 });
 
-            modelBuilder.Entity("Api.Domain.RefreshToken", b =>
+            modelBuilder.Entity("Domain.RefreshToken", b =>
                 {
                     b.Property<int>("RefreshTokenId")
                         .ValueGeneratedOnAdd()
@@ -120,19 +123,21 @@ namespace Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Token")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("RefreshTokenId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshToken", (string)null);
+                    b.ToTable("RefreshToken");
                 });
 
-            modelBuilder.Entity("Api.Domain.User", b =>
+            modelBuilder.Entity("Domain.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -327,37 +332,39 @@ namespace Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Api.Domain.Answer", b =>
+            modelBuilder.Entity("Domain.Answer", b =>
                 {
-                    b.HasOne("Api.Domain.Audit", null)
+                    b.HasOne("Domain.Audit", null)
                         .WithMany("Answers")
                         .HasForeignKey("AuditId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Api.Domain.Question", "Question")
+                    b.HasOne("Domain.Question", "Question")
                         .WithMany()
                         .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Question");
                 });
 
-            modelBuilder.Entity("Api.Domain.AuditAction", b =>
+            modelBuilder.Entity("Domain.AuditAction", b =>
                 {
-                    b.HasOne("Api.Domain.Audit", null)
+                    b.HasOne("Domain.Audit", null)
                         .WithMany("Actions")
                         .HasForeignKey("AuditId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Api.Domain.RefreshToken", b =>
+            modelBuilder.Entity("Domain.RefreshToken", b =>
                 {
-                    b.HasOne("Api.Domain.User", "User")
+                    b.HasOne("Domain.User", "User")
                         .WithMany("RefreshTokens")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -373,7 +380,7 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Api.Domain.User", null)
+                    b.HasOne("Domain.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -382,7 +389,7 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Api.Domain.User", null)
+                    b.HasOne("Domain.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -397,7 +404,7 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Api.Domain.User", null)
+                    b.HasOne("Domain.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -406,21 +413,21 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Api.Domain.User", null)
+                    b.HasOne("Domain.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Api.Domain.Audit", b =>
+            modelBuilder.Entity("Domain.Audit", b =>
                 {
                     b.Navigation("Actions");
 
                     b.Navigation("Answers");
                 });
 
-            modelBuilder.Entity("Api.Domain.User", b =>
+            modelBuilder.Entity("Domain.User", b =>
                 {
                     b.Navigation("RefreshTokens");
                 });

@@ -36,7 +36,7 @@ public class SaveAuditActionCommandMapper :
         {
             AuditId = src.AuditId,
             ActionId = src.ActionId,
-            Description = src.Description,
+            Description = src.Description!,
             IsComplete = src.IsComplete
         };
     }

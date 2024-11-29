@@ -35,7 +35,7 @@ public sealed class ListAuditsQueryHandler : IRequestHandler<ListAuditsQuery, Li
     {
         if (!orderByMapping.ValidMappingExists(query.OrderBy))
         {
-            throw new IncorrectPropertyBadRequestException(query.OrderBy);
+            throw new InvalidOrderByException(query.OrderBy);
         }
 
         var sortables = orderByMapping.Map(query.OrderBy);

@@ -1,4 +1,5 @@
-﻿using Data.Options;
+﻿using Data.Configuration;
+using Data.Options;
 using Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,11 @@ public class LeanAuditorContext : IdentityDbContext<User>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        new AuditEntityTypeConfiguration().Configure(modelBuilder.Entity<Audit>());
+        new AnswerEntityTypeConfiguration().Configure(modelBuilder.Entity<Answer>());
+        new AuditActionEntityTypeConfiguration().Configure(modelBuilder.Entity<AuditAction>());
+        new QuestionEntityTypeConfiguration().Configure(modelBuilder.Entity<Question>());
+
         base.OnModelCreating(modelBuilder);
     }
 

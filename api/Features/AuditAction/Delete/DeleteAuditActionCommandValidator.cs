@@ -11,8 +11,8 @@ public sealed class DeleteAuditActionCommandValidator : AbstractValidator<Delete
         RuleFor(x => x.ActionId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .WithErrorCode(ErrorCodes.ActionIdIsRequired)
+            .WithErrorCode(ErrorCodes.AuditAction.ActionIdIsRequired)
             .MustAsync(auditActionBusinessRules.AuditActionExists)
-            .WithErrorCode(ErrorCodes.AuditActionDoesNotExist);
+            .WithErrorCode(ErrorCodes.AuditAction.DoesNotExist);
     }
 }

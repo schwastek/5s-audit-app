@@ -11,30 +11,26 @@ public class SaveAuditRequestValidator : CustomAbstractValidator<SaveAuditReques
     {
         RuleFor(x => x.AuditId)
             .NotEmpty()
-            .WithErrorCode(ErrorCodes.AuditIdIsRequired);
+            .WithErrorCode(ErrorCodes.Audit.AuditIdIsRequired);
 
         RuleFor(x => x.Author)
             .NotEmpty()
-            .WithErrorCode(ErrorCodes.AuthorIsRequired);
+            .WithErrorCode(ErrorCodes.Audit.AuthorIsRequired);
 
         RuleFor(x => x.Area)
             .NotEmpty()
-            .WithErrorCode(ErrorCodes.AreaIsRequired);
+            .WithErrorCode(ErrorCodes.Audit.AreaIsRequired);
 
         RuleFor(x => x.StartDate)
             .NotEmpty()
-            .WithErrorCode(ErrorCodes.StartDateIsRequired);
+            .WithErrorCode(ErrorCodes.Audit.StartDateIsRequired);
 
         RuleFor(x => x.EndDate)
             .NotEmpty()
-            .WithErrorCode(ErrorCodes.EndDateIsRequired);
+            .WithErrorCode(ErrorCodes.Audit.EndDateIsRequired);
 
         RuleFor(x => x.Answers)
             .NotEmpty()
-            .WithErrorCode(ErrorCodes.AnswersIsRequired);
-
-        RuleFor(x => x.Actions)
-            .NotEmpty()
-            .WithErrorCode(ErrorCodes.ActionsIsRequired);
+            .WithErrorCode(ErrorCodes.Audit.AnswersIsRequired);
     }
 }

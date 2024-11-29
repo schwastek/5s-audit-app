@@ -1,5 +1,4 @@
-﻿using Core.Exceptions;
-using Core.MappingService;
+﻿using Core.MappingService;
 using Data.DbContext;
 using Features.Audit.Dto;
 using MediatR;
@@ -27,12 +26,7 @@ public sealed class GetAuditQueryHandler : IRequestHandler<GetAuditQuery, GetAud
             .Include(audit => audit.Actions)
             .Include(audit => audit.Answers)
             .ThenInclude(answer => answer.Question)
-            .SingleOrDefaultAsync(audit => audit.AuditId.Equals(query.Id), cancellationToken);
-
-        if (audit is null)
-        {
-            throw new NotFoundException($"Audit with ID {query.Id} does not exist.");
-        }
+            .FirstAsync(audit => audit.AuditId.Equals(query.Id), cancellationToken);
 
         var auditDto = mapper.Map<Domain.Audit, AuditDto>(audit);
         var result = new GetAuditQueryResult()

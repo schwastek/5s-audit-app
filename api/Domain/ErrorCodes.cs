@@ -2,24 +2,35 @@
 
 public static class ErrorCodes
 {
-    public const string AuditIdIsRequired = "AuditIdIsRequired";
-    public const string AuditDoesNotExist = "AuditDoesNotExist";
-    public const string AuthorIsRequired = "AuthorIsRequired";
-    public const string AreaIsRequired = "AreaIsRequired";
-    public const string StartDateIsRequired = "StartDateIsRequired";
-    public const string EndDateIsRequired = "EndDateIsRequired";
-    public const string AnswersIsRequired = "AnswersIsRequired";
-    public const string ActionsIsRequired = "ActionsIsRequired";
-    public const string ActionIdIsRequired = "ActionIdIsRequired";
-    public const string DescriptionIsRequired = "DescriptionIsRequired";
-    public const string AuditActionDescriptionIsTooLong = "AuditActionDescriptionIsTooLong";
-    public const string AuditActionDoesNotExist = "AuditActionDoesNotExist";
-    public const string DisplayNameIsRequired = "DisplayNameIsRequired";
-    public const string EmailIsRequired = "EmailIsRequired";
-    public const string EmailFormatIsNotValid = "EmailFormatIsNotValid";
-    public const string EmailIsAlreadyTaken = "EmailIsAlreadyTaken";
-    public const string UsernameIsRequired = "UsernameIsRequired";
-    public const string UsernameIsAlreadyTaken = "UsernameIsAlreadyTaken";
-    public const string PasswordIsRequired = "PasswordIsRequired";
-    public const string PasswordIsTooWeak = "PasswordIsTooWeak";
+    public static class Audit
+    {
+        public const string AuditIdIsRequired = "AuditIdIsRequired";
+        public const string DoesNotExist = "AuditDoesNotExist";
+        public const string AuthorIsRequired = "AuthorIsRequired";
+        public const string AreaIsRequired = "AuditAreaIsRequired";
+        public const string StartDateIsRequired = "AuditStartDateIsRequired";
+        public const string EndDateIsRequired = "AuditEndDateIsRequired";
+        public const string AnswersIsRequired = "AuditAnswersIsRequired";
+    }
+
+    public static class AuditAction
+    {
+        public const string ActionsIsRequired = "AuditActionsIsRequired";
+        public const string ActionIdIsRequired = "AuditActionIdIsRequired";
+        public const string DescriptionIsRequired = "AuditActionDescriptionIsRequired";
+        public const string DoesNotExist = "AuditActionDoesNotExist";
+        public const string DescriptionIsTooLong = "AuditActionDescriptionIsTooLong";
+    }
+
+    public static class Identity
+    {
+        public const string DisplayNameIsRequired = "IdentityDisplayNameIsRequired";
+        public const string EmailIsRequired = "IdentityEmailIsRequired";
+        public const string EmailFormatIsNotValid = "IdentityEmailFormatIsNotValid";
+        public const string EmailIsAlreadyTaken = "IdentityEmailIsAlreadyTaken";
+        public const string UsernameIsRequired = "IdentityUsernameIsRequired";
+        public const string UsernameIsAlreadyTaken = "IdentityUsernameIsAlreadyTaken";
+        public const string PasswordIsRequired = "IdentityPasswordIsRequired";
+        public const string PasswordIsTooWeak = "IdentityPasswordIsTooWeak";
+    }
 }

@@ -8,7 +8,6 @@ using Core.ValidatorService;
 using Features.Account.BusinessRules;
 using Features.Audit.BusinessRules;
 using Features.Audit.Get;
-using Features.Audit.Save;
 using Features.AuditAction.BusinessRules;
 using Features.AuditAction.Delete;
 using Features.AuditAction.Save;
@@ -38,7 +37,6 @@ public static class AddValidatorsServiceExtensions
         services.AddScoped<IValidator<GetAuditQuery>, GetAuditQueryValidator>();
 
         services.AddScoped<IValidator<SaveAuditRequest>, SaveAuditRequestValidator>();
-        services.AddScoped<IValidator<SaveAuditCommand>, SaveAuditCommandValidator>();
     }
 
     private static void AddAuditActionValidators(IServiceCollection services)

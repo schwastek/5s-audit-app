@@ -11,14 +11,10 @@ public class SaveAuditActionRequestValidator : CustomAbstractValidator<SaveAudit
     {
         RuleFor(x => x.ActionId)
             .NotEmpty()
-            .WithErrorCode(ErrorCodes.ActionIdIsRequired);
+            .WithErrorCode(ErrorCodes.AuditAction.ActionIdIsRequired);
 
         RuleFor(x => x.AuditId)
             .NotEmpty()
-            .WithErrorCode(ErrorCodes.AuditIdIsRequired);
-
-        RuleFor(x => x.Description)
-            .NotEmpty()
-            .WithErrorCode(ErrorCodes.DescriptionIsRequired);
+            .WithErrorCode(ErrorCodes.Audit.AuditIdIsRequired);
     }
 }

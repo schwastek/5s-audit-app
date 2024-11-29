@@ -40,8 +40,7 @@ public class ValidationExceptionHandler : IExceptionHandler
                 {
                     { "errors", GetValidationErrors(validationException) }
                 }
-            },
-            Exception = exception
+            }
         });
     }
 

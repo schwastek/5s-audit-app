@@ -1,6 +1,5 @@
 ﻿using Data.DbContext;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,9 +16,9 @@ public sealed class DeleteAuditActionHandler : IRequestHandler<DeleteAuditAction
 
     public async Task Handle(DeleteAuditActionCommand command, CancellationToken cancellationToken)
     {
-        var auditAction = await context.AuditActions.SingleAsync(x => x.AuditActionId == command.ActionId, cancellationToken);
-
-        context.Remove(auditAction);
+        // Find existing (presence already validated)
+        var auditAction = await context.AuditActions.FindAsync([command.ActionId], cancellationToken);
+        context.Remove(auditAction!);
         await context.SaveChangesAsync(cancellationToken);
     }
 }

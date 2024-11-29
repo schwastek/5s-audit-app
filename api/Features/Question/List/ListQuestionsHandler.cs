@@ -3,7 +3,6 @@ using Data.DbContext;
 using Features.Question.Dto;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,7 +22,7 @@ public sealed class ListQuestionsHandler : IRequestHandler<ListQuestionsQuery, L
 
     public async Task<ListQuestionsQueryResult> Handle(ListQuestionsQuery request, CancellationToken cancellationToken)
     {
-        List<Domain.Question> questions = await context.Questions.ToListAsync(cancellationToken);
+        var questions = await context.Questions.ToListAsync(cancellationToken);
 
         // Mapping
         var questionsList = questions

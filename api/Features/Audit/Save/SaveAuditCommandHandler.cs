@@ -1,5 +1,4 @@
-﻿using Core.MappingService;
-using Data.DbContext;
+﻿using Data.DbContext;
 using MediatR;
 using System.Linq;
 using System.Threading;
@@ -10,44 +9,38 @@ namespace Features.Audit.Save;
 public sealed class SaveAuditCommandHandler : IRequestHandler<SaveAuditCommand, SaveAuditCommandResult>
 {
     private readonly LeanAuditorContext context;
-    private readonly IMappingService mapper;
 
-    public SaveAuditCommandHandler(LeanAuditorContext context, IMappingService mapper)
+    public SaveAuditCommandHandler(LeanAuditorContext context)
     {
         this.context = context;
-        this.mapper = mapper;
     }
 
     public async Task<SaveAuditCommandResult> Handle(SaveAuditCommand command, CancellationToken cancellationToken)
     {
-        // TODO: Use factory.
-        var answers = command.Answers.Select(answer => new Domain.Answer()
-        {
-            AuditId = command.AuditId,
-            AnswerId = answer.AnswerId,
-            AnswerText = answer.AnswerText,
-            AnswerType = answer.AnswerType,
-            QuestionId = answer.QuestionId
-        }).ToList();
+        // Create entities
+        var answers = command.Answers.Select(answer => Domain.Answer.Create(
+            answerId: answer.AnswerId,
+            questionId: answer.QuestionId,
+            answerText: answer.AnswerText,
+            answerType: answer.AnswerType
+        ));
 
-        var actions = command.Actions.Select(action => new Domain.AuditAction()
-        {
-            AuditId = command.AuditId,
-            AuditActionId = action.ActionId,
-            Description = action.Description,
-            IsComplete = action.IsComplete
-        }).ToList();
+        var actions = command.Actions.Select(action => Domain.AuditAction.Create(
+            auditActionId: action.ActionId,
+            description: action.Description
+        ));
 
-        var audit = new Domain.Audit()
-        {
-            AuditId = command.AuditId,
-            Author = command.Author,
-            Area = command.Area,
-            StartDate = command.StartDate,
-            EndDate = command.EndDate,
-            Answers = answers,
-            Actions = actions
-        };
+        var audit = Domain.Audit.Create(
+            auditId: command.AuditId,
+            author: command.Author,
+            area: command.Area,
+            startDate: command.StartDate,
+            endDate: command.EndDate
+        );
+
+        // Save
+        audit.AddAnswers(answers);
+        audit.AddActions(actions);
 
         context.Audits.Add(audit);
         context.SaveChanges();

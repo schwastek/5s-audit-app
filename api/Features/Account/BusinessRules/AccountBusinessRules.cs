@@ -10,9 +10,9 @@ namespace Features.Account.BusinessRules;
 
 public interface IAccountBusinessRules
 {
-    public Task<bool> IsEmailAvailable(string email, CancellationToken cancellationToken);
-    public Task<bool> IsUsernameAvailable(string username, CancellationToken cancellationToken);
-    public bool PasswordMatchesStrengthCriteria(string password);
+    public Task<bool> IsEmailAvailable(string? email, CancellationToken cancellationToken);
+    public Task<bool> IsUsernameAvailable(string? username, CancellationToken cancellationToken);
+    public bool PasswordMatchesStrengthCriteria(string? password);
 }
 
 public class AccountBusinessRules : IAccountBusinessRules
@@ -24,8 +24,10 @@ public class AccountBusinessRules : IAccountBusinessRules
         this.userManager = userManager;
     }
 
-    public async Task<bool> IsEmailAvailable(string email, CancellationToken cancellationToken)
+    public async Task<bool> IsEmailAvailable(string? email, CancellationToken cancellationToken)
     {
+        if (string.IsNullOrEmpty(email)) return false;
+
         if (await userManager.Users.AnyAsync(x => x.Email == email, cancellationToken))
         {
             return false;
@@ -34,8 +36,10 @@ public class AccountBusinessRules : IAccountBusinessRules
         return true;
     }
 
-    public async Task<bool> IsUsernameAvailable(string username, CancellationToken cancellationToken)
+    public async Task<bool> IsUsernameAvailable(string? username, CancellationToken cancellationToken)
     {
+        if (string.IsNullOrEmpty(username)) return false;
+
         if (await userManager.Users.AnyAsync(x => x.UserName == username, cancellationToken))
         {
             return false;

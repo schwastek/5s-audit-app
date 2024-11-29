@@ -6,28 +6,32 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace Data.Migrations
 {
     [DbContext(typeof(LeanAuditorContext))]
-    [Migration("20220809183918_Initial")]
+    [Migration("20241130211032_Initial")]
     partial class Initial
     {
+        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.8");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
-            modelBuilder.Entity("Api.Domain.Answer", b =>
+            modelBuilder.Entity("Domain.Answer", b =>
                 {
                     b.Property<Guid>("AnswerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AnswerText")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AnswerType")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("AuditId")
@@ -42,13 +46,12 @@ namespace Data.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Answers");
+                    b.ToTable("Answers", (string)null);
                 });
 
-            modelBuilder.Entity("Api.Domain.Audit", b =>
+            modelBuilder.Entity("Domain.Audit", b =>
                 {
                     b.Property<Guid>("AuditId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Area")
@@ -67,13 +70,12 @@ namespace Data.Migrations
 
                     b.HasKey("AuditId");
 
-                    b.ToTable("Audits");
+                    b.ToTable("Audits", (string)null);
                 });
 
-            modelBuilder.Entity("Api.Domain.AuditAction", b =>
+            modelBuilder.Entity("Domain.AuditAction", b =>
                 {
                     b.Property<Guid>("AuditActionId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("AuditId")
@@ -85,30 +87,33 @@ namespace Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsComplete")
-                        .HasColumnType("INTEGER");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(false);
 
                     b.HasKey("AuditActionId");
 
                     b.HasIndex("AuditId");
 
-                    b.ToTable("AuditActions");
+                    b.ToTable("AuditActions", (string)null);
                 });
 
-            modelBuilder.Entity("Api.Domain.Question", b =>
+            modelBuilder.Entity("Domain.Question", b =>
                 {
                     b.Property<Guid>("QuestionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("QuestionText")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("QuestionId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
                 });
 
-            modelBuilder.Entity("Api.Domain.RefreshToken", b =>
+            modelBuilder.Entity("Domain.RefreshToken", b =>
                 {
                     b.Property<int>("RefreshTokenId")
                         .ValueGeneratedOnAdd()
@@ -121,9 +126,11 @@ namespace Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Token")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("RefreshTokenId");
@@ -133,7 +140,7 @@ namespace Data.Migrations
                     b.ToTable("RefreshToken");
                 });
 
-            modelBuilder.Entity("Api.Domain.User", b =>
+            modelBuilder.Entity("Domain.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -197,7 +204,7 @@ namespace Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers");
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -223,7 +230,7 @@ namespace Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("AspNetRoles");
+                    b.ToTable("AspNetRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -246,7 +253,7 @@ namespace Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims");
+                    b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -269,7 +276,7 @@ namespace Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims");
+                    b.ToTable("AspNetUserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -291,7 +298,7 @@ namespace Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins");
+                    b.ToTable("AspNetUserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -306,7 +313,7 @@ namespace Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles");
+                    b.ToTable("AspNetUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -325,40 +332,42 @@ namespace Data.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens");
+                    b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Api.Domain.Answer", b =>
+            modelBuilder.Entity("Domain.Answer", b =>
                 {
-                    b.HasOne("Api.Domain.Audit", null)
+                    b.HasOne("Domain.Audit", null)
                         .WithMany("Answers")
                         .HasForeignKey("AuditId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Api.Domain.Question", "Question")
+                    b.HasOne("Domain.Question", "Question")
                         .WithMany()
                         .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Question");
                 });
 
-            modelBuilder.Entity("Api.Domain.AuditAction", b =>
+            modelBuilder.Entity("Domain.AuditAction", b =>
                 {
-                    b.HasOne("Api.Domain.Audit", null)
+                    b.HasOne("Domain.Audit", null)
                         .WithMany("Actions")
                         .HasForeignKey("AuditId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Api.Domain.RefreshToken", b =>
+            modelBuilder.Entity("Domain.RefreshToken", b =>
                 {
-                    b.HasOne("Api.Domain.User", "User")
+                    b.HasOne("Domain.User", "User")
                         .WithMany("RefreshTokens")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -374,7 +383,7 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Api.Domain.User", null)
+                    b.HasOne("Domain.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -383,7 +392,7 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Api.Domain.User", null)
+                    b.HasOne("Domain.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -398,7 +407,7 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Api.Domain.User", null)
+                    b.HasOne("Domain.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -407,21 +416,21 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Api.Domain.User", null)
+                    b.HasOne("Domain.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Api.Domain.Audit", b =>
+            modelBuilder.Entity("Domain.Audit", b =>
                 {
                     b.Navigation("Actions");
 
                     b.Navigation("Answers");
                 });
 
-            modelBuilder.Entity("Api.Domain.User", b =>
+            modelBuilder.Entity("Domain.User", b =>
                 {
                     b.Navigation("RefreshTokens");
                 });

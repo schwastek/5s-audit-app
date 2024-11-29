@@ -10,10 +10,10 @@ public class LoginRequestValidator : AbstractValidator<LoginRequest>
     {
         RuleFor(r => r.Email)
             .NotEmpty()
-            .WithErrorCode(ErrorCodes.EmailIsRequired);
+            .WithErrorCode(ErrorCodes.Identity.EmailIsRequired);
 
         RuleFor(r => r.Password)
             .NotEmpty()
-            .WithErrorCode(ErrorCodes.PasswordIsRequired);
+            .WithErrorCode(ErrorCodes.Identity.PasswordIsRequired);
     }
 }

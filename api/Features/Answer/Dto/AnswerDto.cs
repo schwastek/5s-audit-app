@@ -24,7 +24,7 @@ public class AnswerDtoMapper :
             AnswerText = src.AnswerText,
             AnswerType = src.AnswerType,
             QuestionId = src.QuestionId,
-            QuestionText = src.Question.QuestionText
+            QuestionText = src.Question!.QuestionText
         };
     }
 

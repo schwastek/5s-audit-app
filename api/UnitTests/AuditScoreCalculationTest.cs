@@ -1,5 +1,5 @@
 ﻿using Domain;
-using System.Collections.Generic;
+using System;
 using Xunit;
 
 namespace UnitTests;
@@ -10,16 +10,28 @@ public class AuditScoreCalculationTest
     public void Score_ShouldBe50()
     {
         // Arrange
-        var answers = new List<Answer>
-        {
-            new Answer { AnswerText = "10" },
-            new Answer { AnswerText = "0" }
-        };
+        var audit = Audit.Create(
+            auditId: Guid.NewGuid(),
+            author: "John",
+            area: "warehouse",
+            startDate: DateTime.Parse("2020-01-25T20:06:38.946Z"),
+            endDate: DateTime.Parse("2020-01-25T20:36:38.000Z")
+        );
 
-        var audit = new Audit
-        {
-            Answers = answers
-        };
+        audit.AddAnswers([
+             Answer.Create(
+                answerId: Guid.NewGuid(),
+                questionId: Guid.NewGuid(),
+                answerText: "10",
+                answerType: "number"
+            ),
+            Answer.Create(
+                answerId: Guid.NewGuid(),
+                questionId: Guid.NewGuid(),
+                answerText: "0",
+                answerType: "number"
+            )
+        ]);
 
         // Act
         audit.CalculateScore();
@@ -32,16 +44,28 @@ public class AuditScoreCalculationTest
     public void Score_ShouldBe100()
     {
         // Arrange
-        var answers = new List<Answer>
-        {
-            new Answer { AnswerText = "5" },
-            new Answer { AnswerText = "5" }
-        };
+        var audit = Audit.Create(
+            auditId: Guid.NewGuid(),
+            author: "John",
+            area: "warehouse",
+            startDate: DateTime.Parse("2020-01-25T20:06:38.946Z"),
+            endDate: DateTime.Parse("2020-01-25T20:36:38.000Z")
+        );
 
-        var audit = new Audit
-        {
-            Answers = answers
-        };
+        audit.AddAnswers([
+             Answer.Create(
+                answerId: Guid.NewGuid(),
+                questionId: Guid.NewGuid(),
+                answerText: "5",
+                answerType: "number"
+            ),
+            Answer.Create(
+                answerId: Guid.NewGuid(),
+                questionId: Guid.NewGuid(),
+                answerText: "5",
+                answerType: "number"
+            )
+        ]);
 
         // Act
         audit.CalculateScore();
@@ -54,16 +78,28 @@ public class AuditScoreCalculationTest
     public void Score_ShouldBe0()
     {
         // Arrange
-        var answers = new List<Answer>
-        {
-            new Answer { AnswerText = "0" },
-            new Answer { AnswerText = "0" }
-        };
+        var audit = Audit.Create(
+            auditId: Guid.NewGuid(),
+            author: "John",
+            area: "warehouse",
+            startDate: DateTime.Parse("2020-01-25T20:06:38.946Z"),
+            endDate: DateTime.Parse("2020-01-25T20:36:38.000Z")
+        );
 
-        var audit = new Audit
-        {
-            Answers = answers
-        };
+        audit.AddAnswers([
+             Answer.Create(
+                answerId: Guid.NewGuid(),
+                questionId: Guid.NewGuid(),
+                answerText: "0",
+                answerType: "number"
+            ),
+            Answer.Create(
+                answerId: Guid.NewGuid(),
+                questionId: Guid.NewGuid(),
+                answerText: "0",
+                answerType: "number"
+            )
+        ]);
 
         // Act
         audit.CalculateScore();

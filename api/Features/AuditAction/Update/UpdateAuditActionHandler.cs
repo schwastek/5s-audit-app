@@ -1,5 +1,4 @@
-﻿using Core.Exceptions;
-using Data.DbContext;
+﻿using Data.DbContext;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,15 +16,12 @@ public sealed class UpdateAuditActionHandler : IRequestHandler<UpdateAuditAction
 
     public async Task Handle(UpdateAuditActionCommand command, CancellationToken cancellationToken)
     {
-        var auditAction = await context.AuditActions.FindAsync(new object?[] { command.ActionId }, cancellationToken: cancellationToken);
+        // Find existing (presence already validated)
+        var auditAction = await context.AuditActions.FindAsync([command.ActionId], cancellationToken);
 
-        if (auditAction is null)
-        {
-            throw new NotFoundException($"Action with ID {command.ActionId} does not exist.");
-        }
-
-        auditAction.Description = command.Description ?? auditAction.Description;
-        auditAction.IsComplete = command.IsComplete;
+        // Update
+        auditAction!.SetCompletionStatus(command.IsComplete);
+        auditAction!.ChangeDescription(command.Description);
 
         await context.SaveChangesAsync(cancellationToken);
     }

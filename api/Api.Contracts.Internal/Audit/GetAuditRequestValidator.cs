@@ -11,6 +11,6 @@ public class GetAuditRequestValidator : CustomAbstractValidator<GetAuditRequest>
     {
         RuleFor(x => x.Id)
             .NotEmpty()
-            .WithErrorCode(ErrorCodes.AuditIdIsRequired);
+            .WithErrorCode(ErrorCodes.Audit.AuditIdIsRequired);
     }
 }

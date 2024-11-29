@@ -11,10 +11,10 @@ public class UpdateAuditActionRequestValidator : CustomAbstractValidator<UpdateA
     {
         RuleFor(x => x.ActionId)
             .NotEmpty()
-            .WithErrorCode(ErrorCodes.ActionIdIsRequired);
+            .WithErrorCode(ErrorCodes.AuditAction.ActionIdIsRequired);
 
         RuleFor(x => x.Description)
             .NotEmpty()
-            .WithErrorCode(ErrorCodes.DescriptionIsRequired);
+            .WithErrorCode(ErrorCodes.AuditAction.DescriptionIsRequired);
     }
 }
