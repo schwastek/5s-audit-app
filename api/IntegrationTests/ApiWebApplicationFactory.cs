@@ -11,7 +11,7 @@ using System;
 
 namespace IntegrationTests;
 
-public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup> where TStartup : class
+public class ApiWebApplicationFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -39,7 +39,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
             {
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<LeanAuditorContext>();
-                var logger = scopedServices.GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
+                var logger = scopedServices.GetRequiredService<ILogger<ApiWebApplicationFactory>>();
 
                 // Seed DB
                 db.Database.EnsureDeleted();
