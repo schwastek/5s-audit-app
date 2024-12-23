@@ -1,13 +1,8 @@
-﻿using Data.DbContext;
-using IntegrationTests.AuthHandlers;
-using IntegrationTests.Helpers;
+﻿using IntegrationTests.AuthHandlers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
 
 namespace IntegrationTests;
 
@@ -32,29 +27,6 @@ public class ApiWebApplicationFactory : WebApplicationFactory<Program>
                     TestAuthHandlerConstants.AuthenticationScheme,
                     options => { }
                 );
-
-            var sp = services.BuildServiceProvider();
-
-            using (var scope = sp.CreateScope())
-            {
-                var scopedServices = scope.ServiceProvider;
-                var db = scopedServices.GetRequiredService<LeanAuditorContext>();
-                var logger = scopedServices.GetRequiredService<ILogger<ApiWebApplicationFactory>>();
-
-                // Seed DB
-                db.Database.EnsureDeleted();
-                db.Database.Migrate();
-
-                try
-                {
-                    Utilities.InitializeDbForTests(db);
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "An error occurred seeding the " +
-                        "database with test messages. Error: {Message}", ex.Message);
-                }
-            }
         });
     }
 }

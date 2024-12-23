@@ -1,17 +1,34 @@
-﻿using IntegrationTests.AuthHandlers;
+﻿using Data.DbContext;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Net.Http;
-using System.Net.Http.Headers;
 
 namespace IntegrationTests;
 
 internal class BaseTestFixture
 {
-    protected HttpClient Client { get; private set; }
+    private IServiceScope? _scope;
+    private LeanAuditorContext? _dbContext;
 
-    public BaseTestFixture()
+    protected ApiWebApplicationFactory Factory { get; private set; } = null!;
+    protected HttpClient Client { get; private set; } = null!;
+    protected IServiceScope Scope { get => _scope ?? throw new InvalidOperationException($"The field '{nameof(_scope)}' has not been initialized."); }
+    protected LeanAuditorContext DbContext { get => _dbContext ?? throw new InvalidOperationException($"The field '{nameof(_dbContext)}' has not been initialized."); }
+
+    [OneTimeSetUp]
+    public void BaseOneTimeSetUp()
     {
-        var factory = new ApiWebApplicationFactory();
-        Client = factory.CreateClient();
-        Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(TestAuthHandlerConstants.AuthenticationScheme);
+        Factory = GlobalTestFixture.Factory;
+        Client = GlobalTestFixture.Client;
+
+        _scope = Factory.Services.CreateScope();
+        _dbContext = _scope.ServiceProvider.GetRequiredService<LeanAuditorContext>();
+    }
+
+    [OneTimeTearDown]
+    public void BaseOneTimeTearDown()
+    {
+        _dbContext?.Dispose();
+        _scope?.Dispose();
     }
 }
