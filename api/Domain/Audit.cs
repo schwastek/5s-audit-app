@@ -20,7 +20,7 @@ public sealed class Audit
     public IReadOnlyCollection<Answer> Answers => answers.AsReadOnly();
 
     private readonly List<AuditAction> actions = [];
-    public IReadOnlyCollection<AuditAction> Actions => actions;
+    public IReadOnlyCollection<AuditAction> Actions => actions.AsReadOnly();
 
     // EF Core supports using parameterized constructors to map entity properties 
     // during materialization (when retrieving data from the database and creating entity instances).
