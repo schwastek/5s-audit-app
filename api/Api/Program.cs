@@ -88,8 +88,13 @@ builder.Services.AddCors(options =>
 // https://docs.microsoft.com/en-us/aspnet/core/security/enforcing-ssl
 builder.Services.AddHsts(options =>
 {
+    // Once a browser receives the HSTS header from a server, it remembers the setting for the specified max-age duration.
+    // During this period, the browser will enforce HTTPS for all requests to the domain,
+    // even if the server stops sending the HSTS header or runs in an environment where HTTPS isn't configured.
     options.MaxAge = TimeSpan.FromDays(365);
+    // The HSTS policy should also apply to all subdomains.
     options.IncludeSubDomains = true;
+    // If preload is set, the browser will always make HTTPS requests, even on the first request.
     options.Preload = true;
 });
 
@@ -106,7 +111,10 @@ app.UseSecurityHeaders();
 
 if (app.Environment.IsProduction())
 {
-    // Set Strict-Transport-Security response header
+    // Only communicate with the server over HTTPS.
+    // The HSTS specification discourages applying HSTS policies to localhost, because the HSTS settings are highly cacheable by browsers.
+    // Once cached, reversing HSTS settings requires manual intervention (clearing browser's cache),
+    // which can disrupt testing with HTTP or switching between different configurations, domains, or ports.
     app.UseHsts();
 }
 
