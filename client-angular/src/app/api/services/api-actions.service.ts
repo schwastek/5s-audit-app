@@ -9,13 +9,13 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { deleteAction } from '../fn/actions/delete-action';
-import { DeleteAction$Params } from '../fn/actions/delete-action';
+import { deleteAuditAction } from '../fn/actions/delete-audit-action';
+import { DeleteAuditAction$Params } from '../fn/actions/delete-audit-action';
 import { saveAuditAction } from '../fn/actions/save-audit-action';
 import { SaveAuditAction$Params } from '../fn/actions/save-audit-action';
 import { ApiSaveAuditActionResponse } from '../models/api-save-audit-action-response';
-import { updateAction } from '../fn/actions/update-action';
-import { UpdateAction$Params } from '../fn/actions/update-action';
+import { updateAuditAction } from '../fn/actions/update-audit-action';
+import { UpdateAuditAction$Params } from '../fn/actions/update-audit-action';
 
 @Injectable({ providedIn: 'root' })
 export class ApiActionsService extends BaseService {
@@ -56,8 +56,8 @@ export class ApiActionsService extends BaseService {
     );
   }
 
-  /** Path part for operation `updateAction()` */
-  static readonly UpdateActionPath = '/api/actions/{actionId}';
+  /** Path part for operation `updateAuditAction()` */
+  static readonly UpdateAuditActionPath = '/api/actions/{auditActionId}';
 
   /**
    * Updates an action.
@@ -65,12 +65,12 @@ export class ApiActionsService extends BaseService {
    *
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateAction()` instead.
+   * To access only the response body, use `updateAuditAction()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  updateAction$Response(params: UpdateAction$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return updateAction(this.http, this.rootUrl, params, context);
+  updateAuditAction$Response(params: UpdateAuditAction$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return updateAuditAction(this.http, this.rootUrl, params, context);
   }
 
   /**
@@ -79,18 +79,18 @@ export class ApiActionsService extends BaseService {
    *
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `updateAction$Response()` instead.
+   * To access the full response (for headers, for example), `updateAuditAction$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  updateAction(params: UpdateAction$Params, context?: HttpContext): Observable<void> {
-    return this.updateAction$Response(params, context).pipe(
+  updateAuditAction(params: UpdateAuditAction$Params, context?: HttpContext): Observable<void> {
+    return this.updateAuditAction$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 
-  /** Path part for operation `deleteAction()` */
-  static readonly DeleteActionPath = '/api/actions/{actionId}';
+  /** Path part for operation `deleteAuditAction()` */
+  static readonly DeleteAuditActionPath = '/api/actions/{auditActionId}';
 
   /**
    * Deletes an action.
@@ -98,12 +98,12 @@ export class ApiActionsService extends BaseService {
    *
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteAction()` instead.
+   * To access only the response body, use `deleteAuditAction()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteAction$Response(params: DeleteAction$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return deleteAction(this.http, this.rootUrl, params, context);
+  deleteAuditAction$Response(params: DeleteAuditAction$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteAuditAction(this.http, this.rootUrl, params, context);
   }
 
   /**
@@ -112,12 +112,12 @@ export class ApiActionsService extends BaseService {
    *
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `deleteAction$Response()` instead.
+   * To access the full response (for headers, for example), `deleteAuditAction$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteAction(params: DeleteAction$Params, context?: HttpContext): Observable<void> {
-    return this.deleteAction$Response(params, context).pipe(
+  deleteAuditAction(params: DeleteAuditAction$Params, context?: HttpContext): Observable<void> {
+    return this.deleteAuditAction$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
     );
   }

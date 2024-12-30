@@ -7,7 +7,7 @@ namespace Api.Contracts.Audit.Requests
     public class ListAuditsRequest : IPageableRequest, IOrderByRequest
     {
         /// <inheritdoc/>
-        public string OrderBy { get; set; } = null!;
+        public string? OrderBy { get; set; }
 
         /// <inheritdoc/>
         public int? PageNumber { get; set; }

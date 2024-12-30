@@ -4,10 +4,10 @@ import { AuditService } from '../audit.service';
 import { Area } from '../models/area';
 import { firstValueFrom } from 'rxjs';
 import { RatingComponent } from '../../shared/components/rating/rating.component';
-import { ApiAnswerForCreationDto, ApiQuestionDto, ApiSaveAuditActionRequest } from '../../api/models';
+import { ApiAnswerForCreationDto, ApiQuestionDto } from '../../api/models';
 import { v4 as uuidv4 } from 'uuid';
 import { Router } from '@angular/router';
-import { AuditActionComponent } from '../audit-action/audit-action.component';
+import { AuditActionComponent, SaveOrUpdateAuditAction } from '../audit-action/audit-action.component';
 import { LoadingButtonDirective } from '../../shared/components/loading-button/loading-button.directive';
 
 @Component({
@@ -28,7 +28,7 @@ export class AuditNewComponent implements OnInit {
   areas: Area[] | null = null;
   questions: ApiQuestionDto[] | null = null;
   private answers: ApiAnswerForCreationDto[] = [];
-  auditActions = signal<ApiSaveAuditActionRequest[]>([]);
+  auditActions = signal<SaveOrUpdateAuditAction[]>([]);
 
   // Form
   area = new FormControl<string>('assembly', { validators: [Validators.required], nonNullable: true });

@@ -8,7 +8,7 @@ public sealed class DeleteAuditActionCommandValidator : AbstractValidator<Delete
 {
     public DeleteAuditActionCommandValidator(IAuditActionBusinessRules auditActionBusinessRules)
     {
-        RuleFor(x => x.ActionId)
+        RuleFor(x => x.AuditActionId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .WithErrorCode(ErrorCodes.AuditAction.ActionIdIsRequired)

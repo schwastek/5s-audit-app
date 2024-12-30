@@ -5,5 +5,5 @@ namespace Features.AuditAction.Delete;
 
 public sealed record DeleteAuditActionCommand : IRequest
 {
-    public Guid ActionId { get; set; }
+    public Guid AuditActionId { get; set; }
 }

@@ -8,6 +8,8 @@ import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Valida
 import { LoadingButtonDirective } from '../../shared/components/loading-button/loading-button.directive';
 import { ValidationMessagesComponent } from '../../shared/components/validation-messages/validation-messages.component';
 
+export type SaveOrUpdateAuditAction = ApiSaveAuditActionRequest & ApiUpdateAuditActionRequest;
+
 @Component({
   selector: 'app-audit-action',
   standalone: true,
@@ -19,11 +21,10 @@ import { ValidationMessagesComponent } from '../../shared/components/validation-
   templateUrl: './audit-action.component.html'
 })
 export class AuditActionComponent {
-
   // Inputs
   isEditForm = input.required<boolean>();
   auditId = input.required<string>();
-  actions = model<ApiSaveAuditActionRequest[]>([]);
+  actions = model<SaveOrUpdateAuditAction[]>([]);
 
   // Form - Configuration
   readonly descriptionMaxLength = 280;
@@ -55,8 +56,8 @@ export class AuditActionComponent {
 
     this.isSaving.set(true);
 
-    let action: ApiSaveAuditActionRequest = {
-      actionId: uuidv4(),
+    let action: SaveOrUpdateAuditAction = {
+      auditActionId: uuidv4(),
       auditId: this.auditId(),
       description: this.description.value,
       isComplete: false
@@ -78,64 +79,62 @@ export class AuditActionComponent {
     form.resetForm();
   }
 
-  async onDelete(actionId: string) {
-    this.updateStatus(actionId, true);
+  async onDelete(auditActionId: string) {
+    this.updateStatus(auditActionId, true);
 
     if (this.isEditForm()) {
-      await firstValueFrom(this.auditService.deleteAuditAction(actionId));
+      await firstValueFrom(this.auditService.deleteAuditAction(auditActionId));
     }
 
     this.actions.update((actions) => {
-      return actions.filter((action) => action.actionId !== actionId);
+      return actions.filter((action) => action.auditActionId !== auditActionId);
     });
 
-    this.updateStatus(actionId, false);
+    this.updateStatus(auditActionId, false);
   }
 
-  async onComplete(action: ApiSaveAuditActionRequest) {
-    this.updateStatus(action.actionId, true);
+  async onComplete(action: SaveOrUpdateAuditAction) {
+    this.updateStatus(action.auditActionId, true);
 
     const request: ApiUpdateAuditActionRequest = {
-      actionId: action.actionId,
       description: action.description,
       isComplete: true
     };
 
-    await firstValueFrom(this.auditService.updateAuditAction(request));
+    await firstValueFrom(this.auditService.updateAuditAction(action.auditActionId, request));
 
     this.actions.update((actions) => {
-      const i = actions.findIndex((a) => a.actionId === action.actionId);
+      const i = actions.findIndex((a) => a.auditActionId === action.auditActionId);
       const updated = { ...actions[i], isComplete: true };
 
       return [...actions.slice(0, i), updated, ...actions.slice(i + 1)];
     });
 
-    this.updateStatus(action.actionId, false);
+    this.updateStatus(action.auditActionId, false);
   }
 
-  async onIncomplete(action: ApiSaveAuditActionRequest) {
-    this.updateStatus(action.actionId, true);
+  async onIncomplete(action: SaveOrUpdateAuditAction) {
+    this.updateStatus(action.auditActionId, true);
 
     const request: ApiUpdateAuditActionRequest = {
-      actionId: action.actionId,
       description: action.description,
       isComplete: false
     };
 
-    await firstValueFrom(this.auditService.updateAuditAction(request));
+    await firstValueFrom(this.auditService.updateAuditAction(action.auditActionId, request));
 
     this.actions.update((actions) => {
-      const i = actions.findIndex((a) => a.actionId === action.actionId);
+      const i = actions.findIndex((a) => a.auditActionId === action.auditActionId);
       const updated = { ...actions[i], isComplete: false };
 
       return [...actions.slice(0, i), updated, ...actions.slice(i + 1)];
     });
 
-    this.updateStatus(action.actionId, false);
+    this.updateStatus(action.auditActionId, false);
   }
 
-  isUpdating(actionId: string) {
-    return this.isUpdatingMap().get(actionId) ?? false;
+  isUpdating(auditActionId: string) {
+    return this.isUpdatingMap().get(auditActionId) ?? false;
   }
 
   private updateStatus(actionId: string, status: boolean) {

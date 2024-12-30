@@ -8,8 +8,18 @@ public sealed class UpdateAuditActionCommandValidator : AbstractValidator<Update
 {
     public UpdateAuditActionCommandValidator(IAuditActionBusinessRules auditActionBusinessRules)
     {
-        RuleFor(x => x.ActionId)
-            .MustAsync(auditActionBusinessRules.AuditActionExists)
-            .WithErrorCode(ErrorCodes.AuditAction.DoesNotExist);
+        RuleFor(x => x.AuditActionId)
+            .NotEmpty()
+            .WithErrorCode(ErrorCodes.AuditAction.ActionIdIsRequired)
+            .DependentRules(() =>
+            {
+                RuleFor(x => x.AuditActionId)
+                    .MustAsync(auditActionBusinessRules.AuditActionExists)
+                    .WithErrorCode(ErrorCodes.AuditAction.DoesNotExist);
+            });
+
+        RuleFor(x => x.Description)
+            .NotEmpty()
+            .WithErrorCode(ErrorCodes.AuditAction.DescriptionIsRequired);
     }
 }

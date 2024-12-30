@@ -17,7 +17,7 @@ public sealed class DeleteAuditActionHandler : IRequestHandler<DeleteAuditAction
     public async Task Handle(DeleteAuditActionCommand command, CancellationToken cancellationToken)
     {
         // Find existing (presence already validated)
-        var auditAction = await context.AuditActions.FindAsync([command.ActionId], cancellationToken);
+        var auditAction = await context.AuditActions.FindAsync([command.AuditActionId], cancellationToken);
         context.Remove(auditAction!);
         await context.SaveChangesAsync(cancellationToken);
     }

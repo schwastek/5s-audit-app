@@ -47,9 +47,8 @@ internal class SaveAuditActionTestFixture : BaseTestFixture
         var request = new SaveAuditActionRequest()
         {
             AuditId = _audit!.AuditId,
-            ActionId = Guid.NewGuid(),
-            Description = TestValueGenerator.GenerateString(AuditAction.DescriptionMaxLength),
-            IsComplete = false
+            AuditActionId = Guid.NewGuid(),
+            Description = TestValueGenerator.GenerateString(AuditAction.DescriptionMaxLength)
         };
 
         var response = await Client.PostAsJsonAsync($"api/actions", request);
@@ -62,9 +61,9 @@ internal class SaveAuditActionTestFixture : BaseTestFixture
         audit!.Actions.Should().HaveCount(1);
         var auditAction = audit!.Actions.First();
         auditAction.AuditId.Should().Be(request.AuditId);
-        auditAction.AuditActionId.Should().Be(request.ActionId);
+        auditAction.AuditActionId.Should().Be(request.AuditActionId);
         auditAction.Description.Should().Be(request.Description);
-        auditAction.IsComplete.Should().Be(request.IsComplete);
+        auditAction.IsComplete.Should().BeFalse();
     }
 
     [Test]
@@ -73,9 +72,8 @@ internal class SaveAuditActionTestFixture : BaseTestFixture
         var request = new SaveAuditActionRequest()
         {
             AuditId = Guid.NewGuid(),
-            ActionId = Guid.NewGuid(),
-            Description = TestValueGenerator.GenerateString(),
-            IsComplete = false
+            AuditActionId = Guid.NewGuid(),
+            Description = TestValueGenerator.GenerateString()
         };
 
         var response = await Client.PostAsJsonAsync($"api/actions", request);
@@ -98,7 +96,8 @@ internal class SaveAuditActionTestFixture : BaseTestFixture
         content.Should().NotBeNull();
         content!.Errors.Should().BeEquivalentTo([
             ErrorCodes.AuditAction.ActionIdIsRequired,
-            ErrorCodes.Audit.AuditIdIsRequired
+            ErrorCodes.Audit.AuditIdIsRequired,
+            ErrorCodes.AuditAction.DescriptionIsRequired
         ]);
     }
 
@@ -108,9 +107,8 @@ internal class SaveAuditActionTestFixture : BaseTestFixture
         var request = new SaveAuditActionRequest()
         {
             AuditId = _audit!.AuditId,
-            ActionId = Guid.NewGuid(),
-            Description = TestValueGenerator.GenerateString(AuditAction.DescriptionMaxLength + 1),
-            IsComplete = false
+            AuditActionId = Guid.NewGuid(),
+            Description = TestValueGenerator.GenerateString(AuditAction.DescriptionMaxLength + 1)
         };
 
         var response = await Client.PostAsJsonAsync($"api/actions", request);
@@ -119,24 +117,6 @@ internal class SaveAuditActionTestFixture : BaseTestFixture
 
         content.Should().NotBeNull();
         content!.Detail.Should().Be(ErrorCodes.AuditAction.DescriptionIsTooLong);
-    }
-
-    [Test]
-    public async Task Should_throw_error_when_description_is_missing()
-    {
-        var request = new SaveAuditActionRequest()
-        {
-            AuditId = _audit!.AuditId,
-            ActionId = Guid.NewGuid(),
-            IsComplete = false
-        };
-
-        var response = await Client.PostAsJsonAsync($"api/actions", request);
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        var content = await response.Content.ReadFromJsonAsync<ProblemDetails>();
-
-        content.Should().NotBeNull();
-        content!.Detail.Should().Be(ErrorCodes.AuditAction.DescriptionIsRequired);
     }
 
     private async Task<Audit?> GetAudit(Guid id)

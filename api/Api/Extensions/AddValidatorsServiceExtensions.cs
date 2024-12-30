@@ -1,9 +1,7 @@
 ﻿using Api.Contracts.Audit.Requests;
-using Api.Contracts.AuditAction.Requests;
 using Api.Contracts.Identity.Requests;
 using Api.Contracts.Internal.Account;
 using Api.Contracts.Internal.Audit;
-using Api.Contracts.Internal.AuditAction;
 using Core.ValidatorService;
 using Features.Account.BusinessRules;
 using Features.Audit.BusinessRules;
@@ -43,12 +41,10 @@ public static class AddValidatorsServiceExtensions
     {
         services.AddScoped<IAuditActionBusinessRules, AuditActionBusinessRules>();
 
-        services.AddScoped<IValidator<SaveAuditActionRequest>, SaveAuditActionRequestValidator>();
         services.AddScoped<IValidator<SaveAuditActionCommand>, SaveAuditActionCommandValidator>();
 
         services.AddScoped<IValidator<DeleteAuditActionCommand>, DeleteAuditActionCommandValidator>();
 
-        services.AddScoped<IValidator<UpdateAuditActionRequest>, UpdateAuditActionRequestValidator>();
         services.AddScoped<IValidator<UpdateAuditActionCommand>, UpdateAuditActionCommandValidator>();
     }
 

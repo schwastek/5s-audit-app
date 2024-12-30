@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export interface ApiAuditActionDto {
-  actionId: string;
+  auditActionId: string;
   auditId: string;
   description: string;
   isComplete: boolean;

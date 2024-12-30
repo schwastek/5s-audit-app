@@ -10,7 +10,6 @@ using Features.Audit.List;
 using Features.Audit.Save;
 using Features.AuditAction.Dto;
 using Features.AuditAction.Save;
-using Features.AuditAction.Update;
 using Features.Question.Dto;
 using Features.Question.List;
 using Microsoft.Extensions.DependencyInjection;
@@ -71,8 +70,6 @@ public static class AddMappersServiceExtensions
         // CQRS
         services.AddSingleton<IMapper<SaveAuditActionRequest, SaveAuditActionCommand>, SaveAuditActionCommandMapper>();
         services.AddSingleton<IMapper<SaveAuditActionCommandResult, SaveAuditActionResponse>, SaveAuditActionCommandMapper>();
-
-        services.AddSingleton<IMapper<UpdateAuditActionRequest, UpdateAuditActionCommand>, UpdateAuditActionCommandMapper>();
     }
 
     private static void AddQuestionMappers(IServiceCollection services)

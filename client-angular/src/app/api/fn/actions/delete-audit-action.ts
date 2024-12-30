@@ -7,14 +7,14 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface DeleteAction$Params {
-  actionId: string;
+export interface DeleteAuditAction$Params {
+  auditActionId: string;
 }
 
-export function deleteAction(http: HttpClient, rootUrl: string, params: DeleteAction$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, deleteAction.PATH, 'delete');
+export function deleteAuditAction(http: HttpClient, rootUrl: string, params: DeleteAuditAction$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, deleteAuditAction.PATH, 'delete');
   if (params) {
-    rb.path('actionId', params.actionId, {});
+    rb.path('auditActionId', params.auditActionId, {});
   }
 
   return http.request(
@@ -27,4 +27,4 @@ export function deleteAction(http: HttpClient, rootUrl: string, params: DeleteAc
   );
 }
 
-deleteAction.PATH = '/api/actions/{actionId}';
+deleteAuditAction.PATH = '/api/actions/{auditActionId}';

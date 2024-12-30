@@ -77,11 +77,11 @@ export class AuditService {
     return this.apiActionService.saveAuditAction({ body: auditAction });
   }
 
-  updateAuditAction(auditAction: ApiUpdateAuditActionRequest) {
-    return this.apiActionService.updateAction({ actionId: auditAction.actionId, body: auditAction });
+  updateAuditAction(auditActionId: string, auditAction: ApiUpdateAuditActionRequest) {
+    return this.apiActionService.updateAuditAction({ auditActionId, body: auditAction });
   }
 
-  deleteAuditAction(actionId: string) {
-    return this.apiActionService.deleteAction({ actionId });
+  deleteAuditAction(auditActionId: string) {
+    return this.apiActionService.deleteAuditAction({ auditActionId });
   }
 }

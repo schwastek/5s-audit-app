@@ -43,7 +43,6 @@ internal sealed class SaveAuditTestFixture : BaseTestFixture
     public async Task Should_save_audit()
     {
         // Arrange
-        var auditId = Guid.NewGuid();
         var answers = new List<AnswerForCreationDto>(1)
         {
             new()
@@ -58,15 +57,13 @@ internal sealed class SaveAuditTestFixture : BaseTestFixture
         {
             new()
             {
-                AuditId = auditId,
-                ActionId = Guid.NewGuid(),
-                Description = TestValueGenerator.GenerateString(),
-                IsComplete = false
+                AuditActionId = Guid.NewGuid(),
+                Description = TestValueGenerator.GenerateString()
             }
         };
         var request = new SaveAuditRequest()
         {
-            AuditId = auditId,
+            AuditId = Guid.NewGuid(),
             Author = TestValueGenerator.GenerateString(),
             Area = TestValueGenerator.GenerateString(),
             StartDate = DateTime.UtcNow,
@@ -82,10 +79,10 @@ internal sealed class SaveAuditTestFixture : BaseTestFixture
 
         // Assert
         content.Should().NotBeNull();
-        content!.AuditId.Should().Be(auditId);
+        content!.AuditId.Should().Be(request.AuditId);
 
         _audit = await DbContext.Audits
-            .Where(x => x.AuditId.Equals(auditId))
+            .Where(x => x.AuditId.Equals(request.AuditId))
             .AsNoTracking()
             .Include(x => x.Answers)
             .Include(x => x.Actions)
@@ -103,10 +100,8 @@ internal sealed class SaveAuditTestFixture : BaseTestFixture
         // Map to domain model
         var expectedActions = request.Actions.Select(x => new
         {
-            AuditActionId = x.ActionId,
-            AuditId = x.AuditId,
-            Description = x.Description,
-            IsComplete = x.IsComplete
+            AuditActionId = x.AuditActionId,
+            Description = x.Description
         });
         _audit!.Actions.Should().BeEquivalentTo(expectedActions);
     }

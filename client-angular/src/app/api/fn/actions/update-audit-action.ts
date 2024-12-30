@@ -8,15 +8,15 @@ import { RequestBuilder } from '../../request-builder';
 
 import { ApiUpdateAuditActionRequest } from '../../models/api-update-audit-action-request';
 
-export interface UpdateAction$Params {
-  actionId: string;
+export interface UpdateAuditAction$Params {
+  auditActionId: string;
       body?: ApiUpdateAuditActionRequest
 }
 
-export function updateAction(http: HttpClient, rootUrl: string, params: UpdateAction$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, updateAction.PATH, 'put');
+export function updateAuditAction(http: HttpClient, rootUrl: string, params: UpdateAuditAction$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, updateAuditAction.PATH, 'put');
   if (params) {
-    rb.path('actionId', params.actionId, {});
+    rb.path('auditActionId', params.auditActionId, {});
     rb.body(params.body, 'application/*+json');
   }
 
@@ -30,4 +30,4 @@ export function updateAction(http: HttpClient, rootUrl: string, params: UpdateAc
   );
 }
 
-updateAction.PATH = '/api/actions/{actionId}';
+updateAuditAction.PATH = '/api/actions/{auditActionId}';

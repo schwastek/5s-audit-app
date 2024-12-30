@@ -28,7 +28,7 @@ public sealed class SaveAuditActionCommandHandler : IRequestHandler<SaveAuditAct
 
         // Create & add
         var auditAction = Domain.AuditAction.Create(
-            auditActionId: command.ActionId,
+            auditActionId: command.AuditActionId,
             description: command.Description
         );
         audit!.AddActions(auditAction);

@@ -5,10 +5,8 @@ namespace Features.AuditAction.Dto;
 
 public sealed record AuditActionForCreationDto
 {
-    public required Guid AuditId { get; init; }
-    public required Guid ActionId { get; init; }
+    public required Guid AuditActionId { get; init; }
     public required string Description { get; init; }
-    public required bool IsComplete { get; set; }
 }
 
 public class AuditActionForCreationDtoMapper :
@@ -18,10 +16,8 @@ public class AuditActionForCreationDtoMapper :
     {
         return new AuditActionForCreationDto()
         {
-            ActionId = src.ActionId,
-            AuditId = src.AuditId,
-            Description = src.Description,
-            IsComplete = src.IsComplete
+            AuditActionId = src.AuditActionId,
+            Description = src.Description
         };
     }
 }

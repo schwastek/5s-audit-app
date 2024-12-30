@@ -9,9 +9,8 @@ namespace Features.AuditAction.Save;
 public sealed record SaveAuditActionCommand : IRequest<SaveAuditActionCommandResult>
 {
     public required Guid AuditId { get; init; }
-    public required Guid ActionId { get; init; }
+    public required Guid AuditActionId { get; init; }
     public required string Description { get; init; }
-    public required bool IsComplete { get; set; }
 }
 
 public sealed record SaveAuditActionCommandResult
@@ -35,9 +34,8 @@ public class SaveAuditActionCommandMapper :
         return new SaveAuditActionCommand()
         {
             AuditId = src.AuditId,
-            ActionId = src.ActionId,
-            Description = src.Description!,
-            IsComplete = src.IsComplete
+            AuditActionId = src.AuditActionId,
+            Description = src.Description!
         };
     }
 

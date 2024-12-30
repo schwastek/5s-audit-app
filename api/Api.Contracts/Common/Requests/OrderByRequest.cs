@@ -3,6 +3,6 @@
     public interface IOrderByRequest
     {
         /// <example>author asc, created desc</example>
-        public string OrderBy { get; set; }
+        public string? OrderBy { get; set; }
     }
 }

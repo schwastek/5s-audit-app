@@ -17,7 +17,7 @@ public sealed class UpdateAuditActionHandler : IRequestHandler<UpdateAuditAction
     public async Task Handle(UpdateAuditActionCommand command, CancellationToken cancellationToken)
     {
         // Find existing (presence already validated)
-        var auditAction = await context.AuditActions.FindAsync([command.ActionId], cancellationToken);
+        var auditAction = await context.AuditActions.FindAsync([command.AuditActionId], cancellationToken);
 
         // Update
         auditAction!.SetCompletionStatus(command.IsComplete);

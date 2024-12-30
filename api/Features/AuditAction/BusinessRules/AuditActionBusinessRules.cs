@@ -9,7 +9,7 @@ namespace Features.AuditAction.BusinessRules;
 public interface IAuditActionBusinessRules
 {
     public int DescriptionMaxLength { get; }
-    public Task<bool> AuditActionExists(Guid actionId, CancellationToken cancellationToken);
+    public Task<bool> AuditActionExists(Guid auditActionId, CancellationToken cancellationToken);
 }
 
 public class AuditActionBusinessRules : IAuditActionBusinessRules
@@ -23,14 +23,14 @@ public class AuditActionBusinessRules : IAuditActionBusinessRules
         this.context = context;
     }
 
-    public async Task<bool> AuditActionExists(Guid actionId, CancellationToken cancellationToken)
+    public async Task<bool> AuditActionExists(Guid auditActionId, CancellationToken cancellationToken)
     {
-        if (actionId == Guid.Empty)
+        if (auditActionId == Guid.Empty)
         {
             return false;
         }
 
-        var result = await context.AuditActions.AnyAsync(x => x.AuditActionId == actionId, cancellationToken);
+        var result = await context.AuditActions.AnyAsync(x => x.AuditActionId == auditActionId, cancellationToken);
 
         return result;
     }

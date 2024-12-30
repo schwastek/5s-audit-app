@@ -5,7 +5,7 @@ namespace Features.AuditAction.Dto;
 
 public sealed record AuditActionDto
 {
-    public required Guid ActionId { get; set; }
+    public required Guid AuditActionId { get; set; }
     public required Guid AuditId { get; set; }
     public required string Description { get; set; }
     public required bool IsComplete { get; set; }
@@ -19,7 +19,7 @@ public class AuditActionDtoMapper :
     {
         return new AuditActionDto()
         {
-            ActionId = src.AuditActionId,
+            AuditActionId = src.AuditActionId,
             AuditId = src.AuditId,
             Description = src.Description,
             IsComplete = src.IsComplete
@@ -30,7 +30,7 @@ public class AuditActionDtoMapper :
     {
         return new Api.Contracts.AuditAction.Dto.AuditActionDto()
         {
-            ActionId = src.ActionId,
+            AuditActionId = src.AuditActionId,
             AuditId = src.AuditId,
             Description = src.Description,
             IsComplete = src.IsComplete

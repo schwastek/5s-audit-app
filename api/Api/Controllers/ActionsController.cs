@@ -1,7 +1,6 @@
 ﻿using Api.Contracts.AuditAction.Requests;
 using Api.Contracts.Common;
 using Core.MappingService;
-using Core.ValidatorService;
 using Features.AuditAction.Delete;
 using Features.AuditAction.Save;
 using Features.AuditAction.Update;
@@ -21,17 +20,14 @@ public class ActionsController : ControllerBase
 {
     private readonly ISender sender;
     private readonly IMappingService mapper;
-    private readonly IValidatorService validator;
 
     public ActionsController(
         ISender sender,
-        IMappingService mapper,
-        IValidatorService validator
+        IMappingService mapper
     )
     {
         this.sender = sender;
         this.mapper = mapper;
-        this.validator = validator;
     }
 
     /// <summary>
@@ -46,7 +42,6 @@ public class ActionsController : ControllerBase
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SaveAuditAction([FromBody] SaveAuditActionRequest request)
     {
-        await validator.ValidateAndThrowAsync(request);
         var command = mapper.Map<SaveAuditActionRequest, SaveAuditActionCommand>(request);
         var result = await sender.Send(command);
         var response = mapper.Map<SaveAuditActionCommandResult, SaveAuditActionResponse>(result);
@@ -57,15 +52,19 @@ public class ActionsController : ControllerBase
     /// <summary>
     /// Deletes an action
     /// </summary>
-    /// <param name="actionId" example="ac1a0251-46cf-452b-9911-cfc998ea41a9"></param>
+    /// <param name="auditActionId" example="ac1a0251-46cf-452b-9911-cfc998ea41a9"></param>
     /// <response code="204">The action has been deleted</response>
     /// <response code="404">The action is not found</response>
-    [HttpDelete("{actionId}")]
+    [HttpDelete("{auditActionId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteAuditAction([FromRoute] Guid actionId)
+    public async Task<IActionResult> DeleteAuditAction([FromRoute] Guid auditActionId)
     {
-        await sender.Send(new DeleteAuditActionCommand { ActionId = actionId });
+        var command = new DeleteAuditActionCommand
+        {
+            AuditActionId = auditActionId
+        };
+        await sender.Send(command);
 
         return NoContent();
     }
@@ -73,18 +72,21 @@ public class ActionsController : ControllerBase
     /// <summary>
     /// Updates an action
     /// </summary>
-    /// <param name="actionId" example="ac1a0251-46cf-452b-9911-cfc998ea41a9"></param>
+    /// <param name="auditActionId" example="ac1a0251-46cf-452b-9911-cfc998ea41a9"></param>
     /// <param name="request"></param>
     /// <response code="204">The action has been updated</response>
     /// <response code="404">The action is not found</response>
-    [HttpPut("{actionId}")]
+    [HttpPut("{auditActionId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateAuditAction([FromRoute] Guid actionId, [FromBody] UpdateAuditActionRequest request)
+    public async Task<IActionResult> UpdateAuditAction([FromRoute] Guid auditActionId, [FromBody] UpdateAuditActionRequest request)
     {
-        request.ActionId = actionId;
-        await validator.ValidateAndThrowAsync(request);
-        var command = mapper.Map<UpdateAuditActionRequest, UpdateAuditActionCommand>(request);
+        var command = new UpdateAuditActionCommand()
+        {
+            AuditActionId = auditActionId,
+            Description = request.Description,
+            IsComplete = request.IsComplete
+        };
         await sender.Send(command);
 
         return NoContent();
