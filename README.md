@@ -41,24 +41,24 @@ git --version
 
 ```sh
 node --version
-# => v16.13.0
+# => v20.11.1
 
 npm --version
-# => 8.1.3
+# => 10.2.4
 ```
 
 * [.NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet)
 
 ```sh
 dotnet --version
-# => 6.0.407
+# => 8.0.111
 ```
 
 * [EF Core CLI tools](https://docs.microsoft.com/en-us/ef/core/cli/dotnet)
 
 ```sh
 dotnet ef --version
-# => 7.0.3
+# => 9.0.0
 ```
 
 ### Installation
@@ -76,6 +76,11 @@ npm clean-install
 ```sh
 cd client-angular
 npm clean-install
+```
+4. Generate SSL certificate for Angular local development
+```sh
+cd client-angular/ssl
+dotnet dev-certs https --export-path ./certificate.pem --no-password --trust --format PEM
 ```
 
 ### Running application
