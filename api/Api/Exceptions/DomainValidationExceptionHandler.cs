@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Api.Exceptions;
 
-public class InvalidEntityExceptionHandler : IExceptionHandler
+public class DomainValidationExceptionHandler : IExceptionHandler
 {
     private readonly IProblemDetailsService problemDetailsService;
 
-    public InvalidEntityExceptionHandler(IProblemDetailsService problemDetailsService)
+    public DomainValidationExceptionHandler(IProblemDetailsService problemDetailsService)
     {
         this.problemDetailsService = problemDetailsService;
     }
@@ -20,21 +20,22 @@ public class InvalidEntityExceptionHandler : IExceptionHandler
         Exception exception,
         CancellationToken cancellationToken)
     {
-        if (exception is not Domain.Exceptions.InvalidEntityException invalidEntityException)
+        if (exception is not Domain.Exceptions.DomainValidationException domainValidationException)
         {
             return false;
         }
 
         httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+        var problemDetails = new CustomValidationProblemDetails()
+        {
+            Errors = domainValidationException.Errors
+        };
+
         return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
         {
             HttpContext = httpContext,
-            ProblemDetails =
-            {
-                Type = "https://datatracker.ietf.org/doc/html/rfc9110#section-15.5.1",
-                Title = "Invalid domain entity state",
-                Detail = invalidEntityException.Message
-            }
+            ProblemDetails = problemDetails
         });
     }
 }

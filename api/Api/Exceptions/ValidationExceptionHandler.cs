@@ -31,9 +31,6 @@ public class ValidationExceptionHandler : IExceptionHandler
 
         var problemDetails = new CustomValidationProblemDetails()
         {
-            Type = "https://datatracker.ietf.org/doc/html/rfc9110#section-15.5.1",
-            Title = "One or more validation errors occurred",
-            Detail = "See the 'errors' property for a list of specific error codes",
             Errors = GetValidationErrors(validationException.Errors)
         };
 

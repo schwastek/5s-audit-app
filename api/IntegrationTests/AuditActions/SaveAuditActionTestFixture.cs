@@ -3,7 +3,6 @@ using Api.Exceptions;
 using Domain;
 using FluentAssertions;
 using IntegrationTests.Helpers;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -113,10 +112,10 @@ internal class SaveAuditActionTestFixture : BaseTestFixture
 
         var response = await Client.PostAsJsonAsync($"api/actions", request);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        var content = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+        var content = await response.Content.ReadFromJsonAsync<CustomValidationProblemDetails>();
 
         content.Should().NotBeNull();
-        content!.Detail.Should().Be(ErrorCodes.AuditAction.DescriptionIsTooLong);
+        content!.Errors.Should().BeEquivalentTo([ErrorCodes.AuditAction.DescriptionIsTooLong]);
     }
 
     private async Task<Audit?> GetAudit(Guid id)

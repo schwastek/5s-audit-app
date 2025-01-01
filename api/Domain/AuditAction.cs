@@ -1,5 +1,7 @@
 ﻿using Domain.Exceptions;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Domain;
 
@@ -23,16 +25,8 @@ public sealed class AuditAction
 
     public static AuditAction Create(Guid auditActionId, string description)
     {
-        if (string.IsNullOrWhiteSpace(description))
-        {
-            throw new InvalidEntityException(ErrorCodes.AuditAction.DescriptionIsRequired);
-        }
 
-        if (description.Length > DescriptionMaxLength)
-        {
-            throw new InvalidEntityException(ErrorCodes.AuditAction.DescriptionIsTooLong);
-        }
-
+        ValidateDescription(description);
         var auditAction = new AuditAction(auditActionId, description, isComplete: false);
 
         return auditAction;
@@ -62,16 +56,27 @@ public sealed class AuditAction
 
     public void ChangeDescription(string description)
     {
+        ValidateDescription(description);
+        Description = description;
+    }
+
+    private static void ValidateDescription(string description)
+    {
+        var errors = new List<string>();
+
         if (string.IsNullOrWhiteSpace(description))
         {
-            throw new InvalidEntityException(ErrorCodes.AuditAction.DescriptionIsRequired);
+            errors.Add(ErrorCodes.AuditAction.DescriptionIsRequired);
         }
 
         if (description.Length > DescriptionMaxLength)
         {
-            throw new InvalidEntityException(ErrorCodes.AuditAction.DescriptionIsTooLong);
+            errors.Add(ErrorCodes.AuditAction.DescriptionIsTooLong);
         }
 
-        Description = description;
+        if (errors.Any())
+        {
+            throw new DomainValidationException(errors);
+        }
     }
 }
