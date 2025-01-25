@@ -1,7 +1,6 @@
 ﻿using Api.Contracts.Audit.Requests;
 using Core.OrderByService;
 using Domain;
-using FluentAssertions;
 using IntegrationTests.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -39,7 +38,6 @@ internal sealed class ListAuditsTestFixture : BaseTestFixture
     [OneTimeTearDown]
     public async Task OneTimeTearDown()
     {
-        // TODO: Add extension method for removing.
         if (_audit1 is not null) DbContext.Audits.Remove(_audit1);
         if (_audit2 is not null) DbContext.Audits.Remove(_audit2);
         if (_audit3 is not null) DbContext.Audits.Remove(_audit3);
@@ -53,12 +51,18 @@ internal sealed class ListAuditsTestFixture : BaseTestFixture
     {
         var response = await Client.GetAsync($"api/audits");
         response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadFromJsonAsync<ListAuditsResponse>();
 
-        content.Should().NotBeNull();
-        content!.Items.FirstOrDefault(x => x.AuditId.Equals(_audit1!.AuditId)).Should().NotBeNull();
-        content!.Items.FirstOrDefault(x => x.AuditId.Equals(_audit2!.AuditId)).Should().NotBeNull();
-        content!.Items.FirstOrDefault(x => x.AuditId.Equals(_audit3!.AuditId)).Should().NotBeNull();
+        var content = await response.Content.ReadFromJsonAsync<ListAuditsResponse>();
+        Assert.That(content, Is.Not.Null);
+
+        var audit1 = content.Items.FirstOrDefault(x => x.AuditId.Equals(_audit1!.AuditId));
+        Assert.That(audit1, Is.Not.Null);
+
+        var audit2 = content.Items.FirstOrDefault(x => x.AuditId.Equals(_audit2!.AuditId));
+        Assert.That(audit2, Is.Not.Null);
+
+        var audit3 = content.Items.FirstOrDefault(x => x.AuditId.Equals(_audit3!.AuditId));
+        Assert.That(audit3, Is.Not.Null);
     }
 
     [Test]
@@ -68,13 +72,13 @@ internal sealed class ListAuditsTestFixture : BaseTestFixture
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadFromJsonAsync<ListAuditsResponse>();
 
-        content.Should().NotBeNull();
-        content!.Items.Should().HaveCount(1);
-        content!.Metadata.CurrentPage.Should().Be(3);
-        content!.Metadata.TotalPages.Should().Be(3);
-        content!.Metadata.TotalCount.Should().Be(3);
-        content!.Metadata.HasNextPage.Should().BeFalse();
-        content!.Metadata.HasPreviousPage.Should().BeTrue();
+        Assert.That(content, Is.Not.Null);
+        Assert.That(content.Items, Has.Count.EqualTo(1));
+        Assert.That(content.Metadata.CurrentPage, Is.EqualTo(3));
+        Assert.That(content.Metadata.TotalPages, Is.EqualTo(3));
+        Assert.That(content.Metadata.TotalCount, Is.EqualTo(3));
+        Assert.That(content.Metadata.HasNextPage, Is.False);
+        Assert.That(content.Metadata.HasPreviousPage, Is.True);
     }
 
     [Test]
@@ -83,28 +87,28 @@ internal sealed class ListAuditsTestFixture : BaseTestFixture
         // Sort by author descending
         var response1 = await Client.GetAsync($"api/audits?orderBy=author desc");
         response1.EnsureSuccessStatusCode();
-        var content1 = await response1.Content.ReadFromJsonAsync<ListAuditsResponse>();
 
-        content1.Should().NotBeNull();
-        content1!.Items.Should().BeInDescendingOrder(x => x.Author);
+        var content1 = await response1.Content.ReadFromJsonAsync<ListAuditsResponse>();
+        Assert.That(content1, Is.Not.Null);
+        Assert.That(content1.Items.Select(x => x.Author), Is.Ordered.Descending);
 
         // Then sort by area ascending
         var response2 = await Client.GetAsync($"api/audits?orderBy=area asc");
         response2.EnsureSuccessStatusCode();
-        var content2 = await response2.Content.ReadFromJsonAsync<ListAuditsResponse>();
 
-        content2.Should().NotBeNull();
-        content2!.Items.Should().BeInAscendingOrder(x => x.Area);
+        var content2 = await response2.Content.ReadFromJsonAsync<ListAuditsResponse>();
+        Assert.That(content2, Is.Not.Null);
+        Assert.That(content2.Items.Select(x => x.Area), Is.Ordered.Ascending);
     }
 
     [Test]
     public async Task Should_throw_error_when_invalid_field_for_sorting()
     {
         var response = await Client.GetAsync($"api/audits?orderBy=score asc");
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
         var content = await response.Content.ReadFromJsonAsync<ProblemDetails>();
 
-        content.Should().NotBeNull();
-        content!.Detail.Should().BeEquivalentTo(new InvalidOrderByException("score asc").Message);
+        Assert.That(content, Is.Not.Null);
+        Assert.That(content.Detail, Is.EqualTo(new InvalidOrderByException("score asc").Message));
     }
 }

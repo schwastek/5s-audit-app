@@ -1,7 +1,6 @@
 ﻿using Api.Contracts.AuditAction.Requests;
 using Api.Exceptions;
 using Domain;
-using FluentAssertions;
 using IntegrationTests.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -54,15 +53,15 @@ internal class SaveAuditActionTestFixture : BaseTestFixture
         response.EnsureSuccessStatusCode();
 
         var audit = await GetAudit(_audit!.AuditId);
+        Assert.That(audit, Is.Not.Null);
+        Assert.That(audit.Actions, Is.Not.Empty);
+        Assert.That(audit.Actions, Has.Count.EqualTo(1));
 
-        audit.Should().NotBeNull();
-        audit!.Actions.Should().NotBeEmpty();
-        audit!.Actions.Should().HaveCount(1);
         var auditAction = audit!.Actions.First();
-        auditAction.AuditId.Should().Be(request.AuditId);
-        auditAction.AuditActionId.Should().Be(request.AuditActionId);
-        auditAction.Description.Should().Be(request.Description);
-        auditAction.IsComplete.Should().BeFalse();
+        Assert.That(auditAction.AuditId, Is.EqualTo(request.AuditId));
+        Assert.That(auditAction.AuditActionId, Is.EqualTo(request.AuditActionId));
+        Assert.That(auditAction.Description, Is.EqualTo(request.Description));
+        Assert.That(auditAction.IsComplete, Is.False);
     }
 
     [Test]
@@ -76,11 +75,11 @@ internal class SaveAuditActionTestFixture : BaseTestFixture
         };
 
         var response = await Client.PostAsJsonAsync($"api/actions", request);
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
         var content = await response.Content.ReadFromJsonAsync<CustomValidationProblemDetails>();
 
-        content.Should().NotBeNull();
-        content!.Errors.Should().BeEquivalentTo([ErrorCodes.Audit.DoesNotExist]);
+        Assert.That(content, Is.Not.Null);
+        Assert.That(content.Errors, Is.EquivalentTo([ErrorCodes.Audit.DoesNotExist]));
     }
 
     [Test]
@@ -89,15 +88,15 @@ internal class SaveAuditActionTestFixture : BaseTestFixture
         var request = new SaveAuditActionRequest();
 
         var response = await Client.PostAsJsonAsync($"api/actions", request);
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
         var content = await response.Content.ReadFromJsonAsync<CustomValidationProblemDetails>();
 
-        content.Should().NotBeNull();
-        content!.Errors.Should().BeEquivalentTo([
+        Assert.That(content, Is.Not.Null);
+        Assert.That(content.Errors, Is.EquivalentTo([
             ErrorCodes.AuditAction.ActionIdIsRequired,
             ErrorCodes.Audit.AuditIdIsRequired,
             ErrorCodes.AuditAction.DescriptionIsRequired
-        ]);
+        ]));
     }
 
     [Test]
@@ -111,11 +110,11 @@ internal class SaveAuditActionTestFixture : BaseTestFixture
         };
 
         var response = await Client.PostAsJsonAsync($"api/actions", request);
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
         var content = await response.Content.ReadFromJsonAsync<CustomValidationProblemDetails>();
 
-        content.Should().NotBeNull();
-        content!.Errors.Should().BeEquivalentTo([ErrorCodes.AuditAction.DescriptionIsTooLong]);
+        Assert.That(content, Is.Not.Null);
+        Assert.That(content.Errors, Is.EquivalentTo([ErrorCodes.AuditAction.DescriptionIsTooLong]));
     }
 
     private async Task<Audit?> GetAudit(Guid id)

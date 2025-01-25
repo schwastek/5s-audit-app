@@ -1,6 +1,5 @@
 ﻿using Api.Contracts.Question.Requests;
 using Domain;
-using FluentAssertions;
 using IntegrationTests.Helpers;
 using System.Collections.Generic;
 using System.Net.Http.Json;
@@ -37,8 +36,8 @@ internal class ListQuestionsTestFixture : BaseTestFixture
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadFromJsonAsync<ListQuestionsResponse>();
 
-        content.Should().NotBeNull();
-        content!.Questions.Should().NotBeEmpty();
-        content!.Questions.Should().HaveCount(_questions!.Count);
+        Assert.That(content, Is.Not.Null);
+        Assert.That(content.Questions, Is.Not.Empty);
+        Assert.That(content.Questions, Has.Count.EqualTo(_questions!.Count));
     }
 }

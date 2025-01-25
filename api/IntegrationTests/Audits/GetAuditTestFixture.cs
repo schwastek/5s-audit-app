@@ -1,7 +1,6 @@
 ﻿using Api.Contracts.Audit.Requests;
 using Api.Exceptions;
 using Domain;
-using FluentAssertions;
 using IntegrationTests.Helpers;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -50,12 +49,12 @@ internal sealed class GetAuditTestFixture : BaseTestFixture
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadFromJsonAsync<GetAuditResponse>();
 
-        content.Should().NotBeNull();
-        content!.Audit.AuditId.Should().Be(_audit!.AuditId);
-        content!.Audit.Author.Should().Be(_audit!.Author);
-        content!.Audit.Area.Should().Be(_audit!.Area);
-        content!.Audit.StartDate.Should().Be(_audit!.StartDate);
-        content!.Audit.EndDate.Should().Be(_audit!.EndDate);
+        Assert.That(content, Is.Not.Null);
+        Assert.That(content.Audit.AuditId, Is.EqualTo(request.Id));
+        Assert.That(content.Audit.Author, Is.EqualTo(_audit!.Author));
+        Assert.That(content.Audit.Area, Is.EqualTo(_audit!.Area));
+        Assert.That(content.Audit.StartDate, Is.EqualTo(_audit!.StartDate));
+        Assert.That(content.Audit.EndDate, Is.EqualTo(_audit!.EndDate));
     }
 
     [Test]
@@ -66,11 +65,11 @@ internal sealed class GetAuditTestFixture : BaseTestFixture
             Id = Guid.NewGuid()
         };
         var response = await Client.GetAsync($"api/audits/{request.Id}");
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
         var content = await response.Content.ReadFromJsonAsync<CustomValidationProblemDetails>();
 
-        content.Should().NotBeNull();
-        content!.Errors.Should().NotBeEmpty();
-        content!.Errors.Should().Contain(ErrorCodes.Audit.DoesNotExist);
+        Assert.That(content, Is.Not.Null);
+        Assert.That(content.Errors, Is.Not.Empty);
+        Assert.That(content.Errors, Does.Contain(ErrorCodes.Audit.DoesNotExist));
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Api.Exceptions;
 using Domain;
-using FluentAssertions;
 using IntegrationTests.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -55,31 +54,30 @@ internal sealed class DeleteAuditActionTestFixture : BaseTestFixture
         response.EnsureSuccessStatusCode();
 
         var audit = await GetAudit(_audit!.AuditId);
-
-        audit.Should().NotBeNull();
-        audit!.Actions.Should().BeEmpty();
+        Assert.That(audit, Is.Not.Null);
+        Assert.That(audit.Actions, Is.Empty);
     }
 
     [Test]
     public async Task Should_throw_error_when_missing_id()
     {
         var response = await Client.DeleteAsync($"api/actions/{Guid.Empty}");
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
         var content = await response.Content.ReadFromJsonAsync<CustomValidationProblemDetails>();
 
-        content.Should().NotBeNull();
-        content!.Errors.Should().BeEquivalentTo([ErrorCodes.AuditAction.ActionIdIsRequired]);
+        Assert.That(content, Is.Not.Null);
+        Assert.That(content.Errors, Is.EquivalentTo([ErrorCodes.AuditAction.ActionIdIsRequired]));
     }
 
     [Test]
     public async Task Should_throw_error_when_audit_action_does_not_exist()
     {
         var response = await Client.DeleteAsync($"api/actions/{Guid.NewGuid()}");
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
         var content = await response.Content.ReadFromJsonAsync<CustomValidationProblemDetails>();
 
-        content.Should().NotBeNull();
-        content!.Errors.Should().BeEquivalentTo([ErrorCodes.AuditAction.DoesNotExist]);
+        Assert.That(content, Is.Not.Null);
+        Assert.That(content.Errors, Is.EquivalentTo([ErrorCodes.AuditAction.DoesNotExist]));
     }
 
     private async Task<Audit?> GetAudit(Guid id)

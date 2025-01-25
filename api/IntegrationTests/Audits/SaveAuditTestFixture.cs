@@ -3,7 +3,6 @@ using Api.Contracts.Audit.Requests;
 using Api.Contracts.AuditAction.Dto;
 using Api.Exceptions;
 using Domain;
-using FluentAssertions;
 using IntegrationTests.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -78,32 +77,47 @@ internal sealed class SaveAuditTestFixture : BaseTestFixture
         var content = await response.Content.ReadFromJsonAsync<SaveAuditResponse>();
 
         // Assert
-        content.Should().NotBeNull();
-        content!.AuditId.Should().Be(request.AuditId);
+        Assert.That(content, Is.Not.Null);
+        Assert.That(content.AuditId, Is.EqualTo(request.AuditId));
 
-        _audit = await DbContext.Audits
-            .Where(x => x.AuditId.Equals(request.AuditId))
-            .AsNoTracking()
-            .Include(x => x.Answers)
-            .Include(x => x.Actions)
-            .FirstOrDefaultAsync();
+        _audit = await GetAudit(request.AuditId);
 
-        _audit.Should().NotBeNull();
-        _audit!.Author.Should().Be(request.Author);
-        _audit!.Area.Should().Be(request.Area);
-        _audit!.StartDate.Should().Be(request.StartDate);
-        _audit!.EndDate.Should().Be(request.EndDate);
-        _audit!.Answers.Should().HaveCount(request.Answers.Count());
-        _audit!.Actions.Should().HaveCount(request.Actions.Count());
-        _audit!.Answers.Should().BeEquivalentTo(answers);
+        Assert.That(_audit, Is.Not.Null);
+        Assert.That(_audit.Author, Is.EqualTo(request.Author));
+        Assert.That(_audit.Area, Is.EqualTo(request.Area));
+        Assert.That(_audit.StartDate, Is.EqualTo(request.StartDate));
+        Assert.That(_audit.EndDate, Is.EqualTo(request.EndDate));
+        Assert.That(_audit.Answers, Has.Count.EqualTo(request.Answers.Count));
+        Assert.That(_audit.Actions, Has.Count.EqualTo(request.Actions.Count));
 
-        // Map to domain model
+        // Map to common type - use anonymous types for comparison.
+        var actualAnswers = _audit.Answers.Select(x => new
+        {
+            QuestionId = x.QuestionId,
+            AnswerId = x.AnswerId,
+            AnswerType = x.AnswerType,
+            AnswerText = x.AnswerText
+        });
+        var expectedAnswers = request.Answers.Select(x => new
+        {
+            QuestionId = x.QuestionId,
+            AnswerId = x.AnswerId,
+            AnswerType = x.AnswerType,
+            AnswerText = x.AnswerText
+        });
+        Assert.That(actualAnswers, Is.EquivalentTo(expectedAnswers));
+
+        var actualActions = _audit.Actions.Select(x => new
+        {
+            AuditActionId = x.AuditActionId,
+            Description = x.Description
+        });
         var expectedActions = request.Actions.Select(x => new
         {
             AuditActionId = x.AuditActionId,
             Description = x.Description
         });
-        _audit!.Actions.Should().BeEquivalentTo(expectedActions);
+        Assert.That(actualActions, Is.EquivalentTo(expectedActions));
     }
 
     [Test]
@@ -117,7 +131,7 @@ internal sealed class SaveAuditTestFixture : BaseTestFixture
 
         // Act
         var response = await Client.PostAsJsonAsync($"api/audits", request);
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
         var content = await response.Content.ReadFromJsonAsync<CustomValidationProblemDetails>();
 
         // Assert
@@ -130,8 +144,20 @@ internal sealed class SaveAuditTestFixture : BaseTestFixture
             ErrorCodes.Audit.AnswersIsRequired
         };
 
-        content.Should().NotBeNull();
-        content!.Errors.Should().NotBeEmpty();
-        content!.Errors.Should().BeEquivalentTo(expectedErrors);
+        Assert.That(content, Is.Not.Null);
+        Assert.That(content.Errors, Is.Not.Empty);
+        Assert.That(content.Errors, Is.EquivalentTo(expectedErrors));
+    }
+
+    private async Task<Audit?> GetAudit(Guid id)
+    {
+        var audit = await DbContext.Audits
+            .AsNoTracking()
+            .Where(x => x.AuditId.Equals(id))
+            .Include(x => x.Answers)
+            .Include(x => x.Actions)
+            .FirstOrDefaultAsync();
+
+        return audit;
     }
 }
