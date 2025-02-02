@@ -1,4 +1,5 @@
 ﻿using Api.Exceptions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Api.Extensions;
@@ -13,6 +14,8 @@ public static class AddExceptionHandlersExtensions
 
     public static void AddProblemDetails(this IServiceCollection services)
     {
+        services.AddSingleton<IProblemDetailsWriter, CustomProblemDetailsWriter>();
+
         // Return the Problem Details format for non-successful responses.
         services.AddProblemDetails(options =>
         {
