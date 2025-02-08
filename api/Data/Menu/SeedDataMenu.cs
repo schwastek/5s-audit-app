@@ -19,9 +19,9 @@ internal class SeedDataMenu : BaseMenu
     {
         Options = new()
         {
-            { ConsoleKey.D1, new MenuOption("1. Reset", Reset) },
-            { ConsoleKey.D2, new MenuOption("2. Reset and seed sample data", SeedSampleData) },
-            { ConsoleKey.D3, new MenuOption("3. Reset and seed identity data", SeedIdentityData) }
+            { ConsoleKey.D1, new MenuOption("1. Clear sample data", Reset) },
+            { ConsoleKey.D2, new MenuOption("2. Clear and seed sample data", SeedSampleData) },
+            { ConsoleKey.D3, new MenuOption("3. Clear and seed identity data", SeedIdentityData) }
         };
         _context = context;
         _userManager = userManager;

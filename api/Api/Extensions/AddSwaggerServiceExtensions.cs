@@ -1,5 +1,4 @@
-﻿using Api.Contracts.Common;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -66,26 +65,6 @@ public static class AddSwaggerServiceExtensions
                 }
             });
         });
-    }
-}
-
-public class AddSwaggerRequiredSchemaFilter : ISchemaFilter
-{
-    // TODO: Remove this filter along with attribute.
-    public void Apply(OpenApiSchema schema, SchemaFilterContext context)
-    {
-        var properties = context.Type.GetProperties();
-
-        foreach (var property in properties)
-        {
-            var attribute = property.GetCustomAttribute(typeof(SwaggerRequiredAttribute));
-
-            if (attribute is not null)
-            {
-                var propertyNameCamelCase = char.ToLowerInvariant(property.Name[0]) + property.Name.Substring(1);
-                schema.Required.Add(propertyNameCamelCase);
-            }
-        }
     }
 }
 

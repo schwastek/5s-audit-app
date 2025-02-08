@@ -1,8 +1,6 @@
-﻿using Api.Contracts.Audit.Requests;
-using Core.MappingService;
-using Features.Audit.Dto;
-using MediatR;
+﻿using MediatR;
 using System;
+using System.Collections.Generic;
 
 namespace Features.Audit.Get;
 
@@ -13,37 +11,12 @@ public sealed record GetAuditQuery : IRequest<GetAuditQueryResult>
 
 public sealed record GetAuditQueryResult
 {
-    public required AuditDto Audit { get; init; }
-}
-
-public class GetAuditQueryMapper :
-    IMapper<GetAuditRequest, GetAuditQuery>,
-    IMapper<GetAuditQueryResult, GetAuditResponse>
-{
-    private readonly IMappingService mapper;
-
-    public GetAuditQueryMapper(IMappingService mapper)
-    {
-        this.mapper = mapper;
-    }
-
-    public GetAuditQuery Map(GetAuditRequest source)
-    {
-        var result = new GetAuditQuery()
-        {
-            Id = source.Id
-        };
-
-        return result;
-    }
-
-    public GetAuditResponse Map(GetAuditQueryResult src)
-    {
-        var auditDto = mapper.Map<AuditDto, Api.Contracts.Audit.Dto.AuditDto>(src.Audit);
-
-        return new GetAuditResponse()
-        {
-            Audit = auditDto
-        };
-    }
+    public required Guid AuditId { get; init; }
+    public required string Author { get; init; }
+    public required string Area { get; init; }
+    public required DateTime StartDate { get; init; }
+    public required DateTime EndDate { get; init; }
+    public required double Score { get; init; }
+    public required IReadOnlyList<Answer.Dto.AnswerDto> Answers { get; init; }
+    public required IReadOnlyList<AuditAction.Dto.AuditActionDto> Actions { get; init; }
 }

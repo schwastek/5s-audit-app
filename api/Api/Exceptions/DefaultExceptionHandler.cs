@@ -21,6 +21,7 @@ public class DefaultExceptionHandler : IExceptionHandler
         CancellationToken cancellationToken)
     {
         httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
         return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
         {
             HttpContext = httpContext,

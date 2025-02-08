@@ -1,4 +1,4 @@
-﻿using Api.Contracts.Audit.Requests;
+﻿using Api.Requests.Audits.List;
 using Core.OrderByService;
 using Domain;
 using IntegrationTests.Helpers;

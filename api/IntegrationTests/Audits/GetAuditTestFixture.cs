@@ -1,5 +1,5 @@
-﻿using Api.Contracts.Audit.Requests;
-using Api.Exceptions;
+﻿using Api.Exceptions;
+using Api.Requests.Audits.Get;
 using Domain;
 using IntegrationTests.Helpers;
 using Microsoft.AspNetCore.Http;
@@ -50,11 +50,11 @@ internal sealed class GetAuditTestFixture : BaseTestFixture
         var content = await response.Content.ReadFromJsonAsync<GetAuditResponse>();
 
         Assert.That(content, Is.Not.Null);
-        Assert.That(content.Audit.AuditId, Is.EqualTo(request.Id));
-        Assert.That(content.Audit.Author, Is.EqualTo(_audit!.Author));
-        Assert.That(content.Audit.Area, Is.EqualTo(_audit!.Area));
-        Assert.That(content.Audit.StartDate, Is.EqualTo(_audit!.StartDate));
-        Assert.That(content.Audit.EndDate, Is.EqualTo(_audit!.EndDate));
+        Assert.That(content.AuditId, Is.EqualTo(request.Id));
+        Assert.That(content.Author, Is.EqualTo(_audit!.Author));
+        Assert.That(content.Area, Is.EqualTo(_audit!.Area));
+        Assert.That(content.StartDate, Is.EqualTo(_audit!.StartDate));
+        Assert.That(content.EndDate, Is.EqualTo(_audit!.EndDate));
     }
 
     [Test]

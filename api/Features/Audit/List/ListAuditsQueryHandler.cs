@@ -55,9 +55,15 @@ public sealed class ListAuditsQueryHandler : IRequestHandler<ListAuditsQuery, Li
         }
 
         // Map
-        var auditsDto = paged.Items
-            .Select(audit => mapper.Map<Domain.Audit, AuditListItemDto>(audit))
-            .ToList();
+        var auditsDto = paged.Items.Select(x => new AuditListItemDto()
+        {
+            AuditId = x.AuditId,
+            Author = x.Author,
+            Area = x.Area,
+            StartDate = x.StartDate,
+            EndDate = x.EndDate,
+            Score = x.Score
+        }).ToList();
 
         var result = new ListAuditsQueryResult
         {

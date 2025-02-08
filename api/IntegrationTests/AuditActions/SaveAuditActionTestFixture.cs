@@ -1,5 +1,5 @@
-﻿using Api.Contracts.AuditAction.Requests;
-using Api.Exceptions;
+﻿using Api.Exceptions;
+using Api.Requests.AuditActions.Save;
 using Domain;
 using IntegrationTests.Helpers;
 using Microsoft.EntityFrameworkCore;

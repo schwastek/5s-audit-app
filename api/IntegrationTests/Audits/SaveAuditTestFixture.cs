@@ -1,7 +1,7 @@
-﻿using Api.Contracts.Answer.Dto;
-using Api.Contracts.Audit.Requests;
-using Api.Contracts.AuditAction.Dto;
-using Api.Exceptions;
+﻿using Api.Exceptions;
+using Api.Requests.Answers.Dto;
+using Api.Requests.AuditActions.Dto;
+using Api.Requests.Audits.Save;
 using Domain;
 using IntegrationTests.Helpers;
 using Microsoft.EntityFrameworkCore;

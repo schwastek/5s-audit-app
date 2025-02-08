@@ -1,6 +1,5 @@
 ﻿using Core.MappingService;
 using Data.DbContext;
-using Features.AuditAction.Dto;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,10 +34,13 @@ public sealed class SaveAuditActionCommandHandler : IRequestHandler<SaveAuditAct
         await context.SaveChangesAsync(cancellationToken);
 
         // Map
-        var auditActionDto = mapper.Map<Domain.AuditAction, AuditActionDto>(auditAction);
+        var auditActionDto = mapper.Map<Domain.AuditAction, Features.AuditAction.Dto.AuditActionDto>(auditAction);
         var result = new SaveAuditActionCommandResult()
         {
-            AuditAction = auditActionDto
+            AuditActionId = auditActionDto.AuditActionId,
+            AuditId = auditActionDto.AuditId,
+            Description = auditActionDto.Description,
+            IsComplete = auditActionDto.IsComplete
         };
 
         return result;

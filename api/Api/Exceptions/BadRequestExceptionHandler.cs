@@ -27,6 +27,7 @@ public class BadRequestExceptionHandler : IExceptionHandler
         }
 
         httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+
         return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
         {
             HttpContext = httpContext,

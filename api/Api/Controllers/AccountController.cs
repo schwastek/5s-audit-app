@@ -1,5 +1,6 @@
-﻿using Api.Contracts.Identity.Dto;
-using Api.Contracts.Identity.Requests;
+﻿using Api.Constants;
+using Api.Requests.Identity;
+using Api.Requests.Identity.Dto;
 using Core.Identity;
 using Core.ValidatorService;
 using Domain;
@@ -10,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using System.Net.Mime;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -18,7 +18,7 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("api/account")]
-[Produces(MediaTypeNames.Application.Json)]
+[Produces(MediaTypeConstants.JsonContentType, MediaTypeConstants.ProblemDetailsContentType)]
 public class AccountController : ControllerBase
 {
     private readonly UserManager<User> _userManager;
@@ -42,12 +42,10 @@ public class AccountController : ControllerBase
     /// <summary>
     /// Returns access token
     /// </summary>
-    /// <param name="request"></param>
-    /// <returns>User information with access token</returns>
-    /// <response code="200">User is logged in</response>
     [AllowAnonymous]
     [HttpPost("login")]
-    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<UserDto>> Login(LoginRequest request)
     {
         await _validator.ValidateAndThrowAsync(request, HttpContext.RequestAborted);
@@ -71,14 +69,10 @@ public class AccountController : ControllerBase
     /// <summary>
     /// Registers new user
     /// </summary>
-    /// <param name="request"></param>
-    /// <returns>New user information with access token</returns>
-    /// <response code="200">New user is registered</response>
-    /// <response code="400">Validation error</response>
     [AllowAnonymous]
     [HttpPost("register")]
-    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<UserDto>> Register(RegisterRequest request)
     {
         await _validator.ValidateAndThrowAsync(request, HttpContext.RequestAborted);
@@ -106,10 +100,9 @@ public class AccountController : ControllerBase
     /// <summary>
     /// Gets user information
     /// </summary>
-    /// <returns>User information</returns>
-    /// <response code="200">User information</response>
     [HttpGet]
-    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
         var email = User.FindFirstValue(ClaimTypes.Email);
@@ -127,10 +120,7 @@ public class AccountController : ControllerBase
     /// <summary>
     /// Refreshes access token
     /// </summary>
-    /// <returns>User information with new access token</returns>
-    /// <response code="200">User information with new access token</response>
     [HttpPost("refreshToken")]
-    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<UserDto>> RefreshToken()
     {
         var name = User.FindFirstValue(ClaimTypes.Name);

@@ -25,9 +25,10 @@ public class DomainValidationExceptionHandler : IExceptionHandler
             return false;
         }
 
+        httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+
         var problemDetails = new CustomValidationProblemDetails()
         {
-            Status = StatusCodes.Status400BadRequest,
             Errors = domainValidationException.Errors
         };
 

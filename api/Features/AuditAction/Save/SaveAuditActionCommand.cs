@@ -1,7 +1,4 @@
-﻿using Api.Contracts.AuditAction.Requests;
-using Core.MappingService;
-using Features.AuditAction.Dto;
-using MediatR;
+﻿using MediatR;
 using System;
 
 namespace Features.AuditAction.Save;
@@ -15,37 +12,8 @@ public sealed record SaveAuditActionCommand : IRequest<SaveAuditActionCommandRes
 
 public sealed record SaveAuditActionCommandResult
 {
-    public required AuditActionDto AuditAction { get; init; }
-}
-
-public class SaveAuditActionCommandMapper :
-    IMapper<SaveAuditActionRequest, SaveAuditActionCommand>,
-    IMapper<SaveAuditActionCommandResult, SaveAuditActionResponse>
-{
-    private readonly IMappingService mapper;
-
-    public SaveAuditActionCommandMapper(IMappingService mapper)
-    {
-        this.mapper = mapper;
-    }
-
-    public SaveAuditActionCommand Map(SaveAuditActionRequest src)
-    {
-        return new SaveAuditActionCommand()
-        {
-            AuditId = src.AuditId,
-            AuditActionId = src.AuditActionId,
-            Description = src.Description!
-        };
-    }
-
-    public SaveAuditActionResponse Map(SaveAuditActionCommandResult src)
-    {
-        var auditAction = mapper.Map<AuditActionDto, Api.Contracts.AuditAction.Dto.AuditActionDto>(src.AuditAction);
-
-        return new SaveAuditActionResponse()
-        {
-            AuditAction = auditAction
-        };
-    }
+    public required Guid AuditActionId { get; set; }
+    public required Guid AuditId { get; set; }
+    public required string Description { get; set; }
+    public required bool IsComplete { get; set; }
 }

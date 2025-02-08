@@ -73,8 +73,8 @@ internal sealed class DeleteAuditActionTestFixture : BaseTestFixture
     public async Task Should_throw_error_when_audit_action_does_not_exist()
     {
         var response = await Client.DeleteAsync($"api/actions/{Guid.NewGuid()}");
-        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
         var content = await response.Content.ReadFromJsonAsync<CustomValidationProblemDetails>();
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
 
         Assert.That(content, Is.Not.Null);
         Assert.That(content.Errors, Is.EquivalentTo([ErrorCodes.AuditAction.DoesNotExist]));

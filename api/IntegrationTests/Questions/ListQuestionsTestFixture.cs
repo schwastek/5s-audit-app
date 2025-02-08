@@ -1,4 +1,4 @@
-﻿using Api.Contracts.Question.Requests;
+﻿using Api.Requests.Questions.List;
 using Domain;
 using IntegrationTests.Helpers;
 using System.Collections.Generic;

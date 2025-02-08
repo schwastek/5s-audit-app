@@ -31,7 +31,14 @@ public sealed class GetAuditQueryHandler : IRequestHandler<GetAuditQuery, GetAud
         var auditDto = mapper.Map<Domain.Audit, AuditDto>(audit);
         var result = new GetAuditQueryResult()
         {
-            Audit = auditDto
+            AuditId = auditDto.AuditId,
+            Author = auditDto.Author,
+            Area = auditDto.Area,
+            StartDate = auditDto.StartDate,
+            EndDate = auditDto.EndDate,
+            Actions = auditDto.Actions,
+            Answers = auditDto.Answers,
+            Score = auditDto.Score
         };
 
         return result;
