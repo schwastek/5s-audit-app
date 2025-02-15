@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -29,13 +28,6 @@ builder.Services.AddControllers(opt =>
     // as if they had a [Required(AllowEmptyStrings = true)] attribute.
     // A missing value for Name in a JSON or form post results in a validation error. Disable it.
     opt.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
-
-    // Remove output formatters other than JSON, i.e. enforce that only JSON can be processed by the application.
-    // In this case, you don't need the [Consumes] attribute, because the API will only be able to handle requests
-    // with any JSON-related Content-Type HTTP header, such as 'application/json', 'text/json'.
-    // If a request with a different Content-Type (e.g. 'text/plain') is sent,
-    // it will be rejected with 415 Unsupported Media Type.
-    opt.OutputFormatters.RemoveType<StringOutputFormatter>();
 }).ConfigureApiBehaviorOptions(opt =>
 {
     // Disable automatic HTTP 400 responses for invalid model binding or model validation.

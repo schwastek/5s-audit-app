@@ -1,4 +1,5 @@
 ﻿using Api.Constants;
+using Api.Exceptions;
 using Api.Requests.Identity;
 using Api.Requests.Identity.Dto;
 using Core.Identity;
@@ -18,7 +19,8 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("api/account")]
-[Produces(MediaTypeConstants.JsonContentType, MediaTypeConstants.ProblemDetailsContentType)]
+[ProducesResponseType<CustomValidationProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeConstants.ProblemDetailsContentType)]
+[ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeConstants.ProblemDetailsContentType)]
 public class AccountController : ControllerBase
 {
     private readonly UserManager<User> _userManager;
@@ -44,8 +46,8 @@ public class AccountController : ControllerBase
     /// </summary>
     [AllowAnonymous]
     [HttpPost("login")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType<UserDto>(StatusCodes.Status200OK, MediaTypeConstants.JsonContentType)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<UserDto>> Login(LoginRequest request)
     {
         await _validator.ValidateAndThrowAsync(request, HttpContext.RequestAborted);
@@ -71,8 +73,7 @@ public class AccountController : ControllerBase
     /// </summary>
     [AllowAnonymous]
     [HttpPost("register")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<UserDto>(StatusCodes.Status200OK, MediaTypeConstants.JsonContentType)]
     public async Task<ActionResult<UserDto>> Register(RegisterRequest request)
     {
         await _validator.ValidateAndThrowAsync(request, HttpContext.RequestAborted);
@@ -94,15 +95,21 @@ public class AccountController : ControllerBase
             return Ok(userDto);
         }
 
-        return BadRequest("Problem registering user");
+        return BadRequest(new CustomValidationProblemDetails()
+        {
+            Title = "Registration failed",
+            Detail = "An error occurred during registration. Please try again later.",
+            Instance = HttpContext.Request.Path,
+            Errors = result.Errors.Select(e => e.Code).ToArray()
+        });
     }
 
     /// <summary>
     /// Gets user information
     /// </summary>
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType<UserDto>(StatusCodes.Status200OK, MediaTypeConstants.JsonContentType)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
         var email = User.FindFirstValue(ClaimTypes.Email);
@@ -121,6 +128,8 @@ public class AccountController : ControllerBase
     /// Refreshes access token
     /// </summary>
     [HttpPost("refreshToken")]
+    [ProducesResponseType<UserDto>(StatusCodes.Status200OK, MediaTypeConstants.JsonContentType)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<UserDto>> RefreshToken()
     {
         var name = User.FindFirstValue(ClaimTypes.Name);

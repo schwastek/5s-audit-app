@@ -1,4 +1,5 @@
 ﻿using Api.Constants;
+using Api.Exceptions;
 using Api.Requests.Questions.List;
 using Core.MappingService;
 using Features.Question.List;
@@ -11,7 +12,9 @@ namespace Api.Controllers;
 
 [Route("api/questions")]
 [ApiController]
-[Produces(MediaTypeConstants.JsonContentType, MediaTypeConstants.ProblemDetailsContentType)]
+[ProducesResponseType<CustomValidationProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeConstants.ProblemDetailsContentType)]
+[ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeConstants.ProblemDetailsContentType)]
+[ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
 public class QuestionsController : ControllerBase
 {
     private readonly ISender sender;
@@ -27,7 +30,7 @@ public class QuestionsController : ControllerBase
     /// Gets the list of questions
     /// </summary>
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType<ListQuestionsResponse>(StatusCodes.Status200OK, MediaTypeConstants.JsonContentType)]
     public async Task<ActionResult<ListQuestionsResponse>> ListQuestions()
     {
         var result = await sender.Send(new ListQuestionsQuery(), HttpContext.RequestAborted);
