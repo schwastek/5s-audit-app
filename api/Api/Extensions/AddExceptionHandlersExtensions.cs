@@ -1,4 +1,5 @@
 ﻿using Api.Exceptions;
+using Api.Exceptions.Handlers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -31,9 +32,9 @@ public static class AddExceptionHandlersExtensions
     {
         // Exception handlers are processed in the order they're registered.
         // Each handler attempts to process the error, and if not handled, the next in the chain is executed.
-        services.AddExceptionHandler<ValidationExceptionHandler>();
+        services.AddExceptionHandler<FluentValidationExceptionHandler>();
         services.AddExceptionHandler<DomainValidationExceptionHandler>();
-        services.AddExceptionHandler<BadRequestExceptionHandler>();
+        services.AddExceptionHandler<ApplicationValidationExceptionHandler>();
         services.AddExceptionHandler<DefaultExceptionHandler>();
     }
 }

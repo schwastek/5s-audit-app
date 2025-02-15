@@ -1,18 +1,16 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Api.Exceptions;
+namespace Api.Exceptions.Handlers;
 
-public class ValidationExceptionHandler : IExceptionHandler
+public class ApplicationValidationExceptionHandler : IExceptionHandler
 {
     private readonly IProblemDetailsService problemDetailsService;
 
-    public ValidationExceptionHandler(IProblemDetailsService problemDetailsService)
+    public ApplicationValidationExceptionHandler(IProblemDetailsService problemDetailsService)
     {
         this.problemDetailsService = problemDetailsService;
     }
@@ -20,9 +18,10 @@ public class ValidationExceptionHandler : IExceptionHandler
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext,
         Exception exception,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
-        if (exception is not FluentValidation.ValidationException validationException)
+        if (exception is not Core.Exceptions.ApplicationValidationException applicationValidationException)
         {
             return false;
         }
@@ -31,7 +30,8 @@ public class ValidationExceptionHandler : IExceptionHandler
 
         var problemDetails = new CustomValidationProblemDetails()
         {
-            Errors = GetValidationErrors(validationException.Errors)
+            Detail = applicationValidationException.Message,
+            Errors = applicationValidationException.Errors.Sort(StringComparer.Ordinal)
         };
 
         return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
@@ -39,19 +39,5 @@ public class ValidationExceptionHandler : IExceptionHandler
             HttpContext = httpContext,
             ProblemDetails = problemDetails
         });
-    }
-
-    private static List<string> GetValidationErrors(IEnumerable<FluentValidation.Results.ValidationFailure> errors)
-    {
-        var result = new List<string>(errors.Count());
-
-        foreach (var error in errors)
-        {
-            result.Add(error.ErrorCode);
-        }
-
-        result.Sort(StringComparer.Ordinal);
-
-        return result;
     }
 }

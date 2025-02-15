@@ -11,6 +11,7 @@ public static class ErrorCodes
         public const string StartDateIsRequired = "AuditStartDateIsRequired";
         public const string EndDateIsRequired = "AuditEndDateIsRequired";
         public const string AnswersIsRequired = "AuditAnswersIsRequired";
+        public const string InvalidOrderByField = "InvalidOrderByField";
     }
 
     public static class AuditAction

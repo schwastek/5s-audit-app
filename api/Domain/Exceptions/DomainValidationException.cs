@@ -19,15 +19,15 @@ public class DomainValidationException : Exception
         Errors = [];
     }
 
-    public DomainValidationException(string message)
+    public DomainValidationException(string error)
         : base("One or more validation errors occurred.")
     {
-        Errors = [message];
+        Errors = [error];
     }
 
-    public DomainValidationException(string message, Exception inner)
+    public DomainValidationException(string error, Exception inner)
         : base("One or more validation errors occurred.", inner)
     {
-        Errors = [message];
+        Errors = [error];
     }
 }
