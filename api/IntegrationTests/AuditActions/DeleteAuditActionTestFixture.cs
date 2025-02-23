@@ -1,5 +1,6 @@
 ﻿using Api.Exceptions;
 using Domain;
+using Domain.Exceptions;
 using IntegrationTests.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;

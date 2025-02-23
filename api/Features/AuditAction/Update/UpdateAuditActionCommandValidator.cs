@@ -1,4 +1,4 @@
-﻿using Domain;
+﻿using Domain.Exceptions;
 using Features.AuditAction.BusinessRules;
 using FluentValidation;
 

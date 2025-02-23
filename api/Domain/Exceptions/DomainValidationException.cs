@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 
 namespace Domain.Exceptions;
 
 public class DomainValidationException : Exception
 {
-    public ImmutableList<string> Errors { get; }
+    public IEnumerable<string> Errors { get; private set; }
+
+    public const string DefaultErrorMessage = "One or more validation errors occurred.";
 
     public DomainValidationException(IEnumerable<string> errors)
-        : base("One or more validation errors occurred.")
+        : base(DefaultErrorMessage)
     {
-        Errors = errors.ToImmutableList();
+        Errors = errors;
     }
 
     public DomainValidationException()
@@ -20,13 +21,13 @@ public class DomainValidationException : Exception
     }
 
     public DomainValidationException(string error)
-        : base("One or more validation errors occurred.")
+        : base(DefaultErrorMessage)
     {
         Errors = [error];
     }
 
     public DomainValidationException(string error, Exception inner)
-        : base("One or more validation errors occurred.", inner)
+        : base(DefaultErrorMessage, inner)
     {
         Errors = [error];
     }

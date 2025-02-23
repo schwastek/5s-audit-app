@@ -1,6 +1,7 @@
 ﻿using Api.Exceptions;
 using Api.Requests.Audits.Get;
 using Domain;
+using Domain.Exceptions;
 using IntegrationTests.Helpers;
 using Microsoft.AspNetCore.Http;
 using System;

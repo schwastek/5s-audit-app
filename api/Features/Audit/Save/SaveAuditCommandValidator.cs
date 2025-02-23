@@ -1,4 +1,4 @@
-﻿using Domain;
+﻿using Domain.Exceptions;
 using FluentValidation;
 
 namespace Features.Audit.Save;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,13 +32,22 @@ public class ApplicationValidationExceptionHandler : IExceptionHandler
         var problemDetails = new CustomValidationProblemDetails()
         {
             Detail = applicationValidationException.Message,
-            Errors = applicationValidationException.Errors.Sort(StringComparer.Ordinal)
+            Errors = GetValidationErrors(applicationValidationException.Errors)
         };
 
-        return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
+        var result = await problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
         {
             HttpContext = httpContext,
             ProblemDetails = problemDetails
         });
+
+        return result;
+    }
+
+    private static ICollection<string> GetValidationErrors(IEnumerable<string> errors)
+    {
+        var result = new SortedSet<string>(errors, StringComparer.Ordinal);
+
+        return result;
     }
 }

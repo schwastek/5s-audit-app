@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -34,23 +33,23 @@ public class FluentValidationExceptionHandler : IExceptionHandler
             Errors = GetValidationErrors(validationException.Errors)
         };
 
-        return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
+        var result = await problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
         {
             HttpContext = httpContext,
             ProblemDetails = problemDetails
         });
+
+        return result;
     }
 
-    private static List<string> GetValidationErrors(IEnumerable<FluentValidation.Results.ValidationFailure> errors)
+    private static ICollection<string> GetValidationErrors(IEnumerable<FluentValidation.Results.ValidationFailure> errors)
     {
-        var result = new List<string>(errors.Count());
+        var result = new SortedSet<string>(StringComparer.Ordinal);
 
         foreach (var error in errors)
         {
             result.Add(error.ErrorCode);
         }
-
-        result.Sort(StringComparer.Ordinal);
 
         return result;
     }

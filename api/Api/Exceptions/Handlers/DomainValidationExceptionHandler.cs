@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,13 +30,22 @@ public class DomainValidationExceptionHandler : IExceptionHandler
 
         var problemDetails = new CustomValidationProblemDetails()
         {
-            Errors = domainValidationException.Errors.Sort(StringComparer.Ordinal)
+            Errors = GetValidationErrors(domainValidationException.Errors)
         };
 
-        return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
+        var result = await problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
         {
             HttpContext = httpContext,
             ProblemDetails = problemDetails
         });
+
+        return result;
+    }
+
+    private static ICollection<string> GetValidationErrors(IEnumerable<string> errors)
+    {
+        var result = new SortedSet<string>(errors, StringComparer.Ordinal);
+
+        return result;
     }
 }

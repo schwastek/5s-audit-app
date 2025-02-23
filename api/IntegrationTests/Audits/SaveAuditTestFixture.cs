@@ -3,6 +3,7 @@ using Api.Requests.Answers.Dto;
 using Api.Requests.AuditActions.Dto;
 using Api.Requests.Audits.Save;
 using Domain;
+using Domain.Exceptions;
 using IntegrationTests.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;

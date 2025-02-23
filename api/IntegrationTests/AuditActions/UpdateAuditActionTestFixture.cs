@@ -1,6 +1,7 @@
 ﻿using Api.Exceptions;
 using Api.Requests.AuditActions.Update;
 using Domain;
+using Domain.Exceptions;
 using IntegrationTests.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;

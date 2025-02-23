@@ -1,4 +1,4 @@
-﻿namespace Domain;
+﻿namespace Domain.Exceptions;
 
 public static class ErrorCodes
 {

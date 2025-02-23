@@ -6,7 +6,7 @@ namespace Core.Exceptions;
 
 public class ApplicationValidationException : Exception
 {
-    public ImmutableList<string> Errors { get; }
+    public IEnumerable<string> Errors { get; private set; }
 
     public const string DefaultErrorMessage = "One or more validation errors occurred.";
 
@@ -15,7 +15,7 @@ public class ApplicationValidationException : Exception
         Errors = [];
     }
 
-    // Only error.
+    // Error.
     public ApplicationValidationException(string error)
         : base(DefaultErrorMessage)
     {
@@ -41,7 +41,7 @@ public class ApplicationValidationException : Exception
         Errors = errors.ToImmutableList();
     }
 
-    // Only error + inner Excepetion.
+    // Error + Excepetion.
     public ApplicationValidationException(string error, Exception inner)
         : base(DefaultErrorMessage, inner)
     {
@@ -54,7 +54,7 @@ public class ApplicationValidationException : Exception
         Errors = errors.ToImmutableList();
     }
 
-    // Message + error + inner Exception.
+    // Message + error + Exception.
     public ApplicationValidationException(string message, string error, Exception inner)
         : base(message, inner)
     {
