@@ -1,7 +1,7 @@
 ﻿using Core.MappingService;
 using Core.OrderByService;
 using Core.Pagination;
-using Features.Audit.List;
+using Features.Audits.List;
 using System.Linq;
 
 namespace Api.Requests.Audits.List;
@@ -34,10 +34,10 @@ public sealed class ListAuditsQueryResultMapper : IMapper<ListAuditsQueryResult,
     public ListAuditsResponse Map(ListAuditsQueryResult src)
     {
         var items = src.Items
-            .Select(_mapper.Map<Features.Audit.Dto.AuditListItemDto, Dto.AuditListItemDto>)
+            .Select(_mapper.Map<Features.Audits.Dto.AuditListItemDto, Requests.Audits.Dto.AuditListItemDto>)
             .ToList();
 
-        var metadata = _mapper.Map<PaginationMetadata, Common.PaginationMetadata>(src.Metadata);
+        var metadata = _mapper.Map<Core.Pagination.PaginationMetadata, Requests.Common.PaginationMetadata>(src.Metadata);
 
         return new ListAuditsResponse()
         {

@@ -1,7 +1,5 @@
-﻿using Api.Requests.Answers.Dto;
-using Api.Requests.AuditActions.Dto;
-using Core.MappingService;
-using Features.Audit.Save;
+﻿using Core.MappingService;
+using Features.Audits.Save;
 using System.Linq;
 
 namespace Api.Requests.Audits.Save;
@@ -18,11 +16,11 @@ public sealed class SaveAuditRequestMapper : IMapper<SaveAuditRequest, SaveAudit
     public SaveAuditCommand Map(SaveAuditRequest src)
     {
         var answers = src.Answers
-            .Select(_mapper.Map<AnswerForCreationDto, Features.Answer.Dto.AnswerForCreationDto>)
+            .Select(_mapper.Map<Requests.Answers.Dto.AnswerForCreationDto, Features.Answers.Dto.AnswerForCreationDto>)
             .ToList();
 
         var actions = src.Actions
-            .Select(_mapper.Map<AuditActionForCreationDto, Features.AuditAction.Dto.AuditActionForCreationDto>)
+            .Select(_mapper.Map<Requests.AuditActions.Dto.AuditActionForCreationDto, Features.AuditActions.Dto.AuditActionForCreationDto>)
             .ToList();
 
         var command = new SaveAuditCommand()

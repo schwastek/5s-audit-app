@@ -1,5 +1,5 @@
 ﻿using Domain.Exceptions;
-using Features.Account.BusinessRules;
+using Features.Accounts.BusinessRules;
 using FluentValidation;
 
 namespace Api.Requests.Identity;

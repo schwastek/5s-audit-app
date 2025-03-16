@@ -1,13 +1,13 @@
 ﻿using Api.Requests.Identity;
 using Core.ValidatorService;
-using Features.Account.BusinessRules;
-using Features.Audit.BusinessRules;
-using Features.Audit.Get;
-using Features.Audit.Save;
-using Features.AuditAction.BusinessRules;
-using Features.AuditAction.Delete;
-using Features.AuditAction.Save;
-using Features.AuditAction.Update;
+using Features.Accounts.BusinessRules;
+using Features.AuditActions.BusinessRules;
+using Features.AuditActions.Delete;
+using Features.AuditActions.Save;
+using Features.AuditActions.Update;
+using Features.Audits.BusinessRules;
+using Features.Audits.Get;
+using Features.Audits.Save;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 

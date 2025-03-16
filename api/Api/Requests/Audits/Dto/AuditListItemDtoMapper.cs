@@ -2,9 +2,9 @@
 
 namespace Api.Requests.Audits.Dto;
 
-public sealed class AuditListItemDtoMapper : IMapper<Features.Audit.Dto.AuditListItemDto, AuditListItemDto>
+public sealed class AuditListItemDtoMapper : IMapper<Features.Audits.Dto.AuditListItemDto, Requests.Audits.Dto.AuditListItemDto>
 {
-    public AuditListItemDto Map(Features.Audit.Dto.AuditListItemDto src)
+    public AuditListItemDto Map(Features.Audits.Dto.AuditListItemDto src)
     {
         return new AuditListItemDto()
         {

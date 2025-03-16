@@ -2,7 +2,7 @@
 using Api.Exceptions;
 using Api.Requests.Questions.List;
 using Core.MappingService;
-using Features.Question.List;
+using Features.Questions.List;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

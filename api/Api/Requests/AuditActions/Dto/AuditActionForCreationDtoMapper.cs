@@ -2,11 +2,11 @@
 
 namespace Api.Requests.AuditActions.Dto;
 
-public sealed class AuditActionForCreationDtoMapper : IMapper<AuditActionForCreationDto, Features.AuditAction.Dto.AuditActionForCreationDto>
+public sealed class AuditActionForCreationDtoMapper : IMapper<Requests.AuditActions.Dto.AuditActionForCreationDto, Features.AuditActions.Dto.AuditActionForCreationDto>
 {
-    public Features.AuditAction.Dto.AuditActionForCreationDto Map(AuditActionForCreationDto src)
+    public Features.AuditActions.Dto.AuditActionForCreationDto Map(AuditActionForCreationDto src)
     {
-        return new Features.AuditAction.Dto.AuditActionForCreationDto()
+        return new Features.AuditActions.Dto.AuditActionForCreationDto()
         {
             AuditActionId = src.AuditActionId,
             Description = src.Description

@@ -1,7 +1,7 @@
 ﻿using Core.OrderByService;
 using Domain;
-using Features.Audit.List;
-using Features.Audit.Mappers;
+using Features.Audits.List;
+using Features.Audits.Mappers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Api.Extensions;

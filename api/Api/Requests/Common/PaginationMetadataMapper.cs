@@ -2,7 +2,7 @@
 
 namespace Api.Requests.Common;
 
-public sealed class PaginationMetadataMapper : IMapper<Core.Pagination.PaginationMetadata, PaginationMetadata>
+public sealed class PaginationMetadataMapper : IMapper<Core.Pagination.PaginationMetadata, Requests.Common.PaginationMetadata>
 {
     public PaginationMetadata Map(Core.Pagination.PaginationMetadata src)
     {

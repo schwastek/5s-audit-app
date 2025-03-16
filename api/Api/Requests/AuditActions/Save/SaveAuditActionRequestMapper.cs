@@ -1,5 +1,5 @@
 ﻿using Core.MappingService;
-using Features.AuditAction.Save;
+using Features.AuditActions.Save;
 
 namespace Api.Requests.AuditActions.Save;
 

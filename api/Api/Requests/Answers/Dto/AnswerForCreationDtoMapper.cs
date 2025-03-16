@@ -2,11 +2,11 @@
 
 namespace Api.Requests.Answers.Dto;
 
-public sealed class AnswerForCreationDtoMapper : IMapper<AnswerForCreationDto, Features.Answer.Dto.AnswerForCreationDto>
+public sealed class AnswerForCreationDtoMapper : IMapper<Requests.Answers.Dto.AnswerForCreationDto, Features.Answers.Dto.AnswerForCreationDto>
 {
-    public Features.Answer.Dto.AnswerForCreationDto Map(AnswerForCreationDto src)
+    public Features.Answers.Dto.AnswerForCreationDto Map(AnswerForCreationDto src)
     {
-        return new Features.Answer.Dto.AnswerForCreationDto()
+        return new Features.Answers.Dto.AnswerForCreationDto()
         {
             AnswerId = src.AnswerId,
             AnswerText = src.AnswerText,

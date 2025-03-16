@@ -2,9 +2,9 @@
 
 namespace Api.Requests.Answers.Dto;
 
-public sealed class AnswerDtoMapper : IMapper<Features.Answer.Dto.AnswerDto, AnswerDto>
+public sealed class AnswerDtoMapper : IMapper<Features.Answers.Dto.AnswerDto, Requests.Answers.Dto.AnswerDto>
 {
-    public AnswerDto Map(Features.Answer.Dto.AnswerDto src)
+    public AnswerDto Map(Features.Answers.Dto.AnswerDto src)
     {
         return new AnswerDto()
         {

@@ -4,7 +4,7 @@ using Core.MediatR;
 using Core.Pagination;
 using Data.DbContext;
 using Data.Options;
-using Features.Audit.Get;
+using Features.Audits.Get;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
