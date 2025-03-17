@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Core.ValidatorService;
+namespace Features.Core.ValidatorService;
 
 public sealed class ValidatorNotFoundException : Exception
 {

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 
-namespace Core.ValidatorService;
+namespace Features.Core.ValidatorService;
 
 public class CustomAbstractValidator<T> : AbstractValidator<T>
 {

@@ -4,7 +4,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Core.ValidatorService;
+namespace Features.Core.ValidatorService;
 
 public interface IValidatorService
 {

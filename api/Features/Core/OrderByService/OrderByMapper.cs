@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Core.OrderByService;
+namespace Features.Core.OrderByService;
 
 public abstract class OrderByMapper<TSource, TDestination>
 {

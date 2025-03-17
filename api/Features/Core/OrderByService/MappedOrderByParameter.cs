@@ -1,4 +1,4 @@
-﻿namespace Core.OrderByService;
+﻿namespace Features.Core.OrderByService;
 
 public record MappedOrderByParameter
 {

@@ -1,5 +1,7 @@
-﻿using Core.MappingService;
+﻿using Features.Answers.Dto;
+using Features.AuditActions.Dto;
 using Features.Audits.Get;
+using Features.Core.MappingService;
 using System.Linq;
 
 namespace Api.Requests.Audits.Get;
@@ -27,11 +29,11 @@ public sealed class GetAuditQueryResultMapper : IMapper<GetAuditQueryResult, Get
     public GetAuditResponse Map(GetAuditQueryResult src)
     {
         var answers = src.Answers
-                .Select(_mapper.Map<Features.Answers.Dto.AnswerDto, Requests.Answers.Dto.AnswerDto>)
+                .Select(_mapper.Map<AnswerDto, Requests.Answers.Dto.AnswerDto>)
                 .ToList();
 
         var actions = src.Actions
-            .Select(_mapper.Map<Features.AuditActions.Dto.AuditActionDto, Requests.AuditActions.Dto.AuditActionDto>)
+            .Select(_mapper.Map<AuditActionDto, Requests.AuditActions.Dto.AuditActionDto>)
             .ToList();
 
         var response = new GetAuditResponse()

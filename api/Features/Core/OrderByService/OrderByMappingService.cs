@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Core.OrderByService;
+namespace Features.Core.OrderByService;
 
 public class OrderByMappingService<TSource, TDestination>
 {

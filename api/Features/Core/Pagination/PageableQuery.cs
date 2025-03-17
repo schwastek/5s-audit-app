@@ -1,4 +1,4 @@
-﻿namespace Core.Pagination;
+﻿namespace Features.Core.Pagination;
 
 public interface IPageableQuery
 {

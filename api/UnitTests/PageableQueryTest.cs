@@ -1,4 +1,4 @@
-﻿using Core.Pagination;
+﻿using Features.Core.Pagination;
 using Xunit;
 
 namespace UnitTests;

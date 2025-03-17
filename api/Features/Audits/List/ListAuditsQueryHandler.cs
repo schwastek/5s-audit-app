@@ -1,9 +1,9 @@
-﻿using Core.MappingService;
-using Core.OrderByService;
-using Core.Pagination;
+﻿using Features.Audits.Dto;
+using Features.Core.MappingService;
+using Features.Core.OrderByService;
+using Features.Core.Pagination;
 using Data.DbContext;
 using Domain;
-using Features.Audits.Dto;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;

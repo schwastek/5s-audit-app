@@ -1,5 +1,5 @@
-﻿using Core.MappingService;
-using Features.AuditActions.Update;
+﻿using Features.AuditActions.Update;
+using Features.Core.MappingService;
 
 namespace Api.Requests.AuditActions.Update;
 

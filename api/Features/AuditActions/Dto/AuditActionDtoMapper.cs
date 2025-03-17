@@ -1,4 +1,4 @@
-﻿using Core.MappingService;
+﻿using Features.Core.MappingService;
 using Domain;
 
 namespace Features.AuditActions.Dto;

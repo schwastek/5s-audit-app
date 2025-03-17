@@ -1,4 +1,4 @@
-﻿namespace Core.MappingService;
+﻿namespace Features.Core.MappingService;
 
 public interface IMapper<TSource, TDestination>
 {

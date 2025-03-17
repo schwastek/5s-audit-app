@@ -1,6 +1,6 @@
-﻿namespace Core.OrderByService;
+﻿namespace Features.Core.OrderByService;
 
-public record Sortable
+public record OrderByParameter
 {
     public string PropertyName { get; init; } = string.Empty;
     public bool SortDescending { get; init; }

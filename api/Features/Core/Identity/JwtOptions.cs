@@ -1,4 +1,4 @@
-﻿namespace Core.Identity;
+﻿namespace Features.Core.Identity;
 
 public class JwtOptions
 {

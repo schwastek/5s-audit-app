@@ -2,8 +2,8 @@
 using Api.Exceptions;
 using Api.Requests.Identity;
 using Api.Requests.Identity.Dto;
-using Core.Identity;
-using Core.ValidatorService;
+using Features.Core.Identity;
+using Features.Core.ValidatorService;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

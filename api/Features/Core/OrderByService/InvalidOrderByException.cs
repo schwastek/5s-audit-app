@@ -1,7 +1,7 @@
-﻿using Core.Exceptions;
+﻿using Features.Core.Exceptions;
 using Domain.Exceptions;
 
-namespace Core.OrderByService;
+namespace Features.Core.OrderByService;
 
 public sealed class InvalidOrderByException : ApplicationValidationException
 {

@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Core.Identity;
+namespace Features.Core.Identity;
 
 public class TokenService
 {

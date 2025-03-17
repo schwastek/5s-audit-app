@@ -1,5 +1,5 @@
-﻿using Domain.Exceptions;
-using Features.AuditActions.BusinessRules;
+﻿using Features.AuditActions.BusinessRules;
+using Domain.Exceptions;
 using FluentValidation;
 
 namespace Features.AuditActions.Update;

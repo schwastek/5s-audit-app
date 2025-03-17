@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Core.Pagination;
+namespace Features.Core.Pagination;
 
 public interface IPaginatedResultFactory<T>
 {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using Features.Core.Exceptions;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ public class ApplicationValidationExceptionHandler : IExceptionHandler
         CancellationToken cancellationToken
     )
     {
-        if (exception is not Core.Exceptions.ApplicationValidationException applicationValidationException)
+        if (exception is not ApplicationValidationException applicationValidationException)
         {
             return false;
         }

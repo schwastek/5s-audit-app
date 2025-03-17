@@ -1,6 +1,6 @@
-﻿using Core.OrderByService;
-using Core.Pagination;
-using Features.Audits.Dto;
+﻿using Features.Audits.Dto;
+using Features.Core.OrderByService;
+using Features.Core.Pagination;
 using MediatR;
 using System.Collections.Generic;
 

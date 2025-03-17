@@ -1,5 +1,4 @@
 ﻿using Api.Requests.Identity;
-using Core.ValidatorService;
 using Features.Accounts.BusinessRules;
 using Features.AuditActions.BusinessRules;
 using Features.AuditActions.Delete;
@@ -8,6 +7,7 @@ using Features.AuditActions.Update;
 using Features.Audits.BusinessRules;
 using Features.Audits.Get;
 using Features.Audits.Save;
+using Features.Core.ValidatorService;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
-namespace Core.Exceptions;
+namespace Features.Core.Exceptions;
 
 public class ApplicationValidationException : Exception
 {

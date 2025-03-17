@@ -6,13 +6,17 @@ using Api.Requests.Audits.List;
 using Api.Requests.Audits.Save;
 using Api.Requests.Common;
 using Api.Requests.Questions.List;
-using Core.MappingService;
+using Features.Answers.Dto;
 using Features.AuditActions.Delete;
+using Features.AuditActions.Dto;
 using Features.AuditActions.Save;
 using Features.AuditActions.Update;
+using Features.Audits.Dto;
 using Features.Audits.Get;
 using Features.Audits.List;
 using Features.Audits.Save;
+using Features.Core.MappingService;
+using Features.Questions.Dto;
 using Features.Questions.List;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -35,8 +39,8 @@ public static class AddMappersServiceExtensions
     private static void AddAuditMappers(IServiceCollection services)
     {
         // DTO
-        services.AddSingleton<IMapper<Domain.Audit, Features.Audits.Dto.AuditDto>, Features.Audits.Dto.AuditDtoMapper>();
-        services.AddSingleton<IMapper<Features.Audits.Dto.AuditListItemDto, Requests.Audits.Dto.AuditListItemDto>, Requests.Audits.Dto.AuditListItemDtoMapper>();
+        services.AddSingleton<IMapper<Domain.Audit, AuditDto>, AuditDtoMapper>();
+        services.AddSingleton<IMapper<AuditListItemDto, Requests.Audits.Dto.AuditListItemDto>, Requests.Audits.Dto.AuditListItemDtoMapper>();
 
         // CQRS
         services.AddSingleton<IMapper<GetAuditRequest, GetAuditQuery>, GetAuditRequestMapper>();
@@ -52,17 +56,17 @@ public static class AddMappersServiceExtensions
     private static void AddAnswerMappers(IServiceCollection services)
     {
         // DTO
-        services.AddSingleton<IMapper<Domain.Answer, Features.Answers.Dto.AnswerDto>, Features.Answers.Dto.AnswerDtoMapper>();
-        services.AddSingleton<IMapper<Features.Answers.Dto.AnswerDto, Requests.Answers.Dto.AnswerDto>, Requests.Answers.Dto.AnswerDtoMapper>();
-        services.AddSingleton<IMapper<Requests.Answers.Dto.AnswerForCreationDto, Features.Answers.Dto.AnswerForCreationDto>, Requests.Answers.Dto.AnswerForCreationDtoMapper>();
+        services.AddSingleton<IMapper<Domain.Answer, AnswerDto>, AnswerDtoMapper>();
+        services.AddSingleton<IMapper<AnswerDto, Requests.Answers.Dto.AnswerDto>, Requests.Answers.Dto.AnswerDtoMapper>();
+        services.AddSingleton<IMapper<Requests.Answers.Dto.AnswerForCreationDto, AnswerForCreationDto>, Requests.Answers.Dto.AnswerForCreationDtoMapper>();
     }
 
     private static void AddAuditActionMappers(IServiceCollection services)
     {
         // DTO
-        services.AddSingleton<IMapper<Domain.AuditAction, Features.AuditActions.Dto.AuditActionDto>, Features.AuditActions.Dto.AuditActionDtoMapper>();
-        services.AddSingleton<IMapper<Features.AuditActions.Dto.AuditActionDto, Requests.AuditActions.Dto.AuditActionDto>, Requests.AuditActions.Dto.AuditActionDtoMapper>();
-        services.AddSingleton<IMapper<Requests.AuditActions.Dto.AuditActionForCreationDto, Features.AuditActions.Dto.AuditActionForCreationDto>, Requests.AuditActions.Dto.AuditActionForCreationDtoMapper>();
+        services.AddSingleton<IMapper<Domain.AuditAction, AuditActionDto>, AuditActionDtoMapper>();
+        services.AddSingleton<IMapper<AuditActionDto, Requests.AuditActions.Dto.AuditActionDto>, Requests.AuditActions.Dto.AuditActionDtoMapper>();
+        services.AddSingleton<IMapper<Requests.AuditActions.Dto.AuditActionForCreationDto, AuditActionForCreationDto>, Requests.AuditActions.Dto.AuditActionForCreationDtoMapper>();
 
         // CQRS
         services.AddSingleton<IMapper<SaveAuditActionRequest, SaveAuditActionCommand>, SaveAuditActionRequestMapper>();
@@ -75,8 +79,8 @@ public static class AddMappersServiceExtensions
     private static void AddQuestionMappers(IServiceCollection services)
     {
         // DTO
-        services.AddSingleton<IMapper<Domain.Question, Features.Questions.Dto.QuestionDto>, Features.Questions.Dto.QuestionDtoMapper>();
-        services.AddSingleton<IMapper<Features.Questions.Dto.QuestionDto, Requests.Questions.Dto.QuestionDto>, Requests.Questions.Dto.QuestionDtoMapper>();
+        services.AddSingleton<IMapper<Domain.Question, QuestionDto>, QuestionDtoMapper>();
+        services.AddSingleton<IMapper<QuestionDto, Requests.Questions.Dto.QuestionDto>, Requests.Questions.Dto.QuestionDtoMapper>();
 
         // CQRS
         services.AddSingleton<IMapper<ListQuestionsQueryResult, ListQuestionsResponse>, ListQuestionsQueryResultMapper>();
@@ -84,6 +88,6 @@ public static class AddMappersServiceExtensions
 
     private static void AddPaginationMappers(IServiceCollection services)
     {
-        services.AddSingleton<IMapper<Core.Pagination.PaginationMetadata, Requests.Common.PaginationMetadata>, PaginationMetadataMapper>();
+        services.AddSingleton<IMapper<Features.Core.Pagination.PaginationMetadata, Requests.Common.PaginationMetadata>, PaginationMetadataMapper>();
     }
 }
