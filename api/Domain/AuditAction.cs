@@ -1,7 +1,6 @@
 ﻿using Domain.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Domain;
 
@@ -74,7 +73,7 @@ public sealed class AuditAction
             errors.Add(ErrorCodes.AuditAction.DescriptionIsTooLong);
         }
 
-        if (errors.Any())
+        if (errors.Count != 0)
         {
             throw new DomainValidationException(errors);
         }

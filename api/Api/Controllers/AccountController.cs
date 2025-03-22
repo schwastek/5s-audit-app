@@ -2,9 +2,9 @@
 using Api.Exceptions;
 using Api.Requests.Identity;
 using Api.Requests.Identity.Dto;
+using Domain;
 using Features.Core.Identity;
 using Features.Core.ValidatorService;
-using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -155,7 +155,7 @@ public class AccountController : ControllerBase
 
     private async Task SetRefreshToken(User user)
     {
-        var refreshToken = _tokenService.GenerateRefreshToken();
+        var refreshToken = TokenService.GenerateRefreshToken();
 
         user.RefreshTokens.Add(refreshToken);
         await _userManager.UpdateAsync(user);

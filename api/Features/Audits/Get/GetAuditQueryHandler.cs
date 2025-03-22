@@ -1,7 +1,7 @@
-﻿using Features.Audits.Dto;
-using Features.Core.MappingService;
-using Data.DbContext;
+﻿using Data.DbContext;
 using Domain;
+using Features.Audits.Dto;
+using Features.Core.MappingService;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
@@ -11,25 +11,25 @@ namespace Features.Audits.Get;
 
 public sealed class GetAuditQueryHandler : IRequestHandler<GetAuditQuery, GetAuditQueryResult>
 {
-    private readonly LeanAuditorContext context;
-    private readonly IMappingService mapper;
+    private readonly LeanAuditorContext _context;
+    private readonly IMappingService _mapper;
 
     public GetAuditQueryHandler(LeanAuditorContext context, IMappingService mapper)
     {
-        this.context = context;
-        this.mapper = mapper;
+        _context = context;
+        _mapper = mapper;
     }
 
     public async Task<GetAuditQueryResult> Handle(GetAuditQuery query, CancellationToken cancellationToken)
     {
-        var audit = await context.Audits
+        var audit = await _context.Audits
             .AsNoTracking()
             .Include(audit => audit.Actions)
             .Include(audit => audit.Answers)
             .ThenInclude(answer => answer.Question)
             .FirstAsync(audit => audit.AuditId.Equals(query.Id), cancellationToken);
 
-        var auditDto = mapper.Map<Audit, AuditDto>(audit);
+        var auditDto = _mapper.Map<Audit, AuditDto>(audit);
         var result = new GetAuditQueryResult()
         {
             AuditId = auditDto.AuditId,

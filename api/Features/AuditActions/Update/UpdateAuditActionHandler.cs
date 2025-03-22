@@ -7,22 +7,22 @@ namespace Features.AuditActions.Update;
 
 public sealed class UpdateAuditActionHandler : IRequestHandler<UpdateAuditActionCommand>
 {
-    private readonly LeanAuditorContext context;
+    private readonly LeanAuditorContext _context;
 
     public UpdateAuditActionHandler(LeanAuditorContext context)
     {
-        this.context = context;
+        _context = context;
     }
 
     public async Task Handle(UpdateAuditActionCommand command, CancellationToken cancellationToken)
     {
         // Find existing (presence already validated)
-        var auditAction = await context.AuditActions.FindAsync([command.AuditActionId], cancellationToken);
+        var auditAction = await _context.AuditActions.FindAsync([command.AuditActionId], cancellationToken);
 
         // Update
         auditAction!.SetCompletionStatus(command.IsComplete);
         auditAction!.ChangeDescription(command.Description);
 
-        await context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

@@ -16,7 +16,7 @@ public class OrderByMappingService<TSource, TDestination>
     {
         if (string.IsNullOrWhiteSpace(orderByQuery))
         {
-            return new List<Sortable>();
+            return [];
         }
 
         var orderByParameters = CreateOrderByParameters(orderByQuery);
@@ -47,7 +47,7 @@ public class OrderByMappingService<TSource, TDestination>
         return true;
     }
 
-    private static IReadOnlyList<OrderByParameter> CreateOrderByParameters(string orderByQuery)
+    private static List<OrderByParameter> CreateOrderByParameters(string orderByQuery)
     {
         var parameters = new List<OrderByParameter>();
 
@@ -61,7 +61,7 @@ public class OrderByMappingService<TSource, TDestination>
             var trimmed = orderByClause.Trim();
 
             // "created desc" -> "created" or "created" -> "created"
-            var space = trimmed.IndexOf(" ");
+            var space = trimmed.IndexOf(' ');
             var propertyName = space == -1
                 ? trimmed
                 : trimmed.Remove(space);
@@ -85,7 +85,7 @@ public class OrderByMappingService<TSource, TDestination>
         return unique;
     }
 
-    private IReadOnlyList<Sortable> CreateSortables(IEnumerable<OrderByParameter> orderByParameters)
+    private List<Sortable> CreateSortables(IEnumerable<OrderByParameter> orderByParameters)
     {
         var sortables = new List<Sortable>();
 

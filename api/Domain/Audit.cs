@@ -16,11 +16,11 @@ public sealed class Audit
     // Collection navigations, which contain references to multiple related entities, should always be non-nullable.
     // An empty collection means that no related entities exist, but the list itself should never be null.
     // See: https://learn.microsoft.com/en-us/ef/core/miscellaneous/nullable-reference-types#required-navigation-properties
-    private readonly List<Answer> answers = [];
-    public IReadOnlyCollection<Answer> Answers => answers.AsReadOnly();
+    private readonly List<Answer> _answers = [];
+    public IReadOnlyCollection<Answer> Answers => _answers.AsReadOnly();
 
-    private readonly List<AuditAction> actions = [];
-    public IReadOnlyCollection<AuditAction> Actions => actions.AsReadOnly();
+    private readonly List<AuditAction> _actions = [];
+    public IReadOnlyCollection<AuditAction> Actions => _actions.AsReadOnly();
 
     // EF Core supports using parameterized constructors to map entity properties 
     // during materialization (when retrieving data from the database and creating entity instances).
@@ -45,22 +45,22 @@ public sealed class Audit
 
     public void AddAnswers(params Answer[] answers)
     {
-        this.answers.AddRange(answers);
+        _answers.AddRange(answers);
     }
 
     public void AddAnswers(IEnumerable<Answer> answers)
     {
-        this.answers.AddRange(answers);
+        _answers.AddRange(answers);
     }
 
     public void AddActions(params AuditAction[] auditActions)
     {
-        this.actions.AddRange(auditActions);
+        _actions.AddRange(auditActions);
     }
 
     public void AddActions(IEnumerable<AuditAction> auditActions)
     {
-        this.actions.AddRange(auditActions);
+        _actions.AddRange(auditActions);
     }
 
     public void CalculateScore()

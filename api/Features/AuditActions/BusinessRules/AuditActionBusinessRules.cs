@@ -14,13 +14,13 @@ public interface IAuditActionBusinessRules
 
 public class AuditActionBusinessRules : IAuditActionBusinessRules
 {
-    private readonly LeanAuditorContext context;
+    private readonly LeanAuditorContext _context;
 
     public int DescriptionMaxLength => 280;
 
     public AuditActionBusinessRules(LeanAuditorContext context)
     {
-        this.context = context;
+        _context = context;
     }
 
     public async Task<bool> AuditActionExists(Guid auditActionId, CancellationToken cancellationToken)
@@ -30,7 +30,7 @@ public class AuditActionBusinessRules : IAuditActionBusinessRules
             return false;
         }
 
-        var result = await context.AuditActions.AnyAsync(x => x.AuditActionId == auditActionId, cancellationToken);
+        var result = await _context.AuditActions.AnyAsync(x => x.AuditActionId == auditActionId, cancellationToken);
 
         return result;
     }

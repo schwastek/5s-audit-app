@@ -1,5 +1,5 @@
-﻿using Features.Core.MappingService;
-using Domain;
+﻿using Domain;
+using Features.Core.MappingService;
 
 namespace Features.AuditActions.Dto;
 

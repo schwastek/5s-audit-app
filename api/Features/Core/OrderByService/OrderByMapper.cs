@@ -13,7 +13,7 @@ public abstract class OrderByMapper<TSource, TDestination>
         if (!Mappings.TryGetValue(propertyName, out IReadOnlyList<MappedOrderByParameter>? mapping))
         {
             // If mapping does not exist, return empty list
-            return new List<MappedOrderByParameter>();
+            return [];
         }
 
         return mapping;

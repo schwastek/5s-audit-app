@@ -35,9 +35,9 @@ namespace Api.Controllers;
 [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
 public class AuditsController : ControllerBase
 {
-    private readonly IValidatorService validator;
-    private readonly IMappingService mapper;
-    private readonly ISender sender;
+    private readonly IValidatorService _validator;
+    private readonly IMappingService _mapper;
+    private readonly ISender _sender;
 
     public AuditsController(
         IValidatorService validator,
@@ -45,9 +45,9 @@ public class AuditsController : ControllerBase
         ISender sender
     )
     {
-        this.validator = validator;
-        this.mapper = mapper;
-        this.sender = sender;
+        _validator = validator;
+        _mapper = mapper;
+        _sender = sender;
     }
 
     /// <summary>
@@ -57,9 +57,9 @@ public class AuditsController : ControllerBase
     [ProducesResponseType<ListAuditsResponse>(StatusCodes.Status200OK, MediaTypeConstants.JsonContentType)]
     public async Task<ActionResult<ListAuditsResponse>> ListAudits([FromQuery] ListAuditsRequest request)
     {
-        var query = mapper.Map<ListAuditsRequest, ListAuditsQuery>(request);
-        var result = await sender.Send(query, HttpContext.RequestAborted);
-        var response = mapper.Map<ListAuditsQueryResult, ListAuditsResponse>(result);
+        var query = _mapper.Map<ListAuditsRequest, ListAuditsQuery>(request);
+        var result = await _sender.Send(query, HttpContext.RequestAborted);
+        var response = _mapper.Map<ListAuditsQueryResult, ListAuditsResponse>(result);
 
         return Ok(response);
     }
@@ -71,9 +71,9 @@ public class AuditsController : ControllerBase
     [ProducesResponseType<GetAuditResponse>(StatusCodes.Status200OK, MediaTypeConstants.JsonContentType)]
     public async Task<ActionResult<GetAuditResponse>> GetAudit([FromRoute] GetAuditRequest request)
     {
-        var query = mapper.Map<GetAuditRequest, GetAuditQuery>(request);
-        var result = await sender.Send(query, HttpContext.RequestAborted);
-        var response = mapper.Map<GetAuditQueryResult, GetAuditResponse>(result);
+        var query = _mapper.Map<GetAuditRequest, GetAuditQuery>(request);
+        var result = await _sender.Send(query, HttpContext.RequestAborted);
+        var response = _mapper.Map<GetAuditQueryResult, GetAuditResponse>(result);
 
         return Ok(response);
     }
@@ -85,9 +85,9 @@ public class AuditsController : ControllerBase
     [ProducesResponseType<SaveAuditResponse>(StatusCodes.Status201Created, MediaTypeConstants.JsonContentType)]
     public async Task<ActionResult<SaveAuditResponse>> SaveAudit([FromBody] SaveAuditRequest request)
     {
-        var command = mapper.Map<SaveAuditRequest, SaveAuditCommand>(request);
-        var result = await sender.Send(command, HttpContext.RequestAborted);
-        var response = mapper.Map<SaveAuditCommandResult, SaveAuditResponse>(result);
+        var command = _mapper.Map<SaveAuditRequest, SaveAuditCommand>(request);
+        var result = await _sender.Send(command, HttpContext.RequestAborted);
+        var response = _mapper.Map<SaveAuditCommandResult, SaveAuditResponse>(result);
 
         // Adds Location header that specifies the URI of the newly created item.
         return CreatedAtAction(nameof(GetAudit), new { id = response.AuditId }, response);

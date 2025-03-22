@@ -17,18 +17,18 @@ public interface IAccountBusinessRules
 
 public class AccountBusinessRules : IAccountBusinessRules
 {
-    private readonly UserManager<User> userManager;
+    private readonly UserManager<User> _userManager;
 
     public AccountBusinessRules(UserManager<User> userManager)
     {
-        this.userManager = userManager;
+        _userManager = userManager;
     }
 
     public async Task<bool> IsEmailAvailable(string? email, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(email)) return false;
 
-        if (await userManager.Users.AnyAsync(x => x.Email == email, cancellationToken))
+        if (await _userManager.Users.AnyAsync(x => x.Email == email, cancellationToken))
         {
             return false;
         }
@@ -40,7 +40,7 @@ public class AccountBusinessRules : IAccountBusinessRules
     {
         if (string.IsNullOrEmpty(username)) return false;
 
-        if (await userManager.Users.AnyAsync(x => x.UserName == username, cancellationToken))
+        if (await _userManager.Users.AnyAsync(x => x.UserName == username, cancellationToken))
         {
             return false;
         }

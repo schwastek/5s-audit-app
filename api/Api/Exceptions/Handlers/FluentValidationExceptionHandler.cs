@@ -9,11 +9,11 @@ namespace Api.Exceptions.Handlers;
 
 public class FluentValidationExceptionHandler : IExceptionHandler
 {
-    private readonly IProblemDetailsService problemDetailsService;
+    private readonly IProblemDetailsService _problemDetailsService;
 
     public FluentValidationExceptionHandler(IProblemDetailsService problemDetailsService)
     {
-        this.problemDetailsService = problemDetailsService;
+        _problemDetailsService = problemDetailsService;
     }
 
     public async ValueTask<bool> TryHandleAsync(
@@ -33,7 +33,7 @@ public class FluentValidationExceptionHandler : IExceptionHandler
             Errors = GetValidationErrors(validationException.Errors)
         };
 
-        var result = await problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
+        var result = await _problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
         {
             HttpContext = httpContext,
             ProblemDetails = problemDetails
@@ -42,7 +42,7 @@ public class FluentValidationExceptionHandler : IExceptionHandler
         return result;
     }
 
-    private static ICollection<string> GetValidationErrors(IEnumerable<FluentValidation.Results.ValidationFailure> errors)
+    private static SortedSet<string> GetValidationErrors(IEnumerable<FluentValidation.Results.ValidationFailure> errors)
     {
         var result = new SortedSet<string>(StringComparer.Ordinal);
 

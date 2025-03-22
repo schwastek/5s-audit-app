@@ -84,12 +84,15 @@ internal sealed class SaveAuditTestFixture : BaseTestFixture
         _audit = await GetAudit(request.AuditId);
 
         Assert.That(_audit, Is.Not.Null);
-        Assert.That(_audit.Author, Is.EqualTo(request.Author));
-        Assert.That(_audit.Area, Is.EqualTo(request.Area));
-        Assert.That(_audit.StartDate, Is.EqualTo(request.StartDate));
-        Assert.That(_audit.EndDate, Is.EqualTo(request.EndDate));
-        Assert.That(_audit.Answers, Has.Count.EqualTo(request.Answers.Count));
-        Assert.That(_audit.Actions, Has.Count.EqualTo(request.Actions.Count));
+        Assert.Multiple(() =>
+        {
+            Assert.That(_audit.Author, Is.EqualTo(request.Author));
+            Assert.That(_audit.Area, Is.EqualTo(request.Area));
+            Assert.That(_audit.StartDate, Is.EqualTo(request.StartDate));
+            Assert.That(_audit.EndDate, Is.EqualTo(request.EndDate));
+            Assert.That(_audit.Answers, Has.Count.EqualTo(request.Answers.Count));
+            Assert.That(_audit.Actions, Has.Count.EqualTo(request.Actions.Count));
+        });
 
         // Map to common type - use anonymous types for comparison.
         var actualAnswers = _audit.Answers.Select(x => new

@@ -1,6 +1,6 @@
-﻿using Features.Core.Identity;
-using Data.DbContext;
+﻿using Data.DbContext;
 using Domain;
+using Features.Core.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -25,7 +25,7 @@ public static class IdentityServiceExtensions
 
         var jwtOptions = new JwtOptions();
         config.GetSection(JwtOptions.Section).Bind(jwtOptions);
-        SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.TokenKey));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.TokenKey));
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>

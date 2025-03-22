@@ -61,10 +61,13 @@ internal class UpdateAuditActionTestFixture : BaseTestFixture
         Assert.That(audit.Actions, Has.Count.EqualTo(1));
 
         var auditAction = audit!.Actions.First();
-        Assert.That(auditAction.AuditId, Is.EqualTo(_audit.AuditId));
-        Assert.That(auditAction.AuditActionId, Is.EqualTo(_auditAction.AuditActionId));
-        Assert.That(auditAction.Description, Is.EqualTo(request.Description));
-        Assert.That(auditAction.IsComplete, Is.EqualTo(request.IsComplete));
+        Assert.Multiple(() =>
+        {
+            Assert.That(auditAction.AuditId, Is.EqualTo(_audit.AuditId));
+            Assert.That(auditAction.AuditActionId, Is.EqualTo(_auditAction.AuditActionId));
+            Assert.That(auditAction.Description, Is.EqualTo(request.Description));
+            Assert.That(auditAction.IsComplete, Is.EqualTo(request.IsComplete));
+        });
     }
 
     [Test]

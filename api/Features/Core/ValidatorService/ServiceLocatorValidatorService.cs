@@ -13,17 +13,17 @@ public interface IValidatorService
 
 public class ServiceLocatorValidatorService : IValidatorService
 {
-    private readonly IServiceProvider serviceProvider;
+    private readonly IServiceProvider _serviceProvider;
 
     public ServiceLocatorValidatorService(IServiceProvider serviceProvider)
     {
-        this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+        _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
     }
 
     public async Task ValidateAndThrowAsync<T>(T instance, CancellationToken cancellationToken = default)
     {
         // Get registered validator.
-        var validator = serviceProvider.GetService<IValidator<T>>();
+        var validator = _serviceProvider.GetService<IValidator<T>>();
 
         if (validator is null)
         {

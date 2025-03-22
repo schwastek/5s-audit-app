@@ -9,11 +9,11 @@ namespace Features.Audits.Save;
 
 public sealed class SaveAuditCommandHandler : IRequestHandler<SaveAuditCommand, SaveAuditCommandResult>
 {
-    private readonly LeanAuditorContext context;
+    private readonly LeanAuditorContext _context;
 
     public SaveAuditCommandHandler(LeanAuditorContext context)
     {
-        this.context = context;
+        _context = context;
     }
 
     public async Task<SaveAuditCommandResult> Handle(SaveAuditCommand command, CancellationToken cancellationToken)
@@ -43,8 +43,8 @@ public sealed class SaveAuditCommandHandler : IRequestHandler<SaveAuditCommand, 
         audit.AddAnswers(answers);
         audit.AddActions(actions);
 
-        context.Audits.Add(audit);
-        context.SaveChanges();
+        _context.Audits.Add(audit);
+        _context.SaveChanges();
 
         audit.CalculateScore();
 

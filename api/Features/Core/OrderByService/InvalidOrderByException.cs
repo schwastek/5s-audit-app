@@ -1,5 +1,5 @@
-﻿using Features.Core.Exceptions;
-using Domain.Exceptions;
+﻿using Domain.Exceptions;
+using Features.Core.Exceptions;
 
 namespace Features.Core.OrderByService;
 

@@ -9,8 +9,8 @@ namespace Data.DbContext;
 
 public class LeanAuditorContext : IdentityDbContext<User>
 {
-    private readonly ConnectionStringOptions config = new();
-    private string connectionString { get; }
+    private readonly ConnectionStringOptions _config = new();
+    private readonly string _connectionString;
     public DbSet<Audit> Audits => Set<Audit>();
     public DbSet<AuditAction> AuditActions => Set<AuditAction>();
     public DbSet<Question> Questions => Set<Question>();
@@ -19,8 +19,8 @@ public class LeanAuditorContext : IdentityDbContext<User>
     public LeanAuditorContext(DbContextOptions<LeanAuditorContext> options, IOptions<ConnectionStringOptions> config)
     : base(options)
     {
-        this.config = config.Value;
-        this.connectionString = GetConnectionString();
+        _config = config.Value;
+        _connectionString = GetConnectionString();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -28,7 +28,7 @@ public class LeanAuditorContext : IdentityDbContext<User>
         optionsBuilder
             //.LogTo(Console.WriteLine)
             //.EnableSensitiveDataLogging()
-            .UseSqlite(connectionString);
+            .UseSqlite(_connectionString);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -45,7 +45,7 @@ public class LeanAuditorContext : IdentityDbContext<User>
     {
         // The following configures EF to create a SQLite database file in the
         // special "local" folder for your platform: `C:\Users\{User}\AppData\Local`
-        var filename = config.DefaultConnection;
+        var filename = _config.DefaultConnection;
         var folder = Environment.SpecialFolder.LocalApplicationData;
         var path = Environment.GetFolderPath(folder);
         var dbPath = System.IO.Path.Join(path, filename);

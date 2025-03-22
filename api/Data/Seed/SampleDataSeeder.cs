@@ -154,7 +154,9 @@ public class SampleDataSeeder
         {
             var entity = context.Model.FindEntityType(entityName!);
             var tableName = entity!.GetTableName();
+#pragma warning disable EF1002 // Risk of vulnerability to SQL injection.
             context.Database.ExecuteSqlRaw($"DELETE FROM {tableName}");
+#pragma warning restore EF1002 // Risk of vulnerability to SQL injection.
         }
 
         await context.SaveChangesAsync();

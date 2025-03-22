@@ -17,13 +17,13 @@ namespace Api.Controllers;
 [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
 public class QuestionsController : ControllerBase
 {
-    private readonly ISender sender;
-    private readonly IMappingService mapper;
+    private readonly ISender _sender;
+    private readonly IMappingService _mapper;
 
     public QuestionsController(ISender sender, IMappingService mapper)
     {
-        this.sender = sender;
-        this.mapper = mapper;
+        _sender = sender;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -33,8 +33,8 @@ public class QuestionsController : ControllerBase
     [ProducesResponseType<ListQuestionsResponse>(StatusCodes.Status200OK, MediaTypeConstants.JsonContentType)]
     public async Task<ActionResult<ListQuestionsResponse>> ListQuestions()
     {
-        var result = await sender.Send(new ListQuestionsQuery(), HttpContext.RequestAborted);
-        var response = mapper.Map<ListQuestionsQueryResult, ListQuestionsResponse>(result);
+        var result = await _sender.Send(new ListQuestionsQuery(), HttpContext.RequestAborted);
+        var response = _mapper.Map<ListQuestionsQueryResult, ListQuestionsResponse>(result);
 
         return Ok(response);
     }

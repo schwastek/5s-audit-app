@@ -26,17 +26,17 @@ public class SecurityHeadersMiddleware
             // Header used to specify whether a response can be framed in a <frame>, <iframe>, <embed> or <object> element.
             // For an API response, there is no requirement to be framed in any of those elements.
             // Providing DENY prevents any domain from framing the response returned by the API call. 
-            context.Response.Headers["X-Frame-Options"] = "DENY";
+            context.Response.Headers.XFrameOptions = "DENY";
 
             // Disable MIME sniffing. Header to instruct a browser to always use the MIME type
             // that is declared in the Content-Type header rather than trying to determine the MIME type based on the file's content.
             // This header with a nosniff value prevents browsers from performing MIME sniffing, and inappropriately interpreting responses as HTML.
-            context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+            context.Response.Headers.XContentTypeOptions = "nosniff";
 
             // Content-Security-Policy:
             // 1. frame-ancestors 'none':
             //      - Prevents the API response from being embedded in any iframe or frame, protecting against drag-and-drop style clickjacking attacks.
-            context.Response.Headers["Content-Security-Policy"] = "frame-ancestors 'none'";
+            context.Response.Headers.ContentSecurityPolicy = "frame-ancestors 'none'";
 
             return Task.CompletedTask;
         });

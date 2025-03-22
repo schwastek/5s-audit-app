@@ -24,10 +24,31 @@ charset = utf-8-bom
 
 [*.{cs,vb}]
 # Namespace does not match folder structure
-dotnet_diagnostic.IDE0130.severity = error
+dotnet_diagnostic.IDE0130.severity = warning
 
 # Use file-scoped namespace
 dotnet_diagnostic.IDE0161.severity = warning
 
 # Remove unnecessary using directives
-dotnet_diagnostic.IDE0005.severity = error
+dotnet_diagnostic.IDE0005.severity = warning
+
+# Enforce _ prefix for private fields
+dotnet_naming_rule.private_fields_should_have_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_should_have_underscore.style = underscore_prefix
+dotnet_naming_rule.private_fields_should_have_underscore.severity = warning
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+
+dotnet_naming_style.underscore_prefix.required_prefix = _
+dotnet_naming_style.underscore_prefix.capitalization = camel_case
+
+# Do not add 'this' qualification
+dotnet_diagnostic.IDE0009.severity = none
+dotnet_diagnostic.IDE0003.severity = warning
+
+# Do not use primary constructors
+dotnet_diagnostic.IDE0290.severity = none
+
+# Disable: null check can be simplified (if null check)
+dotnet_diagnostic.IDE0270.severity = none

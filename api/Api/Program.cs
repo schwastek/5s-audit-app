@@ -1,10 +1,10 @@
 ﻿using Api.Extensions;
+using Data.DbContext;
+using Data.Options;
 using Features.Audits.Get;
 using Features.Core.Identity;
 using Features.Core.MediatR;
 using Features.Core.Pagination;
-using Data.DbContext;
-using Data.Options;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;

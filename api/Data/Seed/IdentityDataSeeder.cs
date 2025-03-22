@@ -1,4 +1,4 @@
-using Data.DbContext;
+﻿using Data.DbContext;
 using Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,9 +9,9 @@ public static class IdentityDataSeeder
 {
     public static async Task SeedAsync(UserManager<User> userManager)
     {
-        List<User> users = new List<User>
+        var users = new List<User>
             {
-                new User { DisplayName = "John", UserName = "john", Email = "john@test.com" }
+                new() { DisplayName = "John", UserName = "john", Email = "john@test.com" }
             };
 
         foreach (User user in users)
@@ -36,7 +36,9 @@ public static class IdentityDataSeeder
 
         foreach (var table in tables)
         {
+#pragma warning disable EF1002 // Risk of vulnerability to SQL injection.
             context.Database.ExecuteSqlRaw($"DELETE FROM {table}");
+#pragma warning restore EF1002 // Risk of vulnerability to SQL injection.
         }
 
         await context.SaveChangesAsync();

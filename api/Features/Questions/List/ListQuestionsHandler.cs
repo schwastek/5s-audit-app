@@ -1,7 +1,7 @@
-﻿using Features.Core.MappingService;
-using Features.Questions.Dto;
-using Data.DbContext;
+﻿using Data.DbContext;
 using Domain;
+using Features.Core.MappingService;
+using Features.Questions.Dto;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -12,22 +12,22 @@ namespace Features.Questions.List;
 
 public sealed class ListQuestionsHandler : IRequestHandler<ListQuestionsQuery, ListQuestionsQueryResult>
 {
-    private readonly LeanAuditorContext context;
-    private readonly IMappingService mapper;
+    private readonly LeanAuditorContext _context;
+    private readonly IMappingService _mapper;
 
     public ListQuestionsHandler(LeanAuditorContext context, IMappingService mapper)
     {
-        this.context = context;
-        this.mapper = mapper;
+        _context = context;
+        _mapper = mapper;
     }
 
     public async Task<ListQuestionsQueryResult> Handle(ListQuestionsQuery request, CancellationToken cancellationToken)
     {
-        var questions = await context.Questions.ToListAsync(cancellationToken);
+        var questions = await _context.Questions.ToListAsync(cancellationToken);
 
         // Mapping
         var questionsList = questions
-            .Select(question => mapper.Map<Question, QuestionDto>(question))
+            .Select(_mapper.Map<Question, QuestionDto>)
             .ToList();
 
         var result = new ListQuestionsQueryResult()

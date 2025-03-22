@@ -9,11 +9,11 @@ namespace Api.Exceptions.Handlers;
 
 public class DefaultExceptionHandler : IExceptionHandler
 {
-    private readonly IProblemDetailsService problemDetailsService;
+    private readonly IProblemDetailsService _problemDetailsService;
 
     public DefaultExceptionHandler(IProblemDetailsService problemDetailsService)
     {
-        this.problemDetailsService = problemDetailsService;
+        _problemDetailsService = problemDetailsService;
     }
 
     public async ValueTask<bool> TryHandleAsync(
@@ -30,7 +30,7 @@ public class DefaultExceptionHandler : IExceptionHandler
             Detail = exception.Message
         };
 
-        var result = await problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
+        var result = await _problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
         {
             HttpContext = httpContext,
             ProblemDetails = problemDetails

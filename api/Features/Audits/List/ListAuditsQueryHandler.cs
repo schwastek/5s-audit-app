@@ -1,9 +1,8 @@
-﻿using Features.Audits.Dto;
-using Features.Core.MappingService;
+﻿using Data.DbContext;
+using Domain;
+using Features.Audits.Dto;
 using Features.Core.OrderByService;
 using Features.Core.Pagination;
-using Data.DbContext;
-using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -14,40 +13,37 @@ namespace Features.Audits.List;
 
 public sealed class ListAuditsQueryHandler : IRequestHandler<ListAuditsQuery, ListAuditsQueryResult>
 {
-    private readonly LeanAuditorContext context;
-    private readonly IMappingService mapper;
-    private readonly OrderByMappingService<ListAuditsQuery, Audit> orderByMapping;
-    private readonly IPaginatedResultFactory<Audit> paginatedResultFactory;
+    private readonly LeanAuditorContext _context;
+    private readonly OrderByMappingService<ListAuditsQuery, Audit> _orderByMapping;
+    private readonly IPaginatedResultFactory<Audit> _paginatedResultFactory;
 
     public ListAuditsQueryHandler(
         LeanAuditorContext context,
-        IMappingService mapper,
         OrderByMappingService<ListAuditsQuery, Audit> orderByMapping,
         IPaginatedResultFactory<Audit> paginatedResultFactory
     )
     {
-        this.context = context;
-        this.mapper = mapper;
-        this.orderByMapping = orderByMapping;
-        this.paginatedResultFactory = paginatedResultFactory;
+        _context = context;
+        _orderByMapping = orderByMapping;
+        _paginatedResultFactory = paginatedResultFactory;
     }
 
     public async Task<ListAuditsQueryResult> Handle(ListAuditsQuery query, CancellationToken cancellationToken)
     {
-        if (!orderByMapping.ValidMappingExists(query.OrderBy))
+        if (!_orderByMapping.ValidMappingExists(query.OrderBy))
         {
             throw new InvalidOrderByException(query.OrderBy);
         }
 
-        var sortables = orderByMapping.Map(query.OrderBy);
+        var sortables = _orderByMapping.Map(query.OrderBy);
 
-        var audits = context.Audits
+        var audits = _context.Audits
             .AsNoTracking()
             .Include(audit => audit.Answers)
             .ThenInclude(answer => answer.Question)
             .ApplySort(sortables);
 
-        var paged = await paginatedResultFactory.CreateAsync(audits, query, cancellationToken);
+        var paged = await _paginatedResultFactory.CreateAsync(audits, query, cancellationToken);
 
         // Calculate score
         foreach (var audit in paged.Items)

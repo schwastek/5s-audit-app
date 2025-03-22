@@ -51,11 +51,14 @@ internal sealed class GetAuditTestFixture : BaseTestFixture
         var content = await response.Content.ReadFromJsonAsync<GetAuditResponse>();
 
         Assert.That(content, Is.Not.Null);
-        Assert.That(content.AuditId, Is.EqualTo(request.Id));
-        Assert.That(content.Author, Is.EqualTo(_audit!.Author));
-        Assert.That(content.Area, Is.EqualTo(_audit!.Area));
-        Assert.That(content.StartDate, Is.EqualTo(_audit!.StartDate));
-        Assert.That(content.EndDate, Is.EqualTo(_audit!.EndDate));
+        Assert.Multiple(() =>
+        {
+            Assert.That(content.AuditId, Is.EqualTo(request.Id));
+            Assert.That(content.Author, Is.EqualTo(_audit!.Author));
+            Assert.That(content.Area, Is.EqualTo(_audit!.Area));
+            Assert.That(content.StartDate, Is.EqualTo(_audit!.StartDate));
+            Assert.That(content.EndDate, Is.EqualTo(_audit!.EndDate));
+        });
     }
 
     [Test]

@@ -22,16 +22,16 @@ namespace Api.Controllers;
 [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
 public class ActionsController : ControllerBase
 {
-    private readonly ISender sender;
-    private readonly IMappingService mapper;
+    private readonly ISender _sender;
+    private readonly IMappingService _mapper;
 
     public ActionsController(
         ISender sender,
         IMappingService mapper
     )
     {
-        this.sender = sender;
-        this.mapper = mapper;
+        _sender = sender;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -41,9 +41,9 @@ public class ActionsController : ControllerBase
     [ProducesResponseType<SaveAuditActionResponse>(StatusCodes.Status200OK, MediaTypeConstants.JsonContentType)]
     public async Task<ActionResult<SaveAuditActionResponse>> SaveAuditAction([FromBody] SaveAuditActionRequest request)
     {
-        var command = mapper.Map<SaveAuditActionRequest, SaveAuditActionCommand>(request);
-        var result = await sender.Send(command, HttpContext.RequestAborted);
-        var response = mapper.Map<SaveAuditActionCommandResult, SaveAuditActionResponse>(result);
+        var command = _mapper.Map<SaveAuditActionRequest, SaveAuditActionCommand>(request);
+        var result = await _sender.Send(command, HttpContext.RequestAborted);
+        var response = _mapper.Map<SaveAuditActionCommandResult, SaveAuditActionResponse>(result);
 
         return Ok(response);
     }
@@ -55,8 +55,8 @@ public class ActionsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> DeleteAuditAction([FromRoute] DeleteAuditActionRequest request)
     {
-        var command = mapper.Map<DeleteAuditActionRequest, DeleteAuditActionCommand>(request);
-        await sender.Send(command, HttpContext.RequestAborted);
+        var command = _mapper.Map<DeleteAuditActionRequest, DeleteAuditActionCommand>(request);
+        await _sender.Send(command, HttpContext.RequestAborted);
 
         return NoContent();
     }
@@ -69,8 +69,8 @@ public class ActionsController : ControllerBase
     public async Task<ActionResult> UpdateAuditAction([FromRoute] Guid auditActionId, [FromBody] UpdateAuditActionRequest request)
     {
         request.AuditActionId = auditActionId;
-        var command = mapper.Map<UpdateAuditActionRequest, UpdateAuditActionCommand>(request);
-        await sender.Send(command, HttpContext.RequestAborted);
+        var command = _mapper.Map<UpdateAuditActionRequest, UpdateAuditActionCommand>(request);
+        await _sender.Send(command, HttpContext.RequestAborted);
 
         return NoContent();
     }

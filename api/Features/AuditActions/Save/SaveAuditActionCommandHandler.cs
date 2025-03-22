@@ -1,7 +1,7 @@
-﻿using Features.AuditActions.Dto;
-using Features.Core.MappingService;
-using Data.DbContext;
+﻿using Data.DbContext;
 using Domain;
+using Features.AuditActions.Dto;
+using Features.Core.MappingService;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,22 +10,22 @@ namespace Features.AuditActions.Save;
 
 public sealed class SaveAuditActionCommandHandler : IRequestHandler<SaveAuditActionCommand, SaveAuditActionCommandResult>
 {
-    private readonly LeanAuditorContext context;
-    private readonly IMappingService mapper;
+    private readonly LeanAuditorContext _context;
+    private readonly IMappingService _mapper;
 
     public SaveAuditActionCommandHandler(
         LeanAuditorContext context,
         IMappingService mapper
     )
     {
-        this.context = context;
-        this.mapper = mapper;
+        _context = context;
+        _mapper = mapper;
     }
 
     public async Task<SaveAuditActionCommandResult> Handle(SaveAuditActionCommand command, CancellationToken cancellationToken)
     {
         // Find existing (presence already validated)
-        var audit = await context.Audits.FindAsync([command.AuditId], cancellationToken);
+        var audit = await _context.Audits.FindAsync([command.AuditId], cancellationToken);
 
         // Create & add
         var auditAction = AuditAction.Create(
@@ -33,10 +33,10 @@ public sealed class SaveAuditActionCommandHandler : IRequestHandler<SaveAuditAct
             description: command.Description
         );
         audit!.AddActions(auditAction);
-        await context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
 
         // Map
-        var auditActionDto = mapper.Map<AuditAction, AuditActionDto>(auditAction);
+        var auditActionDto = _mapper.Map<AuditAction, AuditActionDto>(auditAction);
         var result = new SaveAuditActionCommandResult()
         {
             AuditActionId = auditActionDto.AuditActionId,

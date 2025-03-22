@@ -10,17 +10,17 @@ public interface IMappingService
 
 public class ServiceLocatorMappingService : IMappingService
 {
-    private readonly IServiceProvider serviceProvider;
+    private readonly IServiceProvider _serviceProvider;
 
     public ServiceLocatorMappingService(IServiceProvider serviceProvider)
     {
-        this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+        _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
     }
 
     public TDestination Map<TSource, TDestination>(TSource entity)
     {
         // Get registered mapper
-        var mapper = serviceProvider.GetService<IMapper<TSource, TDestination>>();
+        var mapper = _serviceProvider.GetService<IMapper<TSource, TDestination>>();
 
         if (mapper is null)
         {

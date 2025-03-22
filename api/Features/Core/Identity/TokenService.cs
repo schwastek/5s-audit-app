@@ -21,17 +21,17 @@ public class TokenService
 
     public string CreateToken(User user)
     {
-        List<Claim> claims = new()
+        var claims = new List<Claim>()
         {
-            new Claim(ClaimTypes.Name, user.UserName!),
-            new Claim(ClaimTypes.NameIdentifier, user.Id),
-            new Claim(ClaimTypes.Email, user.Email!),
+            new(ClaimTypes.Name, user.UserName!),
+            new(ClaimTypes.NameIdentifier, user.Id),
+            new(ClaimTypes.Email, user.Email!),
         };
 
-        SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(_config.TokenKey));
-        SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.TokenKey));
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
-        SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+        var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddHours(10),
@@ -45,7 +45,7 @@ public class TokenService
         return token;
     }
 
-    public RefreshToken GenerateRefreshToken()
+    public static RefreshToken GenerateRefreshToken()
     {
         var randomNumber = new byte[32];
         using var rng = RandomNumberGenerator.Create();

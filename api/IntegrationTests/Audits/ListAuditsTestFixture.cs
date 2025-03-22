@@ -73,12 +73,15 @@ internal sealed class ListAuditsTestFixture : BaseTestFixture
         var content = await response.Content.ReadFromJsonAsync<ListAuditsResponse>();
 
         Assert.That(content, Is.Not.Null);
-        Assert.That(content.Items, Has.Count.EqualTo(1));
-        Assert.That(content.Metadata.CurrentPage, Is.EqualTo(3));
-        Assert.That(content.Metadata.TotalPages, Is.EqualTo(3));
-        Assert.That(content.Metadata.TotalCount, Is.EqualTo(3));
-        Assert.That(content.Metadata.HasNextPage, Is.False);
-        Assert.That(content.Metadata.HasPreviousPage, Is.True);
+        Assert.Multiple(() =>
+        {
+            Assert.That(content.Items, Has.Count.EqualTo(1));
+            Assert.That(content.Metadata.CurrentPage, Is.EqualTo(3));
+            Assert.That(content.Metadata.TotalPages, Is.EqualTo(3));
+            Assert.That(content.Metadata.TotalCount, Is.EqualTo(3));
+            Assert.That(content.Metadata.HasNextPage, Is.False);
+            Assert.That(content.Metadata.HasPreviousPage, Is.True);
+        });
     }
 
     [Test]

@@ -13,11 +13,11 @@ public interface IAuditBusinessRules
 
 public class AuditBusinessRules : IAuditBusinessRules
 {
-    private readonly LeanAuditorContext context;
+    private readonly LeanAuditorContext _context;
 
     public AuditBusinessRules(LeanAuditorContext context)
     {
-        this.context = context;
+        _context = context;
     }
 
     public async Task<bool> AuditExists(Guid auditId, CancellationToken cancellationToken)
@@ -27,7 +27,7 @@ public class AuditBusinessRules : IAuditBusinessRules
             return false;
         }
 
-        var result = await context.Audits.AnyAsync(a => a.AuditId == auditId, cancellationToken);
+        var result = await _context.Audits.AnyAsync(a => a.AuditId == auditId, cancellationToken);
 
         return result;
     }
