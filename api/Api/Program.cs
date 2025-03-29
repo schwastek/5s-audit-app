@@ -27,24 +27,23 @@ builder.Services.AddControllers(opt =>
 {
     // Disable automatic HTTP 400 responses for invalid model binding or model validation.
     // Both model binding and model validation occur before the execution of a controller action.
+    // If a non-nullable string with a default value of `null!` is missing in a POST request,
+    // it triggers a validation error, leaving the property null.
+    // If a required string is missing, a binding error (JSON deserialization failure) occurs,
+    // causing the entire request model to be null in the controller action.
     opt.SuppressModelStateInvalidFilter = true;
 });
 
 builder.Services.AddAuthorization(opt =>
 {
-    // Requires all users to be authenticated by default, providing a more secure approach
-    // compared to manually adding the [Authorize] attribute to new controllers.
-    // The fallback authorization policy applies to all requests that do not explicitly specify 
-    // an authorization policy, such as [Authorize(Policy = "MyPolicy")] or [AllowAnonymous].
-    // FallbackPolicy is used instead of DefaultPolicy because DefaultPolicy only applies
-    // when an endpoint has [Authorize] without a specified policy.
-    // In contrast, FallbackPolicy is enforced globally, even on endpoints without [Authorize].
-    // Setting FallbackPolicy is preferred over applying an authorization filter to all controllers..
+    // Requires all users to be authenticated by default.
     // See: https://learn.microsoft.com/en-us/aspnet/core/security/authorization/secure-data?view=aspnetcore-8.0#require-authenticated-users
     var policy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .Build();
-    opt.FallbackPolicy = policy;
+
+    // The DefaultPolicy is the policy used with the [Authorize] attribute when no policy name is specified.
+    opt.DefaultPolicy = policy;
 });
 
 builder.Services.AddDbContext<LeanAuditorContext>();

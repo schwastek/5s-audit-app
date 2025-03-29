@@ -1,10 +1,15 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Api.Exceptions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Reflection;
 
 namespace Api.Extensions;
@@ -33,6 +38,9 @@ public static class AddSwaggerServiceExtensions
 
             // Mark non-nullable properties as required.
             c.SchemaFilter<RequireNonNullablePropertiesSchemaFilter>();
+
+            // Add common responses to all endpoints.
+            c.OperationFilter<CommonResponsesOperationFilter>();
 
             // Set the comments path for the Swagger JSON and UI
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -81,6 +89,60 @@ public class RequireNonNullablePropertiesSchemaFilter : ISchemaFilter
         foreach (var property in nonNullableProperties)
         {
             schema.Required.Add(property);
+        }
+    }
+}
+
+public class CommonResponsesOperationFilter : IOperationFilter
+{
+    public void Apply(OpenApiOperation operation, OperationFilterContext context)
+    {
+        operation.Responses.TryAdd(
+            StatusCodes.Status400BadRequest.ToString(),
+            new OpenApiResponse
+            {
+                Description = "Bad Request",
+                Content = new Dictionary<string, OpenApiMediaType>
+                {
+                    [MediaTypeNames.Application.Json] = new OpenApiMediaType
+                    {
+                        Schema = context.SchemaGenerator.GenerateSchema(typeof(CustomValidationProblemDetails), context.SchemaRepository)
+                    }
+                }
+            }
+        );
+
+        operation.Responses.TryAdd(
+            StatusCodes.Status500InternalServerError.ToString(),
+            new OpenApiResponse
+            {
+                Description = "Internal Server Error",
+                Content = new Dictionary<string, OpenApiMediaType>
+                {
+                    [MediaTypeNames.Application.Json] = new OpenApiMediaType
+                    {
+                        Schema = context.SchemaGenerator.GenerateSchema(typeof(ProblemDetails), context.SchemaRepository)
+                    }
+                }
+            }
+        );
+
+        // Check if the controller or method has [Authorize] attribute.
+        var authorizeAttributes = context.MethodInfo.DeclaringType?.GetCustomAttributes(true)
+            .Union(context.MethodInfo.GetCustomAttributes(true))
+            .OfType<AuthorizeAttribute>()
+            .ToList() ?? [];
+
+        // Add 401 Unauthorized response to all operations that are decorated with the [Authorize] attribute.
+        if (authorizeAttributes.Count != 0)
+        {
+            operation.Responses.TryAdd(
+                StatusCodes.Status401Unauthorized.ToString(),
+                new OpenApiResponse
+                {
+                    Description = "Unauthorized"
+                }
+            );
         }
     }
 }

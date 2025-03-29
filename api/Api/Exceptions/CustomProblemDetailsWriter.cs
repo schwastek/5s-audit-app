@@ -1,7 +1,7 @@
-﻿using Api.Constants;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
+using System.Net.Mime;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -46,6 +46,6 @@ public class CustomProblemDetailsWriter : IProblemDetailsWriter
         return new ValueTask(httpContext.Response.WriteAsJsonAsync(
                         context.ProblemDetails,
                          _serializerOptions.GetTypeInfo(problemDetailsType),
-                        contentType: MediaTypeConstants.ProblemDetailsContentType));
+                        contentType: MediaTypeNames.Application.ProblemJson));
     }
 }

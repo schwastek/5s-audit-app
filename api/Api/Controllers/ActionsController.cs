@@ -1,6 +1,4 @@
-﻿using Api.Constants;
-using Api.Exceptions;
-using Api.Requests.AuditActions.Delete;
+﻿using Api.Requests.AuditActions.Delete;
 using Api.Requests.AuditActions.Save;
 using Api.Requests.AuditActions.Update;
 using Features.AuditActions.Delete;
@@ -8,18 +6,20 @@ using Features.AuditActions.Save;
 using Features.AuditActions.Update;
 using Features.Core.MappingService;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Net.Mime;
 using System.Threading.Tasks;
 
 namespace Api.Controllers;
 
+[Authorize]
 [Route("api/actions")]
 [ApiController]
-[ProducesResponseType<CustomValidationProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeConstants.ProblemDetailsContentType)]
-[ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeConstants.ProblemDetailsContentType)]
-[ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+[Produces(MediaTypeNames.Application.Json)]
+[Consumes(MediaTypeNames.Application.Json)]
 public class ActionsController : ControllerBase
 {
     private readonly ISender _sender;
@@ -38,7 +38,6 @@ public class ActionsController : ControllerBase
     /// Adds an action to the audit
     /// </summary>
     [HttpPost]
-    [ProducesResponseType<SaveAuditActionResponse>(StatusCodes.Status200OK, MediaTypeConstants.JsonContentType)]
     public async Task<ActionResult<SaveAuditActionResponse>> SaveAuditAction([FromBody] SaveAuditActionRequest request)
     {
         var command = _mapper.Map<SaveAuditActionRequest, SaveAuditActionCommand>(request);

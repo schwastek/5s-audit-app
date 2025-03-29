@@ -1,6 +1,4 @@
-﻿using Api.Constants;
-using Api.Exceptions;
-using Api.Requests.Audits.Get;
+﻿using Api.Requests.Audits.Get;
 using Api.Requests.Audits.List;
 using Api.Requests.Audits.Save;
 using Features.Audits.Get;
@@ -9,13 +7,16 @@ using Features.Audits.Save;
 using Features.Core.MappingService;
 using Features.Core.ValidatorService;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using System.Net.Mime;
 using System.Threading.Tasks;
 
 namespace Api.Controllers;
 
+[Authorize]
 [Route("api/audits")]
 [ApiController]
 // Note #1:
@@ -24,15 +25,15 @@ namespace Api.Controllers;
 // See: https://github.com/dotnet/aspnetcore/issues/56177
 // Note #2:
 // The Produces attribute content type will overwrite the content type specified in the ProducesResponseType attribute.
-// The Produces attribute takes precedence if both are defined. Use only ProducesResponseType.
+// The Produces attribute takes precedence if both are defined.
 // Note #3:
 // The ProducesResponseType attribute requires a response type to set the correct content type.
 // Note #4:
-// Pass typeof(void) explicitly to the ProducesResponseType attribute to avoid
-// the default ProblemDetails schema in the OpenAPI specification for responses with no content.
-[ProducesResponseType<CustomValidationProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeConstants.ProblemDetailsContentType)]
-[ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeConstants.ProblemDetailsContentType)]
-[ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+// Framework doesn't infer 200 OK from ActionResult<T> if other [ProducesResponseType] attributes exist.
+// If [ProducesResponseType(typeof(void), 401)] is present, Swagger will document 401 but not 200 OK.
+[Produces(MediaTypeNames.Application.Json)]
+[Consumes(MediaTypeNames.Application.Json)]
+[Authorize]
 public class AuditsController : ControllerBase
 {
     private readonly IValidatorService _validator;
@@ -54,7 +55,6 @@ public class AuditsController : ControllerBase
     /// Gets list of audits
     /// </summary>
     [HttpGet]
-    [ProducesResponseType<ListAuditsResponse>(StatusCodes.Status200OK, MediaTypeConstants.JsonContentType)]
     public async Task<ActionResult<ListAuditsResponse>> ListAudits([FromQuery] ListAuditsRequest request)
     {
         var query = _mapper.Map<ListAuditsRequest, ListAuditsQuery>(request);
@@ -68,7 +68,6 @@ public class AuditsController : ControllerBase
     /// Gets audit by ID
     /// </summary>
     [HttpGet("{id}")]
-    [ProducesResponseType<GetAuditResponse>(StatusCodes.Status200OK, MediaTypeConstants.JsonContentType)]
     public async Task<ActionResult<GetAuditResponse>> GetAudit([FromRoute] GetAuditRequest request)
     {
         var query = _mapper.Map<GetAuditRequest, GetAuditQuery>(request);
@@ -82,7 +81,6 @@ public class AuditsController : ControllerBase
     /// Creates a new audit
     /// </summary>
     [HttpPost]
-    [ProducesResponseType<SaveAuditResponse>(StatusCodes.Status201Created, MediaTypeConstants.JsonContentType)]
     public async Task<ActionResult<SaveAuditResponse>> SaveAudit([FromBody] SaveAuditRequest request)
     {
         var command = _mapper.Map<SaveAuditRequest, SaveAuditCommand>(request);
