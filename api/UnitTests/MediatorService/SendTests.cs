@@ -16,12 +16,12 @@ public class SendTests : IDisposable
     {
         // Arrange
         var services = new ServiceCollection();
-        services.AddSingleton(sp => new Log());
-        services.AddSingleton<IRequestHandler<RequestWithResponse, string>, HandlerWithResponse>();
+        services.AddSingleton<Log>();
+        services.AddTransient<IRequestHandler<RequestWithResponse, string>, HandlerWithResponse>();
         services.AddTransient<IRequestHandler<RequestWithNoResponse, Unit>, HandlerWithNoResponse>();
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behavior1<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behavior2<,>));
-        services.AddSingleton<IMediator, Mediator>();
+        services.AddTransient<IMediator, Mediator>();
 
         _serviceProvider = services.BuildServiceProvider();
     }
@@ -31,74 +31,58 @@ public class SendTests : IDisposable
         _serviceProvider.Dispose();
     }
 
-    public class Log : List<string> { }
+    private class Log : List<string> { }
 
-    public class RequestWithResponse : IRequest<string>
+    private class RequestWithResponse
     {
         public string Message { get; set; } = string.Empty;
     }
 
-    public class HandlerWithResponse : IRequestHandler<RequestWithResponse, string>
+    private class HandlerWithResponse(Log log) : IRequestHandler<RequestWithResponse, string>
     {
-        private readonly Log _log;
-
-        public HandlerWithResponse(Log log) => _log = log;
-
         public Task<string> Handle(RequestWithResponse request, CancellationToken cancellationToken)
         {
-            _log.Add("Handler");
-            _log.Add($"Request message: {request.Message}");
+            log.Add("Handler");
+            log.Add($"Request message: {request.Message}");
 
             return Task.FromResult(request.Message);
         }
     }
 
-    public class RequestWithNoResponse : IRequest<Unit>
+    private class RequestWithNoResponse
     {
         public string Message { get; set; } = string.Empty;
     }
 
-    public class HandlerWithNoResponse : IRequestHandler<RequestWithNoResponse, Unit>
+    private class HandlerWithNoResponse(Log log) : IRequestHandler<RequestWithNoResponse, Unit>
     {
-        private readonly Log _log;
-
-        public HandlerWithNoResponse(Log log) => _log = log;
-
         public Task<Unit> Handle(RequestWithNoResponse request, CancellationToken cancellationToken)
         {
-            _log.Add("Handler");
-            _log.Add($"Request message: {request.Message}");
+            log.Add("Handler");
+            log.Add($"Request message: {request.Message}");
 
             return Task.FromResult(Unit.Value);
         }
     }
 
-    public class Behavior1<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    private class Behavior1<TRequest, TResponse>(Log log) : IPipelineBehavior<TRequest, TResponse>
     {
-        private readonly Log _log;
-
-        public Behavior1(Log log) => _log = log;
-
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            _log.Add("Behavior1 - Before");
+            log.Add("Behavior1 - Before");
             var result = await next(cancellationToken);
-            _log.Add("Behavior1 - After");
+            log.Add("Behavior1 - After");
             return result;
         }
     }
 
-    public class Behavior2<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    private class Behavior2<TRequest, TResponse>(Log log) : IPipelineBehavior<TRequest, TResponse>
     {
-        private readonly Log _log;
-
-        public Behavior2(Log log) => _log = log;
-
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            _log.Add("Behavior2 - Before");
+            log.Add("Behavior2 - Before");
             var result = await next(cancellationToken);
-            _log.Add("Behavior2 - After");
+            log.Add("Behavior2 - After");
             return result;
         }
     }

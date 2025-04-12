@@ -47,7 +47,7 @@ dotnet_naming_style.underscore_prefix.capitalization = camel_case
 dotnet_diagnostic.IDE0009.severity = none
 dotnet_diagnostic.IDE0003.severity = warning
 
-# Do not use primary constructors
+# Do not suggest using primary constructors
 dotnet_diagnostic.IDE0290.severity = none
 
 # Disable: null check can be simplified (if null check)

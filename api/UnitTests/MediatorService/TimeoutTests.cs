@@ -15,7 +15,7 @@ public class TimeoutTests : IDisposable
     {
         // Arrange
         var services = new ServiceCollection();
-        services.AddSingleton<Dependency>(sp => new Dependency());
+        services.AddSingleton<Dependency>();
         services.AddTransient<IRequestHandler<TimeoutRequest, Unit>, TimeoutRequestHandler>();
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TimeoutBehavior<,>));
         services.AddSingleton<IMediator, Mediator>();
@@ -28,30 +28,26 @@ public class TimeoutTests : IDisposable
         _serviceProvider.Dispose();
     }
 
-    public class Dependency
+    private class Dependency
     {
         public bool Called { get; set; }
     }
 
-    public class TimeoutRequest : IRequest<Unit> { }
+    private class TimeoutRequest { }
 
-    public class TimeoutRequestHandler : IRequestHandler<TimeoutRequest, Unit>
+    private class TimeoutRequestHandler(Dependency dependency) : IRequestHandler<TimeoutRequest, Unit>
     {
-        private readonly Dependency _dependency;
-
-        public TimeoutRequestHandler(Dependency dependency) => _dependency = dependency;
-
         public async Task<Unit> Handle(TimeoutRequest request, CancellationToken cancellationToken)
         {
             await Task.Delay(2000, cancellationToken);
 
-            _dependency.Called = true;
+            dependency.Called = true;
 
             return Unit.Value;
         }
     }
 
-    public class TimeoutBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    private class TimeoutBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
