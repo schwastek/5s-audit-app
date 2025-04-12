@@ -1,4 +1,5 @@
 ﻿using Features.Core.MediatorService;
+using Features.Core.MediatorService.PublishStrategies;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
@@ -16,6 +17,7 @@ public class TimeoutTests : IDisposable
         // Arrange
         var services = new ServiceCollection();
         services.AddSingleton<Dependency>();
+        services.AddSingleton<INotificationPublisher, SyncStopOnExceptionPublisher>();
         services.AddTransient<IRequestHandler<TimeoutRequest, Unit>, TimeoutRequestHandler>();
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TimeoutBehavior<,>));
         services.AddSingleton<IMediator, Mediator>();

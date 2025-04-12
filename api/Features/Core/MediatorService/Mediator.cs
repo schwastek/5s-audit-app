@@ -12,6 +12,7 @@ namespace Features.Core.MediatorService;
 public interface IMediator
 {
     Task<TResponse> Send<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken = default);
+    Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -20,10 +21,12 @@ public interface IMediator
 public class Mediator : IMediator
 {
     private readonly IServiceProvider _serviceProvider;
+    private readonly INotificationPublisher _publisher;
 
-    public Mediator(IServiceProvider serviceProvider)
+    public Mediator(IServiceProvider serviceProvider, INotificationPublisher publisher)
     {
         _serviceProvider = serviceProvider;
+        _publisher = publisher;
     }
 
     public async Task<TResponse> Send<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken = default)
@@ -70,5 +73,14 @@ public class Mediator : IMediator
         // The outermost behavior A gets called first.
         // Behavior A wraps around the entire chain (including B and C and the real handler).
         return await handlerDelegate(cancellationToken);
+    }
+
+    public async Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(notification);
+
+        var handlers = _serviceProvider.GetServices<INotificationHandler<TNotification>>();
+
+        await _publisher.Publish(handlers, notification, cancellationToken);
     }
 }

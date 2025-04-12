@@ -1,4 +1,5 @@
 ﻿using Features.Core.MediatorService;
+using Features.Core.MediatorService.PublishStrategies;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ public class SendTests : IDisposable
         // Arrange
         var services = new ServiceCollection();
         services.AddSingleton<Log>();
+        services.AddSingleton<INotificationPublisher, SyncStopOnExceptionPublisher>();
         services.AddTransient<IRequestHandler<RequestWithResponse, string>, HandlerWithResponse>();
         services.AddTransient<IRequestHandler<RequestWithNoResponse, Unit>, HandlerWithNoResponse>();
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behavior1<,>));
