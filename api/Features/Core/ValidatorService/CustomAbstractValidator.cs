@@ -3,7 +3,7 @@ using FluentValidation.Results;
 
 namespace Features.Core.ValidatorService;
 
-public class CustomAbstractValidator<T> : AbstractValidator<T>
+public class CustomAbstractValidator<T> : FluentValidation.AbstractValidator<T>
 {
     protected override bool PreValidate(ValidationContext<T> context, ValidationResult result)
     {
