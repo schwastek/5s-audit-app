@@ -8,7 +8,6 @@ using Features.Audits.BusinessRules;
 using Features.Audits.Get;
 using Features.Audits.Save;
 using Features.Core.ValidatorService;
-using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Api.Extensions;
@@ -29,24 +28,24 @@ public static class AddValidatorsServiceExtensions
     {
         services.AddScoped<IAuditBusinessRules, AuditBusinessRules>();
 
-        services.AddScoped<IValidator<GetAuditQuery>, GetAuditQueryValidator>();
-        services.AddScoped<IValidator<SaveAuditCommand>, SaveAuditCommandValidator>();
+        services.AddScoped<AbstractValidator<GetAuditQuery>, GetAuditQueryValidator>();
+        services.AddScoped<AbstractValidator<SaveAuditCommand>, SaveAuditCommandValidator>();
     }
 
     private static void AddAuditActionValidators(IServiceCollection services)
     {
         services.AddScoped<IAuditActionBusinessRules, AuditActionBusinessRules>();
 
-        services.AddScoped<IValidator<SaveAuditActionCommand>, SaveAuditActionCommandValidator>();
-        services.AddScoped<IValidator<DeleteAuditActionCommand>, DeleteAuditActionCommandValidator>();
-        services.AddScoped<IValidator<UpdateAuditActionCommand>, UpdateAuditActionCommandValidator>();
+        services.AddScoped<AbstractValidator<SaveAuditActionCommand>, SaveAuditActionCommandValidator>();
+        services.AddScoped<AbstractValidator<DeleteAuditActionCommand>, DeleteAuditActionCommandValidator>();
+        services.AddScoped<AbstractValidator<UpdateAuditActionCommand>, UpdateAuditActionCommandValidator>();
     }
 
     private static void AddIdentityValidators(IServiceCollection services)
     {
         services.AddScoped<IAccountBusinessRules, AccountBusinessRules>();
 
-        services.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();
-        services.AddScoped<IValidator<LoginRequest>, LoginRequestValidator>();
+        services.AddScoped<AbstractValidator<RegisterRequest>, RegisterRequestValidator>();
+        services.AddScoped<AbstractValidator<LoginRequest>, LoginRequestValidator>();
     }
 }

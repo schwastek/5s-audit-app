@@ -67,7 +67,7 @@ internal sealed class DeleteAuditActionTestFixture : BaseTestFixture
         var content = await response.Content.ReadFromJsonAsync<CustomValidationProblemDetails>();
 
         Assert.That(content, Is.Not.Null);
-        Assert.That(content.Errors, Is.EquivalentTo([ErrorCodes.AuditAction.ActionIdIsRequired]));
+        Assert.That(content.Errors, Is.EquivalentTo(new List<string> { ErrorCodes.AuditAction.AuditActionIdIsRequired }));
     }
 
     [Test]
@@ -78,7 +78,7 @@ internal sealed class DeleteAuditActionTestFixture : BaseTestFixture
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
 
         Assert.That(content, Is.Not.Null);
-        Assert.That(content.Errors, Is.EquivalentTo([ErrorCodes.AuditAction.DoesNotExist]));
+        Assert.That(content.Errors, Is.EquivalentTo(new List<string> { ErrorCodes.AuditAction.AuditActionDoesNotExist }));
     }
 
     private async Task<Audit?> GetAudit(Guid id)

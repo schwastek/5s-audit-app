@@ -50,6 +50,8 @@ public class AccountController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<UserDto>> Login(LoginRequest request)
     {
+        // If the request body is missing (nothing is sent), no deserialization occurs, so the `request` parameter is set to null.
+        request ??= new LoginRequest();
         await _validator.ValidateAndThrowAsync(request, HttpContext.RequestAborted);
 
         var user = await _userManager.FindByEmailAsync(request.Email!);
@@ -75,6 +77,7 @@ public class AccountController : ControllerBase
     [HttpPost("register")]
     public async Task<ActionResult<UserDto>> Register(RegisterRequest request)
     {
+        request ??= new RegisterRequest();
         await _validator.ValidateAndThrowAsync(request, HttpContext.RequestAborted);
 
         var user = new User()

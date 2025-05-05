@@ -1,39 +1,45 @@
 ﻿using Domain.Exceptions;
 using Features.Accounts.BusinessRules;
-using FluentValidation;
+using Features.Core.ValidatorService;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Api.Requests.Identity;
 
 public sealed class RegisterRequestValidator : AbstractValidator<RegisterRequest>
 {
+    private readonly IAccountBusinessRules _accountBusinessRules;
+
     public RegisterRequestValidator(IAccountBusinessRules accountBusinessRules)
     {
-        RuleFor(r => r.DisplayName)
-            .NotEmpty()
-            .WithErrorCode(ErrorCodes.Identity.DisplayNameIsRequired);
+        _accountBusinessRules = accountBusinessRules;
+    }
 
-        RuleFor(r => r.Email)
-            .NotEmpty()
-            .WithErrorCode(ErrorCodes.Identity.EmailIsRequired)
-            .EmailAddress()
-            .WithErrorCode(ErrorCodes.Identity.EmailFormatIsNotValid)
-            .MustAsync(accountBusinessRules.IsEmailAvailable)
-            .WithErrorCode(ErrorCodes.Identity.EmailIsAlreadyTaken);
+    public override async Task Validate(RegisterRequest instance, CancellationToken cancellationToken)
+    {
+        if (IsEmpty(instance.DisplayName)) AddError(ErrorCodes.Identity.IdentityDisplayNameIsRequired);
+        if (IsEmpty(instance.Email)) AddError(ErrorCodes.Identity.IdentityEmailIsRequired);
+        if (IsEmpty(instance.Username)) AddError(ErrorCodes.Identity.IdentityUsernameIsRequired);
+        if (IsEmpty(instance.Password)) AddError(ErrorCodes.Identity.IdentityPasswordIsRequired);
 
-        RuleFor(r => r.Username)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .WithErrorCode(ErrorCodes.Identity.UsernameIsRequired)
-            .MustAsync(accountBusinessRules.IsUsernameAvailable)
-            .WithErrorCode(ErrorCodes.Identity.UsernameIsAlreadyTaken);
+        if (!IsValid) return;
 
-        RuleFor(r => r.Password)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .WithErrorCode(ErrorCodes.Identity.PasswordIsRequired)
-            .Must(accountBusinessRules.PasswordMatchesStrengthCriteria)
-            // Error message: "Password is too weak. Password must be between 4 and 8 characters long,
-            // including one lowercase letter, one uppercase letter, one number."
-            .WithErrorCode(ErrorCodes.Identity.PasswordIsTooWeak);
+        if (IsEmailAddress(instance.Email))
+        {
+            var isEmailAvailable = await _accountBusinessRules.IsEmailAvailable(instance.Email, cancellationToken);
+            if (!isEmailAvailable) AddError(ErrorCodes.Identity.IdentityEmailIsAlreadyTaken);
+        }
+        else
+        {
+            AddError(ErrorCodes.Identity.IdentityEmailFormatIsNotValid);
+        }
+
+        var isUsernameAvailable = await _accountBusinessRules.IsUsernameAvailable(instance.Username, cancellationToken);
+        if (!isUsernameAvailable) AddError(ErrorCodes.Identity.IdentityUsernameIsAlreadyTaken);
+
+        // Error message: "Password is too weak. Password must be between 4 and 8 characters long,
+        // including one lowercase letter, one uppercase letter, one number."
+        var isPasswordStrong = _accountBusinessRules.PasswordMatchesStrengthCriteria(instance.Password);
+        if (!isPasswordStrong) AddError(ErrorCodes.Identity.IdentityPasswordIsTooWeak);
     }
 }

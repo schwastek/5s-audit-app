@@ -139,18 +139,16 @@ internal sealed class SaveAuditTestFixture : BaseTestFixture
         var content = await response.Content.ReadFromJsonAsync<CustomValidationProblemDetails>();
 
         // Assert
-        var expectedErrors = new[] {
-            ErrorCodes.Audit.AuditIdIsRequired,
-            ErrorCodes.Audit.AuthorIsRequired,
-            ErrorCodes.Audit.AreaIsRequired,
-            ErrorCodes.Audit.StartDateIsRequired,
-            ErrorCodes.Audit.EndDateIsRequired,
-            ErrorCodes.Audit.AnswersIsRequired
-        };
-
         Assert.That(content, Is.Not.Null);
         Assert.That(content.Errors, Is.Not.Empty);
-        Assert.That(content.Errors, Is.EquivalentTo(expectedErrors));
+        Assert.That(content.Errors, Is.EquivalentTo(new List<string> {
+            ErrorCodes.Audit.AuditIdIsRequired,
+            ErrorCodes.Audit.AuditAuthorIsRequired,
+            ErrorCodes.Audit.AuditAreaIsRequired,
+            ErrorCodes.Audit.AuditStartDateIsRequired,
+            ErrorCodes.Audit.AuditEndDateIsRequired,
+            ErrorCodes.Audit.AuditAnswersIsRequired
+        }));
     }
 
     private async Task<Audit?> GetAudit(Guid id)

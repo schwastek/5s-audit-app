@@ -1,18 +1,17 @@
 ﻿using Domain.Exceptions;
-using FluentValidation;
+using Features.Core.ValidatorService;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Api.Requests.Identity;
 
 public class LoginRequestValidator : AbstractValidator<LoginRequest>
 {
-    public LoginRequestValidator()
+    public override Task Validate(LoginRequest instance, CancellationToken cancellationToken)
     {
-        RuleFor(r => r.Email)
-            .NotEmpty()
-            .WithErrorCode(ErrorCodes.Identity.EmailIsRequired);
+        if (IsEmpty(instance.Email)) AddError(ErrorCodes.Identity.IdentityEmailIsRequired);
+        if (IsEmpty(instance.Password)) AddError(ErrorCodes.Identity.IdentityPasswordIsRequired);
 
-        RuleFor(r => r.Password)
-            .NotEmpty()
-            .WithErrorCode(ErrorCodes.Identity.PasswordIsRequired);
+        return Task.CompletedTask;
     }
 }

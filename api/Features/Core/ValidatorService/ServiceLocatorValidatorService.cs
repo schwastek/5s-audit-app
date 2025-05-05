@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,19 +16,24 @@ public class ServiceLocatorValidatorService : IValidatorService
 
     public ServiceLocatorValidatorService(IServiceProvider serviceProvider)
     {
-        _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+        _serviceProvider = serviceProvider;
     }
 
     public async Task ValidateAndThrowAsync<T>(T instance, CancellationToken cancellationToken = default)
     {
         // Get registered validator.
-        var validator = _serviceProvider.GetService<IValidator<T>>();
+        var validator = _serviceProvider.GetService<AbstractValidator<T>>();
 
         if (validator is null)
         {
             throw new ValidatorNotFoundException(typeof(T));
         }
 
-        await validator.ValidateAndThrowAsync(instance, cancellationToken);
+        await validator.Validate(instance, cancellationToken);
+
+        if (!validator.IsValid)
+        {
+            throw new ValidationException(validator.Errors);
+        }
     }
 }

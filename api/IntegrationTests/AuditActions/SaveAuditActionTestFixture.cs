@@ -83,7 +83,7 @@ internal class SaveAuditActionTestFixture : BaseTestFixture
         var content = await response.Content.ReadFromJsonAsync<CustomValidationProblemDetails>();
 
         Assert.That(content, Is.Not.Null);
-        Assert.That(content.Errors, Is.EquivalentTo([ErrorCodes.Audit.DoesNotExist]));
+        Assert.That(content.Errors, Is.EquivalentTo(new List<string> { ErrorCodes.Audit.AuditDoesNotExist }));
     }
 
     [Test]
@@ -96,11 +96,11 @@ internal class SaveAuditActionTestFixture : BaseTestFixture
         var content = await response.Content.ReadFromJsonAsync<CustomValidationProblemDetails>();
 
         Assert.That(content, Is.Not.Null);
-        Assert.That(content.Errors, Is.EquivalentTo([
-            ErrorCodes.AuditAction.ActionIdIsRequired,
+        Assert.That(content.Errors, Is.EquivalentTo(new List<string> {
+            ErrorCodes.AuditAction.AuditActionIdIsRequired,
             ErrorCodes.Audit.AuditIdIsRequired,
-            ErrorCodes.AuditAction.DescriptionIsRequired
-        ]));
+            ErrorCodes.AuditAction.AuditActionDescriptionIsRequired
+        }));
     }
 
     [Test]
@@ -118,7 +118,7 @@ internal class SaveAuditActionTestFixture : BaseTestFixture
         var content = await response.Content.ReadFromJsonAsync<CustomValidationProblemDetails>();
 
         Assert.That(content, Is.Not.Null);
-        Assert.That(content.Errors, Is.EquivalentTo([ErrorCodes.AuditAction.DescriptionIsTooLong]));
+        Assert.That(content.Errors, Is.EquivalentTo(new List<string> { ErrorCodes.AuditAction.AuditActionDescriptionIsTooLong }));
     }
 
     private async Task<Audit?> GetAudit(Guid id)

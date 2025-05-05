@@ -65,12 +65,12 @@ public sealed class AuditAction
 
         if (string.IsNullOrWhiteSpace(description))
         {
-            errors.Add(ErrorCodes.AuditAction.DescriptionIsRequired);
+            errors.Add(ErrorCodes.AuditAction.AuditActionDescriptionIsRequired);
         }
 
         if (description.Length > DescriptionMaxLength)
         {
-            errors.Add(ErrorCodes.AuditAction.DescriptionIsTooLong);
+            errors.Add(ErrorCodes.AuditAction.AuditActionDescriptionIsTooLong);
         }
 
         if (errors.Count != 0)

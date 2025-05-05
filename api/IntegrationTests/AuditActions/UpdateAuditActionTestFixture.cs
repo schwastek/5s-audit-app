@@ -81,10 +81,10 @@ internal class UpdateAuditActionTestFixture : BaseTestFixture
 
         Assert.That(content, Is.Not.Null);
         Assert.That(content.Errors, Is.Not.Empty);
-        Assert.That(content.Errors, Is.EquivalentTo([
-            ErrorCodes.AuditAction.ActionIdIsRequired,
-            ErrorCodes.AuditAction.DescriptionIsRequired
-        ]));
+        Assert.That(content.Errors, Is.EquivalentTo(new List<string> {
+            ErrorCodes.AuditAction.AuditActionIdIsRequired,
+            ErrorCodes.AuditAction.AuditActionDescriptionIsRequired
+        }));
     }
 
     [Test]
@@ -102,7 +102,7 @@ internal class UpdateAuditActionTestFixture : BaseTestFixture
 
         Assert.That(content, Is.Not.Null);
         Assert.That(content.Errors, Is.Not.Empty);
-        Assert.That(content.Errors, Is.EquivalentTo([ErrorCodes.AuditAction.DoesNotExist]));
+        Assert.That(content.Errors, Is.EquivalentTo(new List<string> { ErrorCodes.AuditAction.AuditActionDoesNotExist }));
     }
 
     [Test]
@@ -121,7 +121,7 @@ internal class UpdateAuditActionTestFixture : BaseTestFixture
 
         Assert.That(content, Is.Not.Null);
         Assert.That(content.Errors, Is.Not.Empty);
-        Assert.That(content.Errors, Is.EquivalentTo([ErrorCodes.AuditAction.DescriptionIsTooLong]));
+        Assert.That(content.Errors, Is.EquivalentTo(new List<string> { ErrorCodes.AuditAction.AuditActionDescriptionIsTooLong }));
     }
 
     private async Task<Audit?> GetAudit(Guid id)

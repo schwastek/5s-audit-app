@@ -4,34 +4,33 @@ public static class ErrorCodes
 {
     public static class Audit
     {
-        public const string AuditIdIsRequired = "AuditIdIsRequired";
-        public const string DoesNotExist = "AuditDoesNotExist";
-        public const string AuthorIsRequired = "AuthorIsRequired";
-        public const string AreaIsRequired = "AuditAreaIsRequired";
-        public const string StartDateIsRequired = "AuditStartDateIsRequired";
-        public const string EndDateIsRequired = "AuditEndDateIsRequired";
-        public const string AnswersIsRequired = "AuditAnswersIsRequired";
-        public const string InvalidOrderByField = "InvalidOrderByField";
+        public static readonly ErrorCode AuditIdIsRequired = new("AuditIdIsRequired");
+        public static readonly ErrorCode AuditDoesNotExist = new("AuditDoesNotExist");
+        public static readonly ErrorCode AuditAuthorIsRequired = new("AuditAuthorIsRequired");
+        public static readonly ErrorCode AuditAreaIsRequired = new("AuditAreaIsRequired");
+        public static readonly ErrorCode AuditStartDateIsRequired = new("AuditStartDateIsRequired");
+        public static readonly ErrorCode AuditEndDateIsRequired = new("AuditEndDateIsRequired");
+        public static readonly ErrorCode AuditAnswersIsRequired = new("AuditAnswersIsRequired");
+        public static readonly ErrorCode InvalidOrderByField = new("InvalidOrderByField");
     }
 
     public static class AuditAction
     {
-        public const string ActionsIsRequired = "AuditActionsIsRequired";
-        public const string ActionIdIsRequired = "AuditActionIdIsRequired";
-        public const string DescriptionIsRequired = "AuditActionDescriptionIsRequired";
-        public const string DoesNotExist = "AuditActionDoesNotExist";
-        public const string DescriptionIsTooLong = "AuditActionDescriptionIsTooLong";
+        public static readonly ErrorCode AuditActionIdIsRequired = new("AuditActionIdIsRequired");
+        public static readonly ErrorCode AuditActionDescriptionIsRequired = new("AuditActionDescriptionIsRequired");
+        public static readonly ErrorCode AuditActionDoesNotExist = new("AuditActionDoesNotExist");
+        public static readonly ErrorCode AuditActionDescriptionIsTooLong = new("AuditActionDescriptionIsTooLong");
     }
 
     public static class Identity
     {
-        public const string DisplayNameIsRequired = "IdentityDisplayNameIsRequired";
-        public const string EmailIsRequired = "IdentityEmailIsRequired";
-        public const string EmailFormatIsNotValid = "IdentityEmailFormatIsNotValid";
-        public const string EmailIsAlreadyTaken = "IdentityEmailIsAlreadyTaken";
-        public const string UsernameIsRequired = "IdentityUsernameIsRequired";
-        public const string UsernameIsAlreadyTaken = "IdentityUsernameIsAlreadyTaken";
-        public const string PasswordIsRequired = "IdentityPasswordIsRequired";
-        public const string PasswordIsTooWeak = "IdentityPasswordIsTooWeak";
+        public static readonly ErrorCode IdentityDisplayNameIsRequired = new("IdentityDisplayNameIsRequired");
+        public static readonly ErrorCode IdentityEmailIsRequired = new("IdentityEmailIsRequired");
+        public static readonly ErrorCode IdentityEmailFormatIsNotValid = new("IdentityEmailFormatIsNotValid");
+        public static readonly ErrorCode IdentityEmailIsAlreadyTaken = new("IdentityEmailIsAlreadyTaken");
+        public static readonly ErrorCode IdentityUsernameIsRequired = new("IdentityUsernameIsRequired");
+        public static readonly ErrorCode IdentityUsernameIsAlreadyTaken = new("IdentityUsernameIsAlreadyTaken");
+        public static readonly ErrorCode IdentityPasswordIsRequired = new("IdentityPasswordIsRequired");
+        public static readonly ErrorCode IdentityPasswordIsTooWeak = new("IdentityPasswordIsTooWeak");
     }
 }

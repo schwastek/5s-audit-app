@@ -1,34 +1,21 @@
 ﻿using Domain.Exceptions;
-using FluentValidation;
+using Features.Core.ValidatorService;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Features.Audits.Save;
 
 public sealed class SaveAuditCommandValidator : AbstractValidator<SaveAuditCommand>
 {
-    public SaveAuditCommandValidator()
+    public override Task Validate(SaveAuditCommand instance, CancellationToken cancellationToken)
     {
-        RuleFor(x => x.AuditId)
-            .NotEmpty()
-            .WithErrorCode(ErrorCodes.Audit.AuditIdIsRequired);
+        if (IsEmpty(instance.AuditId)) AddError(ErrorCodes.Audit.AuditIdIsRequired);
+        if (IsEmpty(instance.Author)) AddError(ErrorCodes.Audit.AuditAuthorIsRequired);
+        if (IsEmpty(instance.Area)) AddError(ErrorCodes.Audit.AuditAreaIsRequired);
+        if (IsEmpty(instance.StartDate)) AddError(ErrorCodes.Audit.AuditStartDateIsRequired);
+        if (IsEmpty(instance.EndDate)) AddError(ErrorCodes.Audit.AuditEndDateIsRequired);
+        if (IsEmpty(instance.Answers)) AddError(ErrorCodes.Audit.AuditAnswersIsRequired);
 
-        RuleFor(x => x.Author)
-            .NotEmpty()
-            .WithErrorCode(ErrorCodes.Audit.AuthorIsRequired);
-
-        RuleFor(x => x.Area)
-            .NotEmpty()
-            .WithErrorCode(ErrorCodes.Audit.AreaIsRequired);
-
-        RuleFor(x => x.StartDate)
-            .NotEmpty()
-            .WithErrorCode(ErrorCodes.Audit.StartDateIsRequired);
-
-        RuleFor(x => x.EndDate)
-            .NotEmpty()
-            .WithErrorCode(ErrorCodes.Audit.EndDateIsRequired);
-
-        RuleFor(x => x.Answers)
-            .NotEmpty()
-            .WithErrorCode(ErrorCodes.Audit.AnswersIsRequired);
+        return Task.CompletedTask;
     }
 }

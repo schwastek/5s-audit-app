@@ -1,17 +1,19 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using Features.Core.ValidatorService;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Api.Exceptions.Handlers;
 
-public class FluentValidationExceptionHandler : IExceptionHandler
+public class ValidationExceptionHandler : IExceptionHandler
 {
     private readonly IProblemDetailsService _problemDetailsService;
 
-    public FluentValidationExceptionHandler(IProblemDetailsService problemDetailsService)
+    public ValidationExceptionHandler(IProblemDetailsService problemDetailsService)
     {
         _problemDetailsService = problemDetailsService;
     }
@@ -21,7 +23,7 @@ public class FluentValidationExceptionHandler : IExceptionHandler
         Exception exception,
         CancellationToken cancellationToken)
     {
-        if (exception is not FluentValidation.ValidationException validationException)
+        if (exception is not ValidationException validationException)
         {
             return false;
         }
@@ -42,15 +44,8 @@ public class FluentValidationExceptionHandler : IExceptionHandler
         return result;
     }
 
-    private static SortedSet<string> GetValidationErrors(IEnumerable<FluentValidation.Results.ValidationFailure> errors)
+    private static List<string> GetValidationErrors(IEnumerable<ValidationError> errors)
     {
-        var result = new SortedSet<string>(StringComparer.Ordinal);
-
-        foreach (var error in errors)
-        {
-            result.Add(error.ErrorCode);
-        }
-
-        return result;
+        return errors.Select(x => x.ErrorCode).ToList();
     }
 }

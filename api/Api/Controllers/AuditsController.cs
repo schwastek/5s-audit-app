@@ -5,7 +5,6 @@ using Features.Audits.Get;
 using Features.Audits.List;
 using Features.Audits.Save;
 using Features.Core.MappingService;
-using Features.Core.ValidatorService;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -36,17 +35,14 @@ namespace Api.Controllers;
 [Authorize]
 public class AuditsController : ControllerBase
 {
-    private readonly IValidatorService _validator;
     private readonly IMappingService _mapper;
     private readonly ISender _sender;
 
     public AuditsController(
-        IValidatorService validator,
         IMappingService mapper,
         ISender sender
     )
     {
-        _validator = validator;
         _mapper = mapper;
         _sender = sender;
     }

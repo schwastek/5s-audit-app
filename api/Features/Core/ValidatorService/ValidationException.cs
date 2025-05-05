@@ -5,7 +5,7 @@ namespace Features.Core.ValidatorService;
 
 public class ValidationException : Exception
 {
-    public IEnumerable<string> Errors { get; private set; }
+    public IEnumerable<ValidationError> Errors { get; private set; }
 
     public const string DefaultErrorMessage = "One or more validation errors occurred.";
 
@@ -14,25 +14,25 @@ public class ValidationException : Exception
         Errors = [];
     }
 
-    public ValidationException(string error)
+    public ValidationException(ValidationError error)
         : base(DefaultErrorMessage)
     {
         Errors = [error];
     }
 
-    public ValidationException(string error, Exception inner)
+    public ValidationException(ValidationError error, Exception inner)
         : base(DefaultErrorMessage, inner)
     {
         Errors = [error];
     }
 
-    public ValidationException(IEnumerable<string> errors)
+    public ValidationException(IEnumerable<ValidationError> errors)
         : base(DefaultErrorMessage)
     {
         Errors = errors;
     }
 
-    public ValidationException(IEnumerable<string> errors, Exception inner)
+    public ValidationException(IEnumerable<ValidationError> errors, Exception inner)
         : base(DefaultErrorMessage, inner)
     {
         Errors = errors;

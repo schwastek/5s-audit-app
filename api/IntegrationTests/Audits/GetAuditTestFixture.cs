@@ -74,6 +74,6 @@ internal sealed class GetAuditTestFixture : BaseTestFixture
 
         Assert.That(content, Is.Not.Null);
         Assert.That(content.Errors, Is.Not.Empty);
-        Assert.That(content.Errors, Does.Contain(ErrorCodes.Audit.DoesNotExist));
+        Assert.That(content.Errors, Does.Contain(ErrorCodes.Audit.AuditDoesNotExist));
     }
 }

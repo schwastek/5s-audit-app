@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+﻿using Features.Core.ValidatorService;
 using MediatR;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +10,9 @@ namespace Features.Core.MediatR;
 public class ValidationPipelineBehavior<TRequest, TResponse>
     : IPipelineBehavior<TRequest, TResponse> where TRequest : class
 {
-    private readonly IEnumerable<IValidator<TRequest>> _validators;
+    private readonly IEnumerable<AbstractValidator<TRequest>> _validators;
 
-    public ValidationPipelineBehavior(IEnumerable<IValidator<TRequest>> validators)
+    public ValidationPipelineBehavior(IEnumerable<AbstractValidator<TRequest>> validators)
     {
         _validators = validators;
     }
@@ -24,13 +24,12 @@ public class ValidationPipelineBehavior<TRequest, TResponse>
             return await next();
         }
 
-        var context = new ValidationContext<TRequest>(request);
-        var validationResults = await Task.WhenAll(_validators.Select(v => v.ValidateAsync(context, cancellationToken)));
-        var failures = validationResults.SelectMany(r => r.Errors).Where(f => f is not null).ToList();
+        await Task.WhenAll(_validators.Select(x => x.Validate(request, cancellationToken)));
+        var errors = _validators.Where(x => !x.IsValid).SelectMany(x => x.Errors).ToList();
 
-        if (failures.Count > 0)
+        if (errors.Count > 0)
         {
-            throw new ValidationException(failures);
+            throw new ValidationException(errors);
         }
 
         return await next();

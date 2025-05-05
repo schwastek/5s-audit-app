@@ -1,29 +1,29 @@
 ﻿using Domain.Exceptions;
 using Features.Audits.BusinessRules;
-using FluentValidation;
+using Features.Core.ValidatorService;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Features.AuditActions.Save;
 
 public sealed class SaveAuditActionCommandValidator : AbstractValidator<SaveAuditActionCommand>
 {
+    private readonly IAuditBusinessRules _auditBusinessRules;
+
     public SaveAuditActionCommandValidator(IAuditBusinessRules auditBusinessRules)
     {
-        RuleFor(x => x.AuditId)
-            .NotEmpty()
-            .WithErrorCode(ErrorCodes.Audit.AuditIdIsRequired)
-            .DependentRules(() =>
-            {
-                RuleFor(x => x.AuditId)
-                    .MustAsync(auditBusinessRules.AuditExists)
-                    .WithErrorCode(ErrorCodes.Audit.DoesNotExist);
-            });
+        _auditBusinessRules = auditBusinessRules;
+    }
 
-        RuleFor(x => x.AuditActionId)
-            .NotEmpty()
-            .WithErrorCode(ErrorCodes.AuditAction.ActionIdIsRequired);
+    public override async Task Validate(SaveAuditActionCommand instance, CancellationToken cancellationToken)
+    {
+        if (IsEmpty(instance.AuditId)) AddError(ErrorCodes.Audit.AuditIdIsRequired);
+        if (IsEmpty(instance.AuditActionId)) AddError(ErrorCodes.AuditAction.AuditActionIdIsRequired);
+        if (IsEmpty(instance.Description)) AddError(ErrorCodes.AuditAction.AuditActionDescriptionIsRequired);
 
-        RuleFor(x => x.Description)
-            .NotEmpty()
-            .WithErrorCode(ErrorCodes.AuditAction.DescriptionIsRequired);
+        if (!IsValid) return;
+
+        var auditExists = await _auditBusinessRules.AuditExists(instance.AuditId, cancellationToken);
+        if (!auditExists) AddError(ErrorCodes.Audit.AuditDoesNotExist);
     }
 }
