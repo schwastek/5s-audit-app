@@ -1,9 +1,9 @@
 ﻿using Data.DbContext;
 using Domain;
 using Features.Audits.Dto;
+using Features.Core.MediatorService;
 using Features.Core.OrderByService;
 using Features.Core.Pagination;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading;

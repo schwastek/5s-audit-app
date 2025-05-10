@@ -1,14 +1,13 @@
 ﻿using Features.Core.ValidatorService;
-using MediatR;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Features.Core.MediatR;
+namespace Features.Core.MediatorService.Pipelines;
 
 public class ValidationPipelineBehavior<TRequest, TResponse>
-    : IPipelineBehavior<TRequest, TResponse> where TRequest : class
+    : IPipelineBehavior<TRequest, TResponse>
 {
     private readonly IEnumerable<AbstractValidator<TRequest>> _validators;
 
@@ -21,7 +20,7 @@ public class ValidationPipelineBehavior<TRequest, TResponse>
     {
         if (!_validators.Any())
         {
-            return await next();
+            return await next(cancellationToken);
         }
 
         await Task.WhenAll(_validators.Select(x => x.Validate(request, cancellationToken)));
@@ -32,6 +31,6 @@ public class ValidationPipelineBehavior<TRequest, TResponse>
             throw new ValidationException(errors);
         }
 
-        return await next();
+        return await next(cancellationToken);
     }
 }

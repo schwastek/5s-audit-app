@@ -18,11 +18,11 @@ public class PublishWithSyncStopOnExceptionPublisherTests : IDisposable
         // Arrange
         var services = new ServiceCollection();
         services.AddSingleton<CallOrder>();
-        services.AddSingleton<INotificationPublisher, SyncStopOnExceptionPublisher>();
+        services.AddTransient<INotificationPublisher, SyncStopOnExceptionPublisher>();
         services.AddTransient<INotificationHandler<Notification>, FirstHandler>();
         services.AddTransient<INotificationHandler<Notification>, SecondHandler>();
         services.AddTransient<INotificationHandler<Notification>, ThirdHandler>();
-        services.AddSingleton<IMediator, Mediator>();
+        services.AddTransient<IMediator, Mediator>();
 
         _serviceProvider = services.BuildServiceProvider();
     }

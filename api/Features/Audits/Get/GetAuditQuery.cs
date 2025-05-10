@@ -1,12 +1,11 @@
 ﻿using Features.Answers.Dto;
 using Features.AuditActions.Dto;
-using MediatR;
 using System;
 using System.Collections.Generic;
 
 namespace Features.Audits.Get;
 
-public sealed record GetAuditQuery : IRequest<GetAuditQueryResult>
+public sealed record GetAuditQuery
 {
     public Guid Id { get; init; }
 }

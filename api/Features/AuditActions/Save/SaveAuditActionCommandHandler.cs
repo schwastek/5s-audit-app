@@ -2,7 +2,7 @@
 using Domain;
 using Features.AuditActions.Dto;
 using Features.Core.MappingService;
-using MediatR;
+using Features.Core.MediatorService;
 using System.Threading;
 using System.Threading.Tasks;
 

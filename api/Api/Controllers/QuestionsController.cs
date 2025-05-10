@@ -1,7 +1,7 @@
 ﻿using Api.Requests.Questions.List;
 using Features.Core.MappingService;
+using Features.Core.MediatorService;
 using Features.Questions.List;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +17,12 @@ namespace Api.Controllers;
 [Consumes(MediaTypeNames.Application.Json)]
 public class QuestionsController : ControllerBase
 {
-    private readonly ISender _sender;
+    private readonly IMediator _mediator;
     private readonly IMappingService _mapper;
 
-    public QuestionsController(ISender sender, IMappingService mapper)
+    public QuestionsController(IMediator mediator, IMappingService mapper)
     {
-        _sender = sender;
+        _mediator = mediator;
         _mapper = mapper;
     }
 
@@ -32,7 +32,7 @@ public class QuestionsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<ListQuestionsResponse>> ListQuestions()
     {
-        var result = await _sender.Send(new ListQuestionsQuery(), HttpContext.RequestAborted);
+        var result = await _mediator.Send<ListQuestionsQuery, ListQuestionsQueryResult>(new ListQuestionsQuery(), HttpContext.RequestAborted);
         var response = _mapper.Map<ListQuestionsQueryResult, ListQuestionsResponse>(result);
 
         return Ok(response);

@@ -1,11 +1,8 @@
 ﻿using Api.Extensions;
 using Data.DbContext;
 using Data.Options;
-using Features.Audits.Get;
 using Features.Core.Identity;
-using Features.Core.MediatR;
 using Features.Core.Pagination;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -51,9 +48,8 @@ builder.Services.AddDbContext<LeanAuditorContext>();
 // Register the Swagger generator
 builder.Services.AddSwagger();
 
-// Register MediatR services
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAuditQueryHandler).Assembly));
-builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
+// Register Mediator services
+builder.Services.AddMediator();
 
 // Register validators
 builder.Services.AddValidators();

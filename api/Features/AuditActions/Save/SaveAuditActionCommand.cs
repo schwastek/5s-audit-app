@@ -1,9 +1,8 @@
-﻿using MediatR;
-using System;
+﻿using System;
 
 namespace Features.AuditActions.Save;
 
-public sealed record SaveAuditActionCommand : IRequest<SaveAuditActionCommandResult>
+public sealed record SaveAuditActionCommand
 {
     public required Guid AuditId { get; init; }
     public required Guid AuditActionId { get; init; }

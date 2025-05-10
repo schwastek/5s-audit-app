@@ -1,12 +1,11 @@
 ﻿using Features.Answers.Dto;
 using Features.AuditActions.Dto;
-using MediatR;
 using System;
 using System.Collections.Generic;
 
 namespace Features.Audits.Save;
 
-public sealed record SaveAuditCommand : IRequest<SaveAuditCommandResult>
+public sealed record SaveAuditCommand
 {
     public required Guid AuditId { get; init; }
     public required string Author { get; init; }

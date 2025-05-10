@@ -1,12 +1,11 @@
 ﻿using Features.Audits.Dto;
 using Features.Core.OrderByService;
 using Features.Core.Pagination;
-using MediatR;
 using System.Collections.Generic;
 
 namespace Features.Audits.List;
 
-public sealed record ListAuditsQuery : IRequest<ListAuditsQueryResult>, IPageableQuery, IOrderByQuery
+public sealed record ListAuditsQuery : IPageableQuery, IOrderByQuery
 {
     public required int PageNumber { get; init; }
     public required int PageSize { get; init; }

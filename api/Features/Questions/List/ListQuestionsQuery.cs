@@ -1,10 +1,9 @@
 ﻿using Features.Questions.Dto;
-using MediatR;
 using System.Collections.Generic;
 
 namespace Features.Questions.List;
 
-public sealed record ListQuestionsQuery : IRequest<ListQuestionsQueryResult>;
+public sealed record ListQuestionsQuery;
 
 public sealed record ListQuestionsQueryResult
 {

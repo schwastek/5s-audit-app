@@ -5,7 +5,7 @@ using Features.AuditActions.Delete;
 using Features.AuditActions.Save;
 using Features.AuditActions.Update;
 using Features.Core.MappingService;
-using MediatR;
+using Features.Core.MediatorService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,15 +22,15 @@ namespace Api.Controllers;
 [Consumes(MediaTypeNames.Application.Json)]
 public class ActionsController : ControllerBase
 {
-    private readonly ISender _sender;
+    private readonly IMediator _mediator;
     private readonly IMappingService _mapper;
 
     public ActionsController(
-        ISender sender,
+        IMediator mediator,
         IMappingService mapper
     )
     {
-        _sender = sender;
+        _mediator = mediator;
         _mapper = mapper;
     }
 
@@ -41,7 +41,7 @@ public class ActionsController : ControllerBase
     public async Task<ActionResult<SaveAuditActionResponse>> SaveAuditAction([FromBody] SaveAuditActionRequest request)
     {
         var command = _mapper.Map<SaveAuditActionRequest, SaveAuditActionCommand>(request);
-        var result = await _sender.Send(command, HttpContext.RequestAborted);
+        var result = await _mediator.Send<SaveAuditActionCommand, SaveAuditActionCommandResult>(command, HttpContext.RequestAborted);
         var response = _mapper.Map<SaveAuditActionCommandResult, SaveAuditActionResponse>(result);
 
         return Ok(response);
@@ -55,7 +55,7 @@ public class ActionsController : ControllerBase
     public async Task<ActionResult> DeleteAuditAction([FromRoute] DeleteAuditActionRequest request)
     {
         var command = _mapper.Map<DeleteAuditActionRequest, DeleteAuditActionCommand>(request);
-        await _sender.Send(command, HttpContext.RequestAborted);
+        await _mediator.Send<DeleteAuditActionCommand, Unit>(command, HttpContext.RequestAborted);
 
         return NoContent();
     }
@@ -69,7 +69,7 @@ public class ActionsController : ControllerBase
     {
         request.AuditActionId = auditActionId;
         var command = _mapper.Map<UpdateAuditActionRequest, UpdateAuditActionCommand>(request);
-        await _sender.Send(command, HttpContext.RequestAborted);
+        await _mediator.Send<UpdateAuditActionCommand, Unit>(command, HttpContext.RequestAborted);
 
         return NoContent();
     }

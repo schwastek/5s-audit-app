@@ -5,7 +5,7 @@ using Features.Audits.Get;
 using Features.Audits.List;
 using Features.Audits.Save;
 using Features.Core.MappingService;
-using MediatR;
+using Features.Core.MediatorService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,15 +36,15 @@ namespace Api.Controllers;
 public class AuditsController : ControllerBase
 {
     private readonly IMappingService _mapper;
-    private readonly ISender _sender;
+    private readonly IMediator _mediator;
 
     public AuditsController(
         IMappingService mapper,
-        ISender sender
+        IMediator mediator
     )
     {
         _mapper = mapper;
-        _sender = sender;
+        _mediator = mediator;
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ public class AuditsController : ControllerBase
     public async Task<ActionResult<ListAuditsResponse>> ListAudits([FromQuery] ListAuditsRequest request)
     {
         var query = _mapper.Map<ListAuditsRequest, ListAuditsQuery>(request);
-        var result = await _sender.Send(query, HttpContext.RequestAborted);
+        var result = await _mediator.Send<ListAuditsQuery, ListAuditsQueryResult>(query, HttpContext.RequestAborted);
         var response = _mapper.Map<ListAuditsQueryResult, ListAuditsResponse>(result);
 
         return Ok(response);
@@ -67,7 +67,7 @@ public class AuditsController : ControllerBase
     public async Task<ActionResult<GetAuditResponse>> GetAudit([FromRoute] GetAuditRequest request)
     {
         var query = _mapper.Map<GetAuditRequest, GetAuditQuery>(request);
-        var result = await _sender.Send(query, HttpContext.RequestAborted);
+        var result = await _mediator.Send<GetAuditQuery, GetAuditQueryResult>(query, HttpContext.RequestAborted);
         var response = _mapper.Map<GetAuditQueryResult, GetAuditResponse>(result);
 
         return Ok(response);
@@ -80,7 +80,7 @@ public class AuditsController : ControllerBase
     public async Task<ActionResult<SaveAuditResponse>> SaveAudit([FromBody] SaveAuditRequest request)
     {
         var command = _mapper.Map<SaveAuditRequest, SaveAuditCommand>(request);
-        var result = await _sender.Send(command, HttpContext.RequestAborted);
+        var result = await _mediator.Send<SaveAuditCommand, SaveAuditCommandResult>(command, HttpContext.RequestAborted);
         var response = _mapper.Map<SaveAuditCommandResult, SaveAuditResponse>(result);
 
         // Adds Location header that specifies the URI of the newly created item.

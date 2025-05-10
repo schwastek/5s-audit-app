@@ -17,10 +17,10 @@ public class TimeoutTests : IDisposable
         // Arrange
         var services = new ServiceCollection();
         services.AddSingleton<Dependency>();
-        services.AddSingleton<INotificationPublisher, SyncStopOnExceptionPublisher>();
+        services.AddTransient<INotificationPublisher, SyncStopOnExceptionPublisher>();
         services.AddTransient<IRequestHandler<TimeoutRequest, Unit>, TimeoutRequestHandler>();
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TimeoutBehavior<,>));
-        services.AddSingleton<IMediator, Mediator>();
+        services.AddTransient<IMediator, Mediator>();
 
         _serviceProvider = services.BuildServiceProvider();
     }

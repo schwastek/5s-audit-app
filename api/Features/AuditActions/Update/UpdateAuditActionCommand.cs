@@ -1,9 +1,8 @@
-﻿using MediatR;
-using System;
+﻿using System;
 
 namespace Features.AuditActions.Update;
 
-public sealed record UpdateAuditActionCommand : IRequest
+public sealed record UpdateAuditActionCommand
 {
     public required Guid AuditActionId { get; init; }
     public required string Description { get; init; }

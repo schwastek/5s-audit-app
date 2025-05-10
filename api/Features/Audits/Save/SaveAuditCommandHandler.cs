@@ -1,6 +1,6 @@
 ﻿using Data.DbContext;
 using Domain;
-using MediatR;
+using Features.Core.MediatorService;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;

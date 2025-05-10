@@ -17,11 +17,11 @@ public class PublishWithParallelWhenAllPublisherTests : IDisposable
     {
         // Arrange
         var services = new ServiceCollection();
-        services.AddSingleton<INotificationPublisher, ParallelWhenAllPublisher>();
+        services.AddTransient<INotificationPublisher, ParallelWhenAllPublisher>();
         services.AddTransient<INotificationHandler<Notification>, FirstHandler>();
         services.AddTransient<INotificationHandler<Notification>, SecondHandler>();
         services.AddTransient<INotificationHandler<Notification>, ThirdHandler>();
-        services.AddSingleton<IMediator, Mediator>();
+        services.AddTransient<IMediator, Mediator>();
 
         _serviceProvider = services.BuildServiceProvider();
     }
