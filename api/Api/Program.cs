@@ -61,7 +61,7 @@ builder.Services.AddMappers();
 builder.Services.AddOrderByMappers();
 
 // Register pagination service
-builder.Services.AddSingleton(typeof(IPaginatedResultFactory<>), typeof(PaginatedResultFactory<>));
+builder.Services.AddTransient(typeof(IPaginatedResultFactory<>), typeof(PaginatedResultFactory<>));
 
 // Options pattern
 builder.Services.Configure<ConnectionStringOptions>(builder.Configuration.GetSection(
