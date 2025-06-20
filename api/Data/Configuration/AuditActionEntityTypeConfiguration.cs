@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -21,7 +22,7 @@ public class AuditActionEntityTypeConfiguration : IEntityTypeConfiguration<Audit
 
         builder.Property(aa => aa.Description)
             .IsRequired()
-            .HasMaxLength(AuditAction.DescriptionMaxLength);
+            .HasMaxLength(AuditActionConstants.DescriptionMaxLength);
 
         builder.Property(aa => aa.IsComplete)
             .IsRequired()

@@ -1,13 +1,9 @@
-﻿using Domain.Exceptions;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace Domain;
 
 public sealed class AuditAction
 {
-    public const int DescriptionMaxLength = 280;
-
     public Guid AuditActionId { get; private set; }
     public string Description { get; private set; }
     public bool IsComplete { get; private set; }
@@ -24,8 +20,6 @@ public sealed class AuditAction
 
     public static AuditAction Create(Guid auditActionId, string description)
     {
-
-        ValidateDescription(description);
         var auditAction = new AuditAction(auditActionId, description, isComplete: false);
 
         return auditAction;
@@ -55,27 +49,6 @@ public sealed class AuditAction
 
     public void ChangeDescription(string description)
     {
-        ValidateDescription(description);
         Description = description;
-    }
-
-    private static void ValidateDescription(string description)
-    {
-        var errors = new List<string>();
-
-        if (string.IsNullOrWhiteSpace(description))
-        {
-            errors.Add(ErrorCodes.AuditAction.AuditActionDescriptionIsRequired);
-        }
-
-        if (description.Length > DescriptionMaxLength)
-        {
-            errors.Add(ErrorCodes.AuditAction.AuditActionDescriptionIsTooLong);
-        }
-
-        if (errors.Count != 0)
-        {
-            throw new DomainValidationException(errors);
-        }
     }
 }

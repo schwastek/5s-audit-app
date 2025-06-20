@@ -1,4 +1,5 @@
-﻿using Domain.Exceptions;
+﻿using Domain.Constants;
+using Domain.Exceptions;
 using Features.Audits.BusinessRules;
 using Features.Core.ValidatorService;
 using System.Threading;
@@ -22,6 +23,11 @@ public sealed class SaveAuditActionCommandValidator : AbstractValidator<SaveAudi
         if (IsEmpty(instance.Description)) AddError(ErrorCodes.AuditAction.AuditActionDescriptionIsRequired);
 
         if (!IsValid) return;
+
+        if (instance.Description.Length > AuditActionConstants.DescriptionMaxLength)
+        {
+            AddError(ErrorCodes.AuditAction.AuditActionDescriptionIsTooLong);
+        }
 
         var auditExists = await _auditBusinessRules.AuditExists(instance.AuditId, cancellationToken);
         if (!auditExists) AddError(ErrorCodes.Audit.AuditDoesNotExist);

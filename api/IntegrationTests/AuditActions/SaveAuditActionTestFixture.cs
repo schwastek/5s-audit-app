@@ -1,6 +1,7 @@
 ﻿using Api.Exceptions;
 using Api.Requests.AuditActions.Save;
 using Domain;
+using Domain.Constants;
 using Domain.Exceptions;
 using IntegrationTests.Helpers;
 using Microsoft.EntityFrameworkCore;
@@ -47,7 +48,7 @@ internal class SaveAuditActionTestFixture : BaseTestFixture
         {
             AuditId = _audit!.AuditId,
             AuditActionId = Guid.NewGuid(),
-            Description = TestValueGenerator.GenerateString(AuditAction.DescriptionMaxLength)
+            Description = TestValueGenerator.GenerateString(AuditActionConstants.DescriptionMaxLength)
         };
 
         var response = await Client.PostAsJsonAsync($"api/actions", request);
@@ -110,7 +111,7 @@ internal class SaveAuditActionTestFixture : BaseTestFixture
         {
             AuditId = _audit!.AuditId,
             AuditActionId = Guid.NewGuid(),
-            Description = TestValueGenerator.GenerateString(AuditAction.DescriptionMaxLength + 1)
+            Description = TestValueGenerator.GenerateString(AuditActionConstants.DescriptionMaxLength + 1)
         };
 
         var response = await Client.PostAsJsonAsync($"api/actions", request);

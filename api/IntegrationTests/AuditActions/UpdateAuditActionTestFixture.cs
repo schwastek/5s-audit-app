@@ -1,6 +1,7 @@
 ﻿using Api.Exceptions;
 using Api.Requests.AuditActions.Update;
 using Domain;
+using Domain.Constants;
 using Domain.Exceptions;
 using IntegrationTests.Helpers;
 using Microsoft.EntityFrameworkCore;
@@ -110,7 +111,7 @@ internal class UpdateAuditActionTestFixture : BaseTestFixture
     {
         var request = new UpdateAuditActionRequest()
         {
-            Description = TestValueGenerator.GenerateString(AuditAction.DescriptionMaxLength + 1),
+            Description = TestValueGenerator.GenerateString(AuditActionConstants.DescriptionMaxLength + 1),
             IsComplete = true
         };
 
