@@ -4,29 +4,21 @@ using System.Linq;
 
 namespace Domain.Events;
 
-public abstract class CollectionChangedEvent : ChangedEvent
+public interface ICollectionChangedEvent { }
+
+public abstract class CollectionChangedEvent<T> : MemberChangedEvent<T>, ICollectionChangedEvent
 {
-    public const string MemberNamePrefix = "Collection";
+    private readonly HashSet<T> _addedItems;
+    private readonly HashSet<T> _removedItems;
 
-    public CollectionChangedEvent(string collectionName) : base($"{MemberNamePrefix}.{collectionName}")
+    public IReadOnlySet<T> AddedItems => _addedItems;
+    public IReadOnlySet<T> RemovedItems => _removedItems;
+
+    public CollectionChangedEvent(string collectionName, IEnumerable<T>? added, IEnumerable<T>? removed, IEqualityComparer<T>? comparer)
+        : base(collectionName, comparer)
     {
-    }
-}
-
-public abstract class CollectionChangedEvent<T> : CollectionChangedEvent
-{
-    public IReadOnlyList<T> AddedItems { get; }
-    public IReadOnlyList<T> RemovedItems { get; }
-    public IEqualityComparer<T> Comparer { get; }
-
-    public abstract CollectionChangedEvent<T> Clone(IEnumerable<T>? addedItems = null, IEnumerable<T>? removedItems = null);
-
-    public CollectionChangedEvent(string collectionName, IEnumerable<T>? addedItems, IEnumerable<T>? removedItems, IEqualityComparer<T>? comparer)
-        : base(collectionName)
-    {
-        AddedItems = addedItems?.ToList() ?? [];
-        RemovedItems = removedItems?.ToList() ?? [];
-        Comparer = comparer ?? EqualityComparer<T>.Default;
+        _addedItems = added?.ToHashSet(comparer) ?? [];
+        _removedItems = removed?.ToHashSet(comparer) ?? [];
     }
 
     public virtual CollectionChangedEvent<T> MergeWith(CollectionChangedEvent<T> other)
@@ -36,20 +28,17 @@ public abstract class CollectionChangedEvent<T> : CollectionChangedEvent
             throw new InvalidOperationException("Cannot merge events with different collection names.");
         }
 
-        var allAdded = AddedItems.Concat(other.AddedItems).ToList();
-        var allRemoved = RemovedItems.Concat(other.RemovedItems).ToList();
-
-        var addedSet = allAdded.ToHashSet(Comparer);
-        var removedSet = allRemoved.ToHashSet(Comparer);
+        _addedItems.UnionWith(other._addedItems);
+        _removedItems.UnionWith(other._removedItems);
 
         // Cancel out opposing changes (added then removed = no change).
-        addedSet.ExceptWith(allRemoved);
-        removedSet.ExceptWith(allAdded);
+        _addedItems.ExceptWith(_removedItems);
+        _removedItems.ExceptWith(_addedItems);
 
-        return Clone(addedSet, removedSet);
+        return this;
     }
 
-    public virtual bool IsEmpty()
+    public virtual bool NoChange()
     {
         return AddedItems.Count == 0 && RemovedItems.Count == 0;
     }
