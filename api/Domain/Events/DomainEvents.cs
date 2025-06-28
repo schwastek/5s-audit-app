@@ -1,42 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using Domain.Events.ChangeTracking;
+using System.Collections.Generic;
 
 namespace Domain.Events;
 
-public abstract class DomainEvents
+public class DomainEvents
 {
-    protected List<DomainEvent> Events { get; } = [];
+    private readonly List<DomainEvent> _events = [];
 
-    public virtual void Add(DomainEvent eventItem)
+    public void Add(DomainEvent eventItem)
     {
-        Events.Add(eventItem);
+        _events.Add(eventItem);
     }
 
-    public virtual void Add(EntityChangedEvent eventItem)
+    public void Add(EntityChangedEvent eventItem)
     {
         // There should be only one event of that type.
-        // Check for an existing event. If found, merge.
-        var index = Events.FindIndex(x => x is EntityChangedEvent);
+        // Check for an existing event.
+        var index = _events.FindIndex(e => e is EntityChangedEvent);
 
-        if (index >= 0)
+        if (index == -1)
         {
-            var previous = Events[index] as EntityChangedEvent;
-            // Event self-updates. Just reposition it as the most recent.
-            Events.RemoveAt(index);
-            Events.Add(eventItem);
-        }
-        else
-        {
-            Events.Add(eventItem);
+            _events.Add(eventItem);
         }
     }
 
-    public virtual IReadOnlyList<DomainEvent> Get()
+    public virtual IReadOnlyList<DomainEvent> Collect()
     {
-        return Events.AsReadOnly();
+        return _events;
     }
 
-    public virtual void Clear()
+    public void Clear()
     {
-        Events.Clear();
+        _events.Clear();
     }
 }

@@ -4,6 +4,6 @@ namespace Domain.Events;
 
 public interface IHaveDomainEvents
 {
-    IReadOnlyList<DomainEvent> GetDomainEvents();
+    IReadOnlyList<DomainEvent> CollectDomainEvents();
     void ClearDomainEvents();
 }
