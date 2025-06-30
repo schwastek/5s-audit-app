@@ -1,6 +1,4 @@
 ﻿using Domain.Events;
-using Domain.Events.ChangeTracking;
-using System.Collections.Generic;
 using Xunit;
 
 namespace UnitTests.Domain.Events;
@@ -8,70 +6,132 @@ namespace UnitTests.Domain.Events;
 public sealed class DomainEventsTests
 {
     [Fact]
-    public void Can_add_domain_events()
+    public void Add_should_add_multiple_of_same_type()
     {
         // Arrange
-        var domainEvents = new DomainEvents();
-        var event1 = new FakeDomainEvent();
-        var event2 = new FakeDomainEvent();
+        var events = new DomainEvents();
 
         // Act
-        domainEvents.Add(event1);
-        domainEvents.Add(event2);
-        var events = domainEvents.Collect();
+        events.Add(new FakeDomainEvent { Data = "A" });
+        events.Add(new FakeDomainEvent { Data = "B" });
+
+        var collected = events.Collect();
 
         // Assert
-        Assert.Equal(2, events.Count);
-        Assert.Contains(event1, events);
-        Assert.Contains(event2, events);
+        Assert.Equal(2, collected.Count);
+
+        var first = Assert.IsType<FakeDomainEvent>(collected[0]);
+        Assert.Equal("A", first.Data);
+
+        var second = Assert.IsType<FakeDomainEvent>(collected[1]);
+        Assert.Equal("B", second.Data);
     }
 
     [Fact]
-    public void Can_clear_domain_events()
+    public void AddOnce_should_only_add_once_per_type()
     {
         // Arrange
-        var domainEvents = new DomainEvents();
-        var event1 = new FakeDomainEvent();
+        var events = new DomainEvents();
 
         // Act
-        domainEvents.Add(event1);
-        domainEvents.Clear();
-        var events = domainEvents.Collect();
+        events.AddOnce(new FakeDomainEvent { Data = "Initial" });
+        events.AddOnce(new FakeDomainEvent { Data = "Ignored" });
+
+        var collected = events.Collect();
 
         // Assert
-        Assert.Empty(events);
+        Assert.Single(collected);
+
+        var only = Assert.IsType<FakeDomainEvent>(collected[0]);
+        Assert.Equal("Initial", only.Data);
     }
 
     [Fact]
-    public void Adds_entity_changed_event_only_once()
+    public void AddOrReplace_should_replace_existing_of_same_type()
     {
         // Arrange
-        var domainEvents = new DomainEvents();
-        var change = new FakePropertyChanged(oldValue: "Old", newValue: "New");
-        var changes = new List<MemberChanged>(1) { change };
-        var firstEvent = new FakeEntityChangedEvent(changes);
-        var secondEvent = new FakeEntityChangedEvent(changes);
+        var events = new DomainEvents();
 
         // Act
-        domainEvents.Add(firstEvent);
-        domainEvents.Add(secondEvent);
-        var events = domainEvents.Collect();
+        events.AddOrReplace(new FakeDomainEvent { Data = "First" });
+        events.AddOrReplace(new FakeDomainEvent { Data = "Second" });
+
+        var collected = events.Collect();
 
         // Assert
-        Assert.Single(events);
-        Assert.Contains(firstEvent, events);
+        Assert.Single(collected);
+
+        var replaced = Assert.IsType<FakeDomainEvent>(collected[0]);
+        Assert.Equal("Second", replaced.Data);
     }
 
-    private class FakeDomainEvent : DomainEvent { }
 
-    private class FakeEntityChangedEvent : EntityChangedEvent
+    [Fact]
+    public void AddOrAppend_should_remove_previous_and_add_to_end()
     {
-        public FakeEntityChangedEvent(IReadOnlyCollection<MemberChanged> changes) : base(changes) { }
+        // Arrange
+        var events = new DomainEvents();
+
+        // Act
+        events.Add(new FakeDomainEvent { Data = "First" });
+        events.Add(new FakeDomainEvent { Data = "Second" });
+        events.AddOrAppend(new FakeDomainEvent { Data = "Third" });
+        events.AddOrAppend(new FakeDomainEvent { Data = "Fourth" });
+
+        var collected = events.Collect();
+
+        // Assert
+        Assert.Equal(2, collected.Count);
+
+        var last = Assert.IsType<FakeDomainEvent>(collected[1]);
+        Assert.Equal("Fourth", last.Data);
     }
 
-    private class FakePropertyChanged : PropertyChanged<string>
+
+    [Fact]
+    public void Clear_should_remove_all_events()
     {
-        public FakePropertyChanged(string oldValue, string newValue)
-            : base(propertyName: "Fake", oldValue, newValue, null) { }
+        // Arrange
+        var events = new DomainEvents();
+
+        // Act
+        events.Add(new FakeDomainEvent { Data = "Some" });
+        events.Clear();
+
+        var collected = events.Collect();
+
+        // Assert
+        Assert.Empty(collected);
+    }
+
+    [Fact]
+    public void Collect_should_return_events_in_correct_order()
+    {
+        // Arrange
+        var events = new DomainEvents();
+
+        // Act
+        events.Add(new FakeDomainEvent { Data = "A" });
+        events.Add(new FakeDomainEvent { Data = "B" });
+        events.Add(new FakeDomainEvent { Data = "C" });
+
+        var collected = events.Collect();
+
+        // Assert
+        Assert.Equal(3, collected.Count);
+
+        var first = Assert.IsType<FakeDomainEvent>(collected[0]);
+        Assert.Equal("A", first.Data);
+
+        var second = Assert.IsType<FakeDomainEvent>(collected[1]);
+        Assert.Equal("B", second.Data);
+
+        var third = Assert.IsType<FakeDomainEvent>(collected[2]);
+        Assert.Equal("C", third.Data);
+    }
+
+    private class FakeDomainEvent : DomainEvent
+    {
+        public string? Data { get; set; }
     }
 }

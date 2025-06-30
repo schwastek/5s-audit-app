@@ -225,7 +225,7 @@ public sealed class EntityWithDomainEventsTests
         {
             if (_tracker.HasChanges)
             {
-                _events.Add(new ArticleEntityChangedEvent(_id, _tracker.Changes));
+                _events.AddOnce(new ArticleEntityChangedEvent(_id, _tracker.Changes));
             }
 
             return _events.Collect();
