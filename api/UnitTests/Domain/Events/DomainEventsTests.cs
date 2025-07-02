@@ -47,27 +47,7 @@ public sealed class DomainEventsTests
     }
 
     [Fact]
-    public void AddOrReplace_should_replace_existing_of_same_type()
-    {
-        // Arrange
-        var events = new DomainEvents();
-
-        // Act
-        events.AddOrReplace(new FakeDomainEvent { Data = "First" });
-        events.AddOrReplace(new FakeDomainEvent { Data = "Second" });
-
-        var collected = events.Collect();
-
-        // Assert
-        Assert.Single(collected);
-
-        var replaced = Assert.IsType<FakeDomainEvent>(collected[0]);
-        Assert.Equal("Second", replaced.Data);
-    }
-
-
-    [Fact]
-    public void AddOrAppend_should_remove_previous_and_add_to_end()
+    public void AddOrReplaceLast_should_remove_single_previous_and_add_to_end()
     {
         // Arrange
         var events = new DomainEvents();
@@ -75,8 +55,8 @@ public sealed class DomainEventsTests
         // Act
         events.Add(new FakeDomainEvent { Data = "First" });
         events.Add(new FakeDomainEvent { Data = "Second" });
-        events.AddOrAppend(new FakeDomainEvent { Data = "Third" });
-        events.AddOrAppend(new FakeDomainEvent { Data = "Fourth" });
+        events.AddOrReplaceLast(new FakeDomainEvent { Data = "Third" });
+        events.AddOrReplaceLast(new FakeDomainEvent { Data = "Fourth" });
 
         var collected = events.Collect();
 
@@ -84,6 +64,28 @@ public sealed class DomainEventsTests
         Assert.Equal(2, collected.Count);
 
         var last = Assert.IsType<FakeDomainEvent>(collected[1]);
+        Assert.Equal("Fourth", last.Data);
+    }
+
+    [Fact]
+    public void AddOrReplaceAll_should_remove_all_previous_and_add_to_end()
+    {
+        // Arrange
+        var events = new DomainEvents();
+
+        // Act
+        events.Add(new FakeDomainEvent { Data = "First" });
+        events.Add(new FakeDomainEvent { Data = "Second" });
+        events.Add(new FakeDomainEvent { Data = "Third" });
+
+        events.AddOrReplaceAll(new FakeDomainEvent { Data = "Fourth" });
+
+        var collected = events.Collect();
+
+        // Assert
+        Assert.Single(collected);
+
+        var last = Assert.IsType<FakeDomainEvent>(collected[0]);
         Assert.Equal("Fourth", last.Data);
     }
 

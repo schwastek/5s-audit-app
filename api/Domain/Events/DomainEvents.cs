@@ -9,11 +9,18 @@ namespace Domain.Events;
 /// </summary>
 public class DomainEvents
 {
-    private readonly List<DomainEvent> _events = [];
-    private readonly Dictionary<Type, int> _eventTypeIndex = [];
+    // Stores all domain events in order.
+    // LinkedList allows fast insertion, removal, and reordering.
+    // If we used a List, we would need to track the index of each event per type.
+    // On removal, all subsequent indices would shift and tracked indices would need to be updated.
+    private readonly LinkedList<DomainEvent> _events = [];
+
+    // Maps each event type to the set of nodes containing events of that type.
+    // Enables O(1) access to all events of a specific type for efficient add, replace, or removal.
+    private readonly Dictionary<Type, List<LinkedListNode<DomainEvent>>> _eventsByType = [];
 
     /// <summary>
-    /// Adds a domain event to the list, even if another event of the same type already exists.
+    /// Adds a domain event to the list, even if another event of the same type already exists (duplicates allowed).
     /// Use when all occurrences of the event matter and should be captured independently.
     /// </summary>
     /// <remarks>
@@ -23,10 +30,8 @@ public class DomainEvents
     /// <param name="domainEvent">The event instance to add.</param>
     public void Add<T>(T domainEvent) where T : DomainEvent
     {
-        // Always add, even if type already exists (duplicates allowed).
-        _events.Add(domainEvent);
-        // Update index to latest occurrence (for consistency).
-        _eventTypeIndex[typeof(T)] = _events.Count - 1;
+        var node = _events.AddLast(domainEvent);
+        AddNode(typeof(T), node);
     }
 
     /// <summary>
@@ -41,68 +46,58 @@ public class DomainEvents
     public void AddOnce<T>(T domainEvent) where T : DomainEvent
     {
         var type = typeof(T);
-
-        if (!_eventTypeIndex.ContainsKey(type))
+        if (!_eventsByType.ContainsKey(type))
         {
-            _events.Add(domainEvent);
-            _eventTypeIndex[type] = _events.Count - 1;
-        }
-    }
-
-    /// <summary>
-    /// Adds a domain event or replaces the previous event of the same type.
-    /// Use when the latest version should overwrite any earlier one; order does not matter.
-    /// </summary>
-    /// <remarks>
-    /// Example: <c>UserLastLoginUpdatedEvent</c> — only the most recent login is relevant, earlier ones are obsolete.
-    /// </remarks>
-    /// <typeparam name="T">Type of the domain event.</typeparam>
-    /// <param name="domainEvent">The new event to add or replace.</param>
-    public void AddOrReplace<T>(T domainEvent) where T : DomainEvent
-    {
-        var type = typeof(T);
-
-        if (_eventTypeIndex.TryGetValue(type, out int index))
-        {
-            // Replace.
-            _events[index] = domainEvent;
-        }
-        else
-        {
-            _events.Add(domainEvent);
-            _eventTypeIndex[type] = _events.Count - 1;
+            Add(domainEvent);
         }
     }
 
     /// <summary>
     /// Removes the previous event of the same type (if present) and appends the new one to the end.
-    /// Keeps event order correct while ensuring only the latest version remains; order matters.
+    /// Use when the latest version should overwrite any earlier one.
     /// </summary>
     /// <remarks>
-    /// Example: <c>UserSessionStartedEvent</c> — only the latest session matters, but ordering with other events is important.
+    /// Example: <c>UserLastSeenUpdatedEvent</c> — only the most recent login is relevant, earlier ones are obsolete.
     /// </remarks>
     /// <typeparam name="T">Type of the domain event.</typeparam>
-    /// <param name="domainEvent">The new event to add.</param>
-    public void AddOrAppend<T>(T domainEvent) where T : DomainEvent
+    /// <param name="domainEvent">The new event to add or replace.</param>
+    public void AddOrReplaceLast<T>(T domainEvent) where T : DomainEvent
     {
         var type = typeof(T);
 
-        if (_eventTypeIndex.TryGetValue(type, out int index))
+        if (_eventsByType.TryGetValue(type, out var nodes) && nodes.Count > 0)
         {
-            _events.RemoveAt(index);
+            var last = nodes[^1];
+            _events.Remove(last);
+            nodes.RemoveAt(nodes.Count - 1);
+        }
 
-            // Update indices for events after the removed one.
-            foreach (var key in _eventTypeIndex.Keys.ToList())
+        Add(domainEvent);
+    }
+
+    /// <summary>
+    /// Removes all previous events of the same type (if present) and appends the new one to the end.
+    /// Use when the latest version should overwrite all earlier ones.
+    /// </summary>
+    /// <remarks>
+    /// Example: <c>UserLastSeenUpdatedEvent</c> — only the most recent login is relevant, earlier ones are obsolete.
+    /// </remarks>
+    /// <typeparam name="T">Type of the domain event.</typeparam>
+    /// <param name="domainEvent">The new event to add or replace.</param>
+    public void AddOrReplaceAll<T>(T domainEvent) where T : DomainEvent
+    {
+        var type = typeof(T);
+
+        if (_eventsByType.TryGetValue(type, out var nodes))
+        {
+            foreach (var node in nodes)
             {
-                if (_eventTypeIndex[key] > index)
-                {
-                    _eventTypeIndex[key]--;
-                }
+                _events.Remove(node);
             }
         }
 
-        _events.Add(domainEvent);
-        _eventTypeIndex[type] = _events.Count - 1;
+        _eventsByType.Remove(type);
+        Add(domainEvent);
     }
 
     /// <summary>
@@ -112,7 +107,8 @@ public class DomainEvents
     /// <returns>List of domain events.</returns>
     public virtual IReadOnlyList<DomainEvent> Collect()
     {
-        return _events.AsReadOnly();
+        var collected = _events.ToList().AsReadOnly();
+        return collected;
     }
 
     /// <summary>
@@ -122,6 +118,17 @@ public class DomainEvents
     public void Clear()
     {
         _events.Clear();
-        _eventTypeIndex.Clear();
+        _eventsByType.Clear();
+    }
+
+    private void AddNode(Type type, LinkedListNode<DomainEvent> node)
+    {
+        if (!_eventsByType.TryGetValue(type, out var list))
+        {
+            list = [];
+            _eventsByType[type] = list;
+        }
+
+        list.Add(node);
     }
 }
