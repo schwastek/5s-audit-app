@@ -1,8 +1,8 @@
 // Source: https://github.com/kentcdodds/kentcdodds.com/issues/206 (author: https://github.com/npirotte).
 
-type ErrorWithMessage = {
+interface ErrorWithMessage {
   message: string
-};
+}
 
 function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
   return (

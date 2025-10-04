@@ -1,13 +1,13 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './shared/interceptors/jwt.interceptor';
-import { ApiModule } from './api/api.module';
-import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideBrowserGlobalErrorListeners(),
+    provideZonelessChangeDetection(),
     provideRouter(
       routes,
       withComponentInputBinding()
@@ -15,7 +15,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       // The interceptors are chained together in the order they are listed.
       withInterceptors([authInterceptor])
-    ),
-    importProvidersFrom(ApiModule.forRoot({ rootUrl: environment.apiUrl }))
+    )
   ]
 };

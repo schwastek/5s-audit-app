@@ -4,9 +4,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { RatingTemplateDirective } from './templates.directive';
 import { noop } from 'rxjs';
 
-export interface GetLabelTextFn {
-  (starValue: number): string;
-}
+export type GetLabelTextFn = (starValue: number) => string;
 
 // Register the custom form control as a known value accessor in the dependency injection system.
 // All value accessors within Angular Forms are registered
@@ -25,23 +23,22 @@ export const RATING_VALUE_ACCESSOR = {
   selector: 'app-rating',
   templateUrl: './rating.component.html',
   providers: [RATING_VALUE_ACCESSOR],
-  standalone: true,
-  imports: [CommonModule, NgTemplateOutlet, RatingTemplateDirective]
+  imports: [CommonModule, NgTemplateOutlet]
 })
 export class RatingComponent implements ControlValueAccessor, OnInit, OnChanges {
 
   // The current rating. Useful if the rating component is not controlled by Angular Forms (e.g. via `formControlName`).
-  @Input() rate: number = 0;
+  @Input() rate = 0;
 
   // Number of stars.
-  @Input() max: number = 5;
+  @Input() max = 5;
 
   // If `true`, the rating can't be changed or focused.
-  @Input() isDisabled: boolean = false;
+  @Input() isDisabled = false;
 
   // If `true`, the rating can't be changed.
   // Note: Input elements of type `radio` does not have a `readonly` attribute.
-  @Input() isReadOnly: boolean = false;
+  @Input() isReadOnly = false;
 
   // Returns the label text for the current rating value, e.g. "2 Stars".
   @Input() getLabelTextFn?: GetLabelTextFn;
@@ -60,7 +57,7 @@ export class RatingComponent implements ControlValueAccessor, OnInit, OnChanges 
   @ContentChild(RatingTemplateDirective, { read: TemplateRef, static: false }) ratingTemplate?: TemplateRef<unknown>;
 
   stars: number[] = [];
-  name: string = 'rating';
+  name = 'rating';
   onChange: (value: number) => void = noop;
   onTouched: () => void = noop;
 
@@ -131,7 +128,7 @@ export class RatingComponent implements ControlValueAccessor, OnInit, OnChanges 
     this.onTouched();
   }
 
-  getCssClassesFor(value: number): { [key: string]: boolean } {
+  getCssClassesFor(value: number): Record<string, boolean> {
     const starFilledClass = this.starFilledClass || 'rating-icon-filled';
     const starEmptyClass = this.starEmptyClass || 'rating-icon-empty';
 

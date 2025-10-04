@@ -3,7 +3,6 @@ import { ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'app-validation-messages',
-  standalone: true,
   imports: [],
   templateUrl: './validation-messages.component.html',
   host: {

@@ -3,7 +3,6 @@ import { range } from '../../utilities/utilities';
 
 @Component({
   selector: 'app-pagination',
-  standalone: true,
   imports: [],
   templateUrl: './pagination.component.html'
 })

@@ -1,6 +1,6 @@
-import { ApiAnswerDto, ApiAuditDto, ApiAuditListItemDto } from '../../api/models';
+import { ApiAnswerDto, ApiAuditListItemDto, ApiGetAuditResponse } from '../../api/models';
 
-export interface AuditDtoWithAnswerNumber extends ApiAuditDto {
+export interface AuditDtoWithAnswerNumber extends ApiGetAuditResponse {
   answers: AnswerDtoWithAnswerNumber[];
 }
 

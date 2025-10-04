@@ -1,4 +1,4 @@
-import { Component, input, model, signal } from '@angular/core';
+import { Component, inject, input, model, signal } from '@angular/core';
 import { ApiSaveAuditActionRequest, ApiUpdateAuditActionRequest } from '../../api/models';
 import { AuditService } from '../audit.service';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,7 +12,6 @@ export type SaveOrUpdateAuditAction = ApiSaveAuditActionRequest & ApiUpdateAudit
 
 @Component({
   selector: 'app-audit-action',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     LoadingButtonDirective,
@@ -21,6 +20,8 @@ export type SaveOrUpdateAuditAction = ApiSaveAuditActionRequest & ApiUpdateAudit
   templateUrl: './audit-action.component.html'
 })
 export class AuditActionComponent {
+  private auditService = inject(AuditService);
+
   // Inputs
   isEditForm = input.required<boolean>();
   auditId = input.required<string>();
@@ -47,16 +48,12 @@ export class AuditActionComponent {
   // Actions - Status (one status per action)
   private isUpdatingMap = signal(new Map<string, boolean>());
 
-  constructor(
-    private auditService: AuditService
-  ) { }
-
   async onSave(form: FormGroupDirective) {
     if (form.invalid) return;
 
     this.isSaving.set(true);
 
-    let action: SaveOrUpdateAuditAction = {
+    const action: SaveOrUpdateAuditAction = {
       auditActionId: uuidv4(),
       auditId: this.auditId(),
       description: this.description.value,
@@ -65,7 +62,10 @@ export class AuditActionComponent {
 
     if (this.isEditForm()) {
       const response = await firstValueFrom(this.auditService.saveAuditAction(action));
-      action = response.auditAction;
+      action.auditActionId = response.auditActionId;
+      action.auditId = response.auditId;
+      action.description = response.description;
+      action.isComplete = response.isComplete;
     }
 
     this.actions.update((actions) => {

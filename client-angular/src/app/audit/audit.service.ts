@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, map, of } from 'rxjs';
 import { PaginatedResult } from '../shared/models/pagination';
 import { Area } from './models/area';
@@ -14,11 +14,9 @@ import { formatAsPercentage, formatDate, getShortGuid } from '../shared/utilitie
   providedIn: 'root'
 })
 export class AuditService {
-  constructor(
-    private apiAuditsService: ApiAuditsService,
-    private apiQuestionsService: ApiQuestionsService,
-    private apiActionService: ApiActionsService
-  ) { }
+  private apiAuditsService = inject(ApiAuditsService);
+  private apiQuestionsService = inject(ApiQuestionsService);
+  private apiActionService = inject(ApiActionsService);
 
   getAudits(pageNumber?: number | null): Observable<PaginatedResult<AuditListItemDto>> {
     const params: ListAudits$Params = {
@@ -47,9 +45,7 @@ export class AuditService {
   getAudit(id: Nullable<string>) {
     if (!isDefined(id)) return of(null);
 
-    return this.apiAuditsService.getAudit({ id: id! }).pipe(
-      map((response) => response.audit)
-    );
+    return this.apiAuditsService.getAudit({ id: id! });
   }
 
   getAreas(): Observable<Area[]> {

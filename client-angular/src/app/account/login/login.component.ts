@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AccountService } from '../account.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,7 +8,6 @@ import { LoadingButtonDirective } from '../../shared/components/loading-button/l
 
 @Component({
   selector: 'app-login',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     ValidationMessagesComponent,
@@ -17,6 +16,10 @@ import { LoadingButtonDirective } from '../../shared/components/loading-button/l
   templateUrl: './login.component.html'
 })
 export class LoginComponent implements OnInit {
+  private accountService = inject(AccountService);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+
   username = new FormControl('', { validators: [Validators.required, Validators.email], nonNullable: true });
   password = new FormControl('', { validators: [Validators.required], nonNullable: true });
 
@@ -27,13 +30,7 @@ export class LoginComponent implements OnInit {
 
   returnUrl!: string;
   errorMessage: string | null = null;
-  isSubmitting: boolean = false;
-
-  constructor(
-    private accountService: AccountService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute
-  ) { }
+  isSubmitting = false;
 
   ngOnInit(): void {
     this.returnUrl = this.activatedRoute.snapshot.queryParamMap.get('returnUrl') || '/audits';

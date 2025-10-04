@@ -13,29 +13,29 @@
           <form [formGroup]="form" (ngSubmit)="onSave()">
             <label for="select-area" class="form-label mb-2">Select area:</label>
             <select id="select-area" class="form-select mb-4" formControlName="area">
-              @if (areas) {
+              @if (areas(); as areas) {
                 @for (area of areas; track area.id) {
                   <option [ngValue]="area.key">{{ area.value }}</option>
                 }
               }
             </select>
             <ng-container formArrayName="ratings">
-            @if (questions) {
-              @for (question of questions; track question.questionId) {
-                <div class="d-flex pt-3 border-bottom lh-1 text-muted">
-                  <div class="flex-grow-1">
-                    <p class="pb-3 mb-0 lh-sm">{{ question.questionText }}</p>
+              @if (isQuestionsReady()) {
+                @for (rating of ratings.controls; track $index; let i = $index) {
+                  <div class="d-flex pt-3 border-bottom lh-1 text-muted">
+                    <div class="flex-grow-1">
+                      <p class="pb-3 mb-0 lh-sm">{{ questions![i].questionText }}</p>
+                    </div>
+                    <div>
+                      <app-rating [max]="5" [formControlName]="$index"></app-rating>
+                    </div>
                   </div>
-                  <div>
-                    <app-rating [max]="5" [formControlName]="$index"></app-rating>
-                  </div>
-                </div>
+                }
+              } @else {
+                <p>Could not load questions.</p>
               }
-            } @else {
-              <p>Could not load questions.</p>
-            }
             </ng-container>
-            <button type="submit" id="saveForm" class="btn btn-primary mt-3" [disabled]="form.invalid || isSaving()" [appLoadingButton]="isSaving()">Save</button>
+            <button type="submit" id="saveForm" class="btn btn-primary mt-3" [disabled]="form.invalid || isFormSaving()" [appLoadingButton]="isFormSaving()">Save</button>
           </form>
         </div>
       </div>

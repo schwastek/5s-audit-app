@@ -2,8 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { Directive, effect, ElementRef, inject, input } from '@angular/core';
 
 @Directive({
-  selector: '[appLoadingButton]',
-  standalone: true
+  selector: '[appLoadingButton]'
 })
 export class LoadingButtonDirective {
   loading = input<boolean>(false, { alias: 'appLoadingButton' });

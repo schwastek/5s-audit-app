@@ -6,12 +6,12 @@ import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-loading',
-  standalone: true,
   imports: [AsyncPipe],
   templateUrl: './loading.component.html'
 })
 export class LoadingComponent {
-  loadingService = inject(LoadingService);
+  private loadingService = inject(LoadingService);
+
   showLoadingAfterMs = 900;
   isLoading$ = toObservable(this.loadingService.isLoading).pipe(
     switchMap((isLoading) => {

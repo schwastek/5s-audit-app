@@ -1,9 +1,8 @@
-import { Directive, TemplateRef } from '@angular/core';
+import { Directive, inject, TemplateRef } from '@angular/core';
 
 @Directive({
-  standalone: true,
   selector: '[appRatingTemplate]'
 })
 export class RatingTemplateDirective {
-  constructor(public templateRef: TemplateRef<unknown>) { }
+  public readonly template = inject(TemplateRef<unknown>);
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { AuditService } from '../audit.service';
 import { lastValueFrom } from 'rxjs';
 import { RatingComponent } from '../../shared/components/rating/rating.component';
@@ -11,7 +11,6 @@ import { AuditActionComponent } from '../audit-action/audit-action.component';
 @Component({
   selector: 'app-audit-detail',
   templateUrl: './audit-detail.component.html',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     RatingComponent,
@@ -19,17 +18,13 @@ import { AuditActionComponent } from '../audit-action/audit-action.component';
   ]
 })
 export class AuditDetailComponent implements OnInit {
-  @Input() id?: string;
-  audit?: Nullable<AuditDtoWithAnswerNumber>;
+  private auditService = inject(AuditService);
 
-  constructor(
-    private auditService: AuditService
-  ) {}
+  id = input.required<string>();
+  audit = signal<Nullable<AuditDtoWithAnswerNumber>>(null);
 
   ngOnInit() {
-    this.getAudit(this.id).then((audit) => {
-      this.audit = audit;
-    });
+    this.getAudit(this.id());
   }
 
   async getAudit(id: Nullable<string>) {
@@ -41,7 +36,7 @@ export class AuditDetailComponent implements OnInit {
     const transformedAudit = audit as AuditDtoWithAnswerNumber;
     transformedAudit.answers = answers;
 
-    return transformedAudit;
+    this.audit.set(transformedAudit);
   }
 
   private convertStringsToNumbers(answers: Nullable<ApiAnswerDto[]>): AnswerDtoWithAnswerNumber[] | undefined {

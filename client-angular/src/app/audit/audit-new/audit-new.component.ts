@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuditService } from '../audit.service';
 import { Area } from '../models/area';
@@ -13,7 +13,6 @@ import { LoadingButtonDirective } from '../../shared/components/loading-button/l
 @Component({
   selector: 'app-audit-new',
   templateUrl: './audit-new.component.html',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     RatingComponent,
@@ -22,17 +21,20 @@ import { LoadingButtonDirective } from '../../shared/components/loading-button/l
   ]
 })
 export class AuditNewComponent implements OnInit {
+  private auditService = inject(AuditService);
+  private router = inject(Router);
+
   readonly auditId = uuidv4();
   private readonly startDate = new Date().toISOString();
 
-  areas: Area[] | null = null;
+  // Content
+  areas= signal<Area[] | null>(null);
+  auditActions = signal<SaveOrUpdateAuditAction[]>([]);
   questions: ApiQuestionDto[] | null = null;
   private answers: ApiAnswerForCreationDto[] = [];
-  auditActions = signal<SaveOrUpdateAuditAction[]>([]);
 
   // Form
   area = new FormControl<string>('assembly', { validators: [Validators.required], nonNullable: true });
-  rating = new FormControl<number>(3, { validators: [Validators.required], nonNullable: true });
   ratings = new FormArray<FormControl<number>>([]);
 
   form: FormGroup = new FormGroup({
@@ -41,28 +43,25 @@ export class AuditNewComponent implements OnInit {
   });
 
   // Form status
-  isSaving = signal(false);
+  isQuestionsReady = signal(false);
+  isFormSaving = signal(false);
 
   // Configuration
   private readonly defaultAnswer = 3;
-
-  constructor(
-    private auditService: AuditService,
-    private router: Router
-  ) { }
 
   ngOnInit() {
     this.getAreas();
     this.getQuestions()
       .then(() => this.createInitialAnswers())
       .then(() => this.addRatings())
-      .then(() => this.updateAnswersWhenRatingChanges());
+      .then(() => this.updateAnswersWhenRatingChanges())
+      .then(() => this.isQuestionsReady.set(true));
   }
 
   async onSave() {
     if (this.form.invalid) return;
 
-    this.isSaving.set(true);
+    this.isFormSaving.set(true);
 
     // Generate IDs here to ensure each submission has unique IDs.
     // If saving fails and user resubmits, new IDs will prevent errors from duplicate IDs in DB.
@@ -81,13 +80,14 @@ export class AuditNewComponent implements OnInit {
     };
 
     this.auditService.saveAudit(audit).subscribe((response) => {
-      this.isSaving.set(false);
+      this.isFormSaving.set(false);
       this.router.navigate(['audits', response.auditId]);
     });
   }
 
   private async getAreas() {
-    this.areas = await firstValueFrom(this.auditService.getAreas());
+    const areas = await firstValueFrom(this.auditService.getAreas());
+    this.areas.set(areas);
   }
 
   private async getQuestions() {

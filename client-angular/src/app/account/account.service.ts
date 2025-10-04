@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ReplaySubject, catchError, map, of, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { User } from './models/user';
@@ -9,11 +9,12 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AccountService {
+  private http = inject(HttpClient);
+  private router = inject(Router);
+
   baseUrl = environment.apiUrl;
   private currentUserSource = new ReplaySubject<User | null>(1);
   currentUser$ = this.currentUserSource.asObservable();
-
-  constructor(private http: HttpClient, private router: Router) { }
 
   login(email: string | null, password: string | null) {
     return this.http.post<User>(this.baseUrl + '/api/account/login', { email, password })

@@ -11,12 +11,12 @@ export class PaginationMetadata implements ApiPaginationMetadata
   hasNextPage: boolean;
 
   constructor(
-    currentPage: number = 1,
-    totalPages: number = 1,
-    pageSize: number = 1,
-    totalCount: number = 1,
-    hasPreviousPage: boolean = false,
-    hasNextPage: boolean = false
+    currentPage = 1,
+    totalPages = 1,
+    pageSize = 1,
+    totalCount = 1,
+    hasPreviousPage = false,
+    hasNextPage = false
   ) {
     this.currentPage = currentPage;
     this.totalPages = totalPages;

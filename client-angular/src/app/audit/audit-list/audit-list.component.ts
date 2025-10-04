@@ -1,19 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AuditService } from '../audit.service';
 import { PaginatedResult } from '../../shared/models/pagination';
 import { RouterLink } from '@angular/router';
 import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
 import { AuditListItemDto } from '../models/audit.models';
-import { AsyncPipe } from '@angular/common';
 import { LoadingService } from '../../shared/loading/loading.service';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 
 @Component({
   selector: 'app-audit-list',
   templateUrl: './audit-list.component.html',
-  standalone: true,
   imports: [
-    AsyncPipe,
     RouterLink,
     PaginationComponent,
     LoadingComponent
@@ -21,14 +18,12 @@ import { LoadingComponent } from '../../shared/loading/loading.component';
   providers: [LoadingService]
 })
 export class AuditListComponent implements OnInit {
-  public audits = new PaginatedResult<AuditListItemDto>();
-  public error: string | null = null;
-  public isLoading = this.loadingService.isLoading;
+  private auditService = inject(AuditService);
+  private loadingService = inject(LoadingService);
 
-  constructor(
-    private auditService: AuditService,
-    private loadingService: LoadingService
-  ) {}
+  audits = new PaginatedResult<AuditListItemDto>();
+  error: string | null = null;
+  isLoading = this.loadingService.isLoading;
 
   ngOnInit() {
     this.getAudits(1);

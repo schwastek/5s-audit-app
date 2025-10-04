@@ -10,35 +10,36 @@
     <div class="row">
       <div class="col-8">
         <div class="px-3 py-3 bg-body rounded shadow-sm">
-            @if (audit) {
-              <div class="mb-3 row">
-                <div class="col-2">
-                  <span class="fw-medium">Area</span>
-                </div>
-                <div class="col-10">
-                  <span class="text-capitalize">{{ audit.area }}</span>
-                </div>
+          @let audit = this.audit();
+          @if (audit) {
+            <div class="mb-3 row">
+              <div class="col-2">
+                <span class="fw-medium">Area</span>
               </div>
+              <div class="col-10">
+                <span class="text-capitalize">{{ audit.area }}</span>
+              </div>
+            </div>
 
-              @for (answer of audit.answers; track answer.answerId) {
-                <div class="d-flex pt-3 border-bottom lh-1 text-muted">
-                  <div class="flex-grow-1">
-                    <p class="pb-3 mb-0 lh-sm">{{ answer.questionText }}</p>
-                  </div>
-                  <div>
-                    <app-rating [rate]="answer.answerNumber" [max]="5" [isReadOnly]="true"></app-rating>
-                  </div>
+            @for (answer of audit.answers; track answer.answerId) {
+              <div class="d-flex pt-3 border-bottom lh-1 text-muted">
+                <div class="flex-grow-1">
+                  <p class="pb-3 mb-0 lh-sm">{{ answer.questionText }}</p>
                 </div>
-              }
-
-            }
-            @else {
-              <div class="row">
-                <div class="col">
-                  <p>No audit found.</p>
+                <div>
+                  <app-rating [rate]="answer.answerNumber" [max]="5" [isReadOnly]="true"></app-rating>
                 </div>
               </div>
             }
+
+          }
+          @else {
+            <div class="row">
+              <div class="col">
+                <p>No audit found.</p>
+              </div>
+            </div>
+          }
         </div>
       </div>
       <div class="col-4">

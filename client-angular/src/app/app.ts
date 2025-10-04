@@ -1,21 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { AccountService } from './account/account.service';
 import { HeaderComponent } from './shared/components/header/header.component';
+import { ApiConfiguration } from './api/api-configuration';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [CommonModule, RouterOutlet, HeaderComponent],
-  templateUrl: './app.component.html'
+  templateUrl: './app.html'
 })
-export class AppComponent implements OnInit {
-  title = '5S Audit App';
+export class App implements OnInit {
+  private accountService = inject(AccountService);
+  private apiConfiguration = inject(ApiConfiguration);
 
-  constructor(private accountService: AccountService) {}
+  protected readonly title = '5S Audit App';
 
   ngOnInit(): void {
+    this.apiConfiguration.rootUrl = environment.apiUrl;
     this.loadCurrentUser();
   }
 
