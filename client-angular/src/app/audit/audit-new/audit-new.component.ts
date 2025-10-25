@@ -4,11 +4,22 @@ import { AuditService } from '../audit.service';
 import { Area } from '../models/area';
 import { firstValueFrom } from 'rxjs';
 import { RatingComponent } from '../../shared/components/rating/rating.component';
-import { ApiAnswerForCreationDto, ApiQuestionDto } from '../../api/models';
+import { ApiQuestionDto } from '../../api/models';
 import { v4 as uuidv4 } from 'uuid';
 import { Router } from '@angular/router';
 import { AuditActionComponent, SaveOrUpdateAuditAction } from '../audit-action/audit-action.component';
 import { LoadingButtonDirective } from '../../shared/components/loading-button/loading-button.directive';
+
+// Typed form models
+interface AnswerGroup {
+  questionId: FormControl<string>;
+  rating: FormControl<number>;
+}
+
+interface AuditForm {
+  area: FormControl<string>;
+  answers: FormArray<FormGroup<AnswerGroup>>;
+}
 
 @Component({
   selector: 'app-audit-new',
@@ -31,15 +42,13 @@ export class AuditNewComponent implements OnInit {
   areas= signal<Area[] | null>(null);
   auditActions = signal<SaveOrUpdateAuditAction[]>([]);
   questions: ApiQuestionDto[] | null = null;
-  private answers: ApiAnswerForCreationDto[] = [];
 
   // Form
   area = new FormControl<string>('assembly', { validators: [Validators.required], nonNullable: true });
-  ratings = new FormArray<FormControl<number>>([]);
-
-  form: FormGroup = new FormGroup({
+  answers = new FormArray<FormGroup<AnswerGroup>>([]);
+  form = new FormGroup<AuditForm>({
     area: this.area,
-    ratings: this.ratings
+    answers: this.answers
   });
 
   // Form status
@@ -52,9 +61,7 @@ export class AuditNewComponent implements OnInit {
   ngOnInit() {
     this.getAreas();
     this.getQuestions()
-      .then(() => this.createInitialAnswers())
       .then(() => this.addRatings())
-      .then(() => this.updateAnswersWhenRatingChanges())
       .then(() => this.isQuestionsReady.set(true));
   }
 
@@ -65,8 +72,15 @@ export class AuditNewComponent implements OnInit {
 
     // Generate IDs here to ensure each submission has unique IDs.
     // If saving fails and user resubmits, new IDs will prevent errors from duplicate IDs in DB.
-    this.answers.forEach((answer) => {
-      answer.answerId = uuidv4();
+    const answers = this.answers.value.map((a) => {
+      return {
+        answerId: uuidv4(),
+        // Disabled controls are excluded from a FormGroup/FormArray's .value.
+        // Therefore, .value is typed as Partial<...>, meaning fields may be undefined.
+        questionId: a.questionId!,
+        answerText: a.rating!.toString(),
+        answerType: 'number'
+      }
     });
 
     const audit = {
@@ -75,14 +89,16 @@ export class AuditNewComponent implements OnInit {
       area: this.area.value,
       startDate: this.startDate,
       endDate: new Date().toISOString(),
-      answers: this.answers,
+      answers: answers,
       actions: this.auditActions()
     };
 
-    this.auditService.saveAudit(audit).subscribe((response) => {
-      this.isFormSaving.set(false);
+    try {
+      const response = await firstValueFrom(this.auditService.saveAudit(audit));
       this.router.navigate(['audits', response.auditId]);
-    });
+    } finally {
+      this.isFormSaving.set(false);
+    }
   }
 
   private async getAreas() {
@@ -94,35 +110,18 @@ export class AuditNewComponent implements OnInit {
     this.questions = await firstValueFrom(this.auditService.getQuestions());
   }
 
-  private createInitialAnswers() {
-    const answers: ApiAnswerForCreationDto[] = [];
-
-    // Create initial answers to be updated and saved when submitting the form.
-    this.questions!.forEach((question) => {
-      answers.push({
-        answerId: '<ID_GENERATED_LATER>',
-        questionId: question.questionId,
-        answerText: this.defaultAnswer.toString(),
-        answerType: 'number'
-      });
-    });
-
-    this.answers = answers;
-  }
-
   private addRatings() {
-    this.questions!.forEach(() => {
-      const ratingControl = new FormControl<number>(this.defaultAnswer, { nonNullable: true });
-      this.ratings.push(ratingControl);
-    });
-  }
+    this.answers.clear();
 
-  private updateAnswersWhenRatingChanges() {
-    // Ratings and answers are based on questions. They share the same index.
-    this.ratings.valueChanges.subscribe((ratings) => {
-      this.answers.forEach((answer, i) => {
-        answer.answerText = ratings[i].toString();
+    this.questions!.forEach((q) => {
+      const questionIdControl = new FormControl<string>(q.questionId, { nonNullable: true });
+      const ratingControl = new FormControl<number>(this.defaultAnswer, { nonNullable: true });
+      const answerGroup = new FormGroup({
+        questionId: questionIdControl,
+        rating: ratingControl
       });
+
+      this.answers.push(answerGroup);
     });
   }
 }

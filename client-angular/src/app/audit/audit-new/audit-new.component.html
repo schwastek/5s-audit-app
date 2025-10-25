@@ -10,7 +10,7 @@
     <div class="row">
       <div class="col-8">
         <div class="px-3 py-3 bg-body rounded shadow-sm">
-          <form [formGroup]="form" (ngSubmit)="onSave()">
+          <form id="saveForm" [formGroup]="form" (ngSubmit)="onSave()">
             <label for="select-area" class="form-label mb-2">Select area:</label>
             <select id="select-area" class="form-select mb-4" formControlName="area">
               @if (areas(); as areas) {
@@ -19,17 +19,19 @@
                 }
               }
             </select>
-            <ng-container formArrayName="ratings">
+            <ng-container formArrayName="answers">
               @if (isQuestionsReady()) {
-                @for (rating of ratings.controls; track $index; let i = $index) {
-                  <div class="d-flex pt-3 border-bottom lh-1 text-muted">
-                    <div class="flex-grow-1">
-                      <p class="pb-3 mb-0 lh-sm">{{ questions![i].questionText }}</p>
+                @for (answer of answers.controls; track $index; let i = $index) {
+                  <ng-container [formGroupName]="i">
+                    <div class="d-flex pt-3 border-bottom lh-1 text-muted">
+                      <div class="flex-grow-1">
+                        <p class="pb-3 mb-0 lh-sm">{{ questions![i].questionText }}</p>
+                      </div>
+                      <div>
+                        <app-rating [max]="5" formControlName="rating"></app-rating>
+                      </div>
                     </div>
-                    <div>
-                      <app-rating [max]="5" [formControlName]="$index"></app-rating>
-                    </div>
-                  </div>
+                  </ng-container>
                 }
               } @else {
                 <p>Could not load questions.</p>
