@@ -116,6 +116,20 @@ Log in with email and password:
 * **`john@test.com`**
 * **`Pa$$w0rd`**
 
+### Swagger
+
+**Swagger UI** is available at https://localhost:5000/swagger/index.html after [running the application](./README.md#running-application).
+
+![Swagger UI](./docs/img/swagger.png)
+
+To execute protected endpoints you need to authenticate yourself first.
+
+Execute `/api/account/login` endpoint to obtain the access token.
+
+Then click **Authorize** button and paste the access token in the following format: `Bearer xxxxxxxx.yyyyy.zzzzz`.
+
+![Swagger Authentication](./docs/img/swagger-authorization.png)
+
 ## Usage
 
 Log in
@@ -134,7 +148,20 @@ Browse audits
 
 ### API
 
-Please refer to the [API docs](./docs/API.md).
+| API | Description |
+|---|---|
+| `GET /api/audits`  | Get a list of audits (paged by default) |
+| `GET /api/audits?orderBy=author asc&pageSize=5&pageNumber=1`  | Get a list of audits (paged and sorted) |
+| `GET /api/audits/{{id}}` | Get an audit by ID |
+| `POST /api/audits` | Create an audit |
+| `POST /api/actions` | Add an action to audit |
+| `PUT /api/actions/{{id}}` | Update an action |
+| `DELETE /api/actions/{{id}}` | Delete an action |
+| `GET /api/questions` | Get a list of questions |
+| `POST /api/account/login` | Log a user in |
+| `POST /api/account/refreshToken` | Refresh token for a logged in user |
+| `GET /api/account` | Get the current logged in user |
+| `POST /api/account/register` | Register a new user  |
 
 ### Database
 
