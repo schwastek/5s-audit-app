@@ -1,5 +1,6 @@
 ﻿using Api.Exceptions;
 using Api.Requests.AuditActions.Update;
+using Data.Context;
 using Domain;
 using Domain.Constants;
 using Domain.Exceptions;
@@ -52,6 +53,7 @@ internal class UpdateAuditActionTestFixture : BaseTestFixture
             Description = TestValueGenerator.GenerateString(),
             IsComplete = true
         };
+        var now = DateTimeOffset.UtcNow;
 
         var response = await Client.PutAsJsonAsync($"api/actions/{_auditAction!.AuditActionId}", request);
         response.EnsureSuccessStatusCode();
@@ -68,6 +70,13 @@ internal class UpdateAuditActionTestFixture : BaseTestFixture
             Assert.That(auditAction.AuditActionId, Is.EqualTo(_auditAction.AuditActionId));
             Assert.That(auditAction.Description, Is.EqualTo(request.Description));
             Assert.That(auditAction.IsComplete, Is.EqualTo(request.IsComplete));
+        });
+        Assert.Multiple(() =>
+        {
+            Assert.That(auditAction.CreatedBy, Is.EqualTo(_auditAction.CreatedBy));
+            Assert.That(auditAction.CreatedAt, Is.EqualTo(_auditAction.CreatedAt));
+            Assert.That(auditAction.ModifiedBy, Is.EqualTo(AuditUsers.Test));
+            Assert.That(auditAction.ModifiedAt, Is.GreaterThan(now));
         });
     }
 

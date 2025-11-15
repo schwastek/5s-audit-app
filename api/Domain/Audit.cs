@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Domain.Auditing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Domain;
 
-public sealed class Audit
+public sealed class Audit : IAuditableEntity
 {
     public Guid AuditId { get; private set; }
     public string Author { get; private set; }
@@ -22,23 +23,48 @@ public sealed class Audit
     private readonly List<AuditAction> _actions = [];
     public IReadOnlyCollection<AuditAction> Actions => _actions.AsReadOnly();
 
+    public string CreatedBy { get; private set; }
+    public DateTimeOffset CreatedAt { get; private set; }
+    public string ModifiedBy { get; private set; }
+    public DateTimeOffset ModifiedAt { get; private set; }
+
     // EF Core supports using parameterized constructors to map entity properties 
     // during materialization (when retrieving data from the database and creating entity instances).
     // Adding a parameterless constructor would be enough for Entity Framework,
     // but using parameters resolves nullable reference warnings.
     // See: https://learn.microsoft.com/en-us/ef/core/modeling/constructors
-    private Audit(Guid auditId, string author, string area, DateTime startDate, DateTime endDate)
+    private Audit(Guid auditId, string author, string area, DateTime startDate, DateTime endDate,
+        string createdBy, DateTimeOffset createdAt, string modifiedBy, DateTimeOffset modifiedAt)
     {
         AuditId = auditId;
         Area = area;
         Author = author;
         StartDate = startDate;
         EndDate = endDate;
+
+        // Set auditable properties.
+        CreatedBy = createdBy;
+        CreatedAt = createdAt;
+        ModifiedAt = modifiedAt;
+        ModifiedBy = modifiedBy;
     }
 
     public static Audit Create(Guid auditId, string author, string area, DateTime startDate, DateTime endDate)
     {
-        var audit = new Audit(auditId, author, area, startDate, endDate);
+        // Set auditable properties.
+        var createdBy = AuditPlaceholders.Unknown;
+        var createdAt = DateTimeOffset.UtcNow;
+
+        var audit = new Audit(
+            auditId: auditId,
+            author: author,
+            area: area,
+            startDate: startDate,
+            endDate: endDate,
+            createdBy: createdBy,
+            createdAt: createdAt,
+            modifiedBy: createdBy,
+            modifiedAt: createdAt);
 
         return audit;
     }

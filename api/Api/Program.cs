@@ -1,4 +1,6 @@
-﻿using Api.Extensions;
+﻿using Api.Context;
+using Api.Extensions;
+using Data.Context;
 using Data.DbContext;
 using Data.Options;
 using Features.Core.Identity;
@@ -62,6 +64,9 @@ builder.Services.AddOrderByMappers();
 
 // Register pagination service
 builder.Services.AddTransient(typeof(IPaginatedResultFactory<>), typeof(PaginatedResultFactory<>));
+
+// Register current user service
+builder.Services.AddScoped<ICurrentUserService, ApiCurrentUserService>();
 
 // Options pattern
 builder.Services.Configure<ConnectionStringOptions>(builder.Configuration.GetSection(

@@ -1,5 +1,6 @@
 ﻿using Api.Exceptions;
 using Api.Requests.AuditActions.Save;
+using Data.Context;
 using Domain;
 using Domain.Constants;
 using Domain.Exceptions;
@@ -50,6 +51,7 @@ internal class SaveAuditActionTestFixture : BaseTestFixture
             AuditActionId = Guid.NewGuid(),
             Description = TestValueGenerator.GenerateString(AuditActionConstants.DescriptionMaxLength)
         };
+        var now = DateTimeOffset.UtcNow;
 
         var response = await Client.PostAsJsonAsync($"api/actions", request);
         response.EnsureSuccessStatusCode();
@@ -66,6 +68,13 @@ internal class SaveAuditActionTestFixture : BaseTestFixture
             Assert.That(auditAction.AuditActionId, Is.EqualTo(request.AuditActionId));
             Assert.That(auditAction.Description, Is.EqualTo(request.Description));
             Assert.That(auditAction.IsComplete, Is.False);
+        });
+        Assert.Multiple(() =>
+        {
+            Assert.That(auditAction.CreatedBy, Is.EqualTo(AuditUsers.Test));
+            Assert.That(auditAction.CreatedAt, Is.GreaterThan(now));
+            Assert.That(auditAction.ModifiedBy, Is.EqualTo(auditAction.CreatedBy));
+            Assert.That(auditAction.ModifiedAt, Is.EqualTo(auditAction.CreatedAt));
         });
     }
 

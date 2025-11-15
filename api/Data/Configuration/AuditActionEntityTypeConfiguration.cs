@@ -27,5 +27,7 @@ public class AuditActionEntityTypeConfiguration : IEntityTypeConfiguration<Audit
         builder.Property(aa => aa.IsComplete)
             .IsRequired()
             .HasDefaultValue(false);
+
+        builder.ConfigureAuditableProperties();
     }
 }

@@ -1,4 +1,5 @@
-﻿using Data.DbContext;
+﻿using Data.Context;
+using Data.DbContext;
 using Data.Menu;
 using Data.Options;
 using Domain;
@@ -13,6 +14,7 @@ var builder = Host.CreateDefaultBuilder(args);
 builder.ConfigureServices((hostContext, services) =>
 {
     services.AddScoped<SeedDataMenu>();
+    services.AddSingleton<ICurrentUserService, EfDesignTimeCurrentUserService>();
 
     // DB
     services.AddDbContext<LeanAuditorContext>();

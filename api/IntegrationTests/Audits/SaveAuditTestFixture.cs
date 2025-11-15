@@ -2,6 +2,7 @@
 using Api.Requests.Answers.Dto;
 using Api.Requests.AuditActions.Dto;
 using Api.Requests.Audits.Save;
+using Data.Context;
 using Domain;
 using Domain.Exceptions;
 using IntegrationTests.Helpers;
@@ -71,6 +72,7 @@ internal sealed class SaveAuditTestFixture : BaseTestFixture
             Answers = answers,
             Actions = actions
         };
+        var now = DateTimeOffset.UtcNow;
 
         // Act
         var response = await Client.PostAsJsonAsync($"api/audits", request);
@@ -92,6 +94,13 @@ internal sealed class SaveAuditTestFixture : BaseTestFixture
             Assert.That(_audit.EndDate, Is.EqualTo(request.EndDate));
             Assert.That(_audit.Answers, Has.Count.EqualTo(request.Answers.Count));
             Assert.That(_audit.Actions, Has.Count.EqualTo(request.Actions.Count));
+        });
+        Assert.Multiple(() =>
+        {
+            Assert.That(_audit.CreatedBy, Is.EqualTo(AuditUsers.Test));
+            Assert.That(_audit.CreatedAt, Is.GreaterThan(now));
+            Assert.That(_audit.ModifiedBy, Is.EqualTo(_audit.CreatedBy));
+            Assert.That(_audit.ModifiedAt, Is.EqualTo(_audit.CreatedAt));
         });
 
         // Map to common type - use anonymous types for comparison.

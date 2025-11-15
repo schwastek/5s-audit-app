@@ -40,5 +40,7 @@ public class AuditEntityTypeConfiguration : IEntityTypeConfiguration<Audit>
             .HasForeignKey(ans => ans.AuditId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.ConfigureAuditableProperties();
     }
 }

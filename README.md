@@ -172,7 +172,7 @@ Use Run command below (`WIN+R`) to open the "local" folder on Windows: `C:\Users
 %LocalAppData%
 ```
 
-You can run `Api.Data` console application to seed database:
+You can run `Data` console application to seed database:
 
 ![Setup database console application](./docs/img/setup-database-console-app.png)
 
@@ -183,17 +183,22 @@ or [Package Manager Console](https://learn.microsoft.com/en-us/ef/core/cli/power
 
 ```sh
 # Add migration
-dotnet ef migrations add MyMigration --project Api.Data --startup-project Api.Data
+dotnet ef migrations add MyMigration --project Data --startup-project Data
 
 # Remove last migration
-dotnet ef migrations remove --project Api.Data --startup-project Api.Data
+dotnet ef migrations remove --project Data --startup-project Data
 
 # Apply migrations (specify environment)
-dotnet ef database update --project Api.Data --startup-project Api.Data -- --environment Development
+dotnet ef database update --project Data --startup-project Data -- --environment Development
 
 # Or apply migrations using Package Manager Console
-Update-Database -Project Api.Data -StartupProject Api.Data -Args '--environment Development'
+Update-Database -Project Data -StartupProject Data -Args '--environment Development'
 ```
+
+EF CLI options:
+
+* `--project` - where migrations are stored (DbContext project).
+* `--startup-project` - which project EF runs to build the model (usually the executable app).
 
 ## Roadmap
 
