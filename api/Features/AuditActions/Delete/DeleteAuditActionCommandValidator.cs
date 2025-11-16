@@ -1,6 +1,6 @@
 ﻿using Domain.Exceptions;
 using Features.AuditActions.BusinessRules;
-using Features.Core.ValidatorService;
+using Infrastructure.ValidatorService;
 using System.Threading;
 using System.Threading.Tasks;
 

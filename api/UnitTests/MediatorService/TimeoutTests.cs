@@ -1,5 +1,5 @@
-﻿using Features.Core.MediatorService;
-using Features.Core.MediatorService.PublishStrategies;
+﻿using Infrastructure.MediatorService;
+using Infrastructure.MediatorService.PublishStrategies;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;

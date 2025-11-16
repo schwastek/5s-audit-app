@@ -15,7 +15,7 @@ using Features.Audits.Dto;
 using Features.Audits.Get;
 using Features.Audits.List;
 using Features.Audits.Save;
-using Features.Core.MappingService;
+using Infrastructure.MappingService;
 using Features.Questions.Dto;
 using Features.Questions.List;
 using Microsoft.Extensions.DependencyInjection;
@@ -88,6 +88,6 @@ public static class AddMappersServiceExtensions
 
     private static void AddPaginationMappers(IServiceCollection services)
     {
-        services.AddSingleton<IMapper<Features.Core.Pagination.PaginationMetadata, Requests.Common.PaginationMetadata>, PaginationMetadataMapper>();
+        services.AddSingleton<IMapper<Infrastructure.Pagination.PaginationMetadata, Requests.Common.PaginationMetadata>, PaginationMetadataMapper>();
     }
 }

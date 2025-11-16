@@ -7,7 +7,7 @@ using Features.AuditActions.Update;
 using Features.Audits.BusinessRules;
 using Features.Audits.Get;
 using Features.Audits.Save;
-using Features.Core.ValidatorService;
+using Infrastructure.ValidatorService;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Api.Extensions;

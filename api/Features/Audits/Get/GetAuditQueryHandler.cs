@@ -1,8 +1,8 @@
 ﻿using Data.DbContext;
 using Domain;
 using Features.Audits.Dto;
-using Features.Core.MappingService;
-using Features.Core.MediatorService;
+using Infrastructure.MappingService;
+using Infrastructure.MediatorService;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;

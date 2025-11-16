@@ -1,4 +1,4 @@
-﻿using Features.Core.ValidatorService;
+﻿using Infrastructure.ValidatorService;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using System;

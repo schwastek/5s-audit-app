@@ -1,6 +1,6 @@
 ﻿using Features.Audits.Dto;
-using Features.Core.OrderByService;
-using Features.Core.Pagination;
+using Infrastructure.OrderByService;
+using Infrastructure.Pagination;
 using System.Collections.Generic;
 
 namespace Features.Audits.List;

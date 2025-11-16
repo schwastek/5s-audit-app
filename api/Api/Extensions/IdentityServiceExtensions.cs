@@ -1,6 +1,6 @@
 ﻿using Data.DbContext;
 using Domain;
-using Features.Core.Identity;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;

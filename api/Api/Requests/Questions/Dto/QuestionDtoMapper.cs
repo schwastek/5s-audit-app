@@ -1,4 +1,4 @@
-﻿using Features.Core.MappingService;
+﻿using Infrastructure.MappingService;
 
 namespace Api.Requests.Questions.Dto;
 

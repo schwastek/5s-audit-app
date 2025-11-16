@@ -1,6 +1,6 @@
 ﻿using Api.Requests.Questions.List;
-using Features.Core.MappingService;
-using Features.Core.MediatorService;
+using Infrastructure.MappingService;
+using Infrastructure.MediatorService;
 using Features.Questions.List;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

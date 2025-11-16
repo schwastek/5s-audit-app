@@ -1,5 +1,5 @@
 ﻿using Data.DbContext;
-using Features.Core.MediatorService;
+using Infrastructure.MediatorService;
 using System.Threading;
 using System.Threading.Tasks;
 

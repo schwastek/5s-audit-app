@@ -1,5 +1,5 @@
 ﻿using Domain.Exceptions;
-using Features.Core.ValidatorService;
+using Infrastructure.ValidatorService;
 using System;
 using System.Collections.Generic;
 using System.Threading;

@@ -1,7 +1,7 @@
 ﻿using Data.DbContext;
 using Domain;
-using Features.Core.MappingService;
-using Features.Core.MediatorService;
+using Infrastructure.MappingService;
+using Infrastructure.MediatorService;
 using Features.Questions.Dto;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;

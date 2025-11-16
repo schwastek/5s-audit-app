@@ -1,6 +1,6 @@
-﻿using Features.Core.MediatorService;
-using Features.Core.MediatorService.Pipelines;
-using Features.Core.MediatorService.PublishStrategies;
+﻿using Infrastructure.MediatorService;
+using Infrastructure.MediatorService.Pipelines;
+using Infrastructure.MediatorService.PublishStrategies;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

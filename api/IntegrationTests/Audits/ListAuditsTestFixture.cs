@@ -1,6 +1,6 @@
 ﻿using Api.Requests.Audits.List;
 using Domain;
-using Features.Core.OrderByService;
+using Infrastructure.OrderByService;
 using IntegrationTests.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;

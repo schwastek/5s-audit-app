@@ -1,7 +1,7 @@
 ﻿using Domain;
 using Features.Audits.Dto;
 using Features.Audits.List;
-using Features.Core.OrderByService;
+using Infrastructure.OrderByService;
 
 namespace Features.Audits.Mappers;
 

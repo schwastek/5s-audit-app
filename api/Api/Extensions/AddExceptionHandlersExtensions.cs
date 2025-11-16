@@ -33,7 +33,7 @@ public static class AddExceptionHandlersExtensions
         // Exception handlers are processed in the order they're registered.
         // Each handler attempts to process the error, and if not handled, the next in the chain is executed.
         services.AddExceptionHandler<ValidationExceptionHandler>();
-        services.AddExceptionHandler<ApplicationValidationExceptionHandler>();
+        services.AddExceptionHandler<ApplicationExceptionHandler>();
         services.AddExceptionHandler<DefaultExceptionHandler>();
     }
 }

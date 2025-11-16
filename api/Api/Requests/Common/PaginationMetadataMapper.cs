@@ -1,10 +1,10 @@
-﻿using Features.Core.MappingService;
+﻿using Infrastructure.MappingService;
 
 namespace Api.Requests.Common;
 
-public sealed class PaginationMetadataMapper : IMapper<Features.Core.Pagination.PaginationMetadata, Requests.Common.PaginationMetadata>
+public sealed class PaginationMetadataMapper : IMapper<Infrastructure.Pagination.PaginationMetadata, Requests.Common.PaginationMetadata>
 {
-    public PaginationMetadata Map(Features.Core.Pagination.PaginationMetadata src)
+    public PaginationMetadata Map(Infrastructure.Pagination.PaginationMetadata src)
     {
         return new PaginationMetadata()
         {

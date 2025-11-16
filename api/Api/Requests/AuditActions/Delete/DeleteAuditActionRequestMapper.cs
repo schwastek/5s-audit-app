@@ -1,5 +1,5 @@
 ﻿using Features.AuditActions.Delete;
-using Features.Core.MappingService;
+using Infrastructure.MappingService;
 
 namespace Api.Requests.AuditActions.Delete;
 

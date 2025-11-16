@@ -11,7 +11,6 @@ public static class ErrorCodes
         public static readonly ErrorCode AuditStartDateIsRequired = new("AuditStartDateIsRequired");
         public static readonly ErrorCode AuditEndDateIsRequired = new("AuditEndDateIsRequired");
         public static readonly ErrorCode AuditAnswersIsRequired = new("AuditAnswersIsRequired");
-        public static readonly ErrorCode InvalidOrderByField = new("InvalidOrderByField");
     }
 
     public static class AuditAction

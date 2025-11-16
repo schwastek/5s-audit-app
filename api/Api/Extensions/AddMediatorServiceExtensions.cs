@@ -4,9 +4,9 @@ using Features.AuditActions.Update;
 using Features.Audits.Get;
 using Features.Audits.List;
 using Features.Audits.Save;
-using Features.Core.MediatorService;
-using Features.Core.MediatorService.Extensions;
-using Features.Core.MediatorService.Pipelines;
+using Infrastructure.MediatorService;
+using Infrastructure.MediatorService.Extensions;
+using Infrastructure.MediatorService.Pipelines;
 using Features.Questions.List;
 using Microsoft.Extensions.DependencyInjection;
 

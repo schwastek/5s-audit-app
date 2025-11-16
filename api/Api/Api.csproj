@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Data\Data.csproj" />
 	  <ProjectReference Include="..\Features\Features.csproj" />
+	  <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
