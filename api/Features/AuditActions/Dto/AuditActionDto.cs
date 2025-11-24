@@ -8,4 +8,5 @@ public sealed record AuditActionDto
     public required Guid AuditId { get; set; }
     public required string Description { get; set; }
     public required bool IsComplete { get; set; }
+    public required long LastVersion { get; set; }
 }

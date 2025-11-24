@@ -57,7 +57,8 @@ export class AuditActionComponent {
       auditActionId: uuidv4(),
       auditId: this.auditId(),
       description: this.description.value,
-      isComplete: false
+      isComplete: false,
+      lastVersion: 0
     };
 
     if (this.isEditForm()) {
@@ -66,6 +67,7 @@ export class AuditActionComponent {
       action.auditId = response.auditId;
       action.description = response.description;
       action.isComplete = response.isComplete;
+      action.lastVersion = response.lastVersion;
     }
 
     this.actions.update((actions) => {
@@ -98,14 +100,16 @@ export class AuditActionComponent {
 
     const request: ApiUpdateAuditActionRequest = {
       description: action.description,
-      isComplete: true
+      isComplete: true,
+      lastVersion: action.lastVersion
     };
 
-    await firstValueFrom(this.auditService.updateAuditAction(action.auditActionId, request));
+    // TODO: Add error notification when concurrency conflict.
+    const response = await firstValueFrom(this.auditService.updateAuditAction(action.auditActionId, request));
 
     this.actions.update((actions) => {
       const i = actions.findIndex((a) => a.auditActionId === action.auditActionId);
-      const updated = { ...actions[i], isComplete: true };
+      const updated = { ...actions[i], isComplete: true, lastVersion: response.lastVersion };
 
       return [...actions.slice(0, i), updated, ...actions.slice(i + 1)];
     });
@@ -118,14 +122,15 @@ export class AuditActionComponent {
 
     const request: ApiUpdateAuditActionRequest = {
       description: action.description,
-      isComplete: false
+      isComplete: false,
+      lastVersion: action.lastVersion
     };
 
-    await firstValueFrom(this.auditService.updateAuditAction(action.auditActionId, request));
+    const response = await firstValueFrom(this.auditService.updateAuditAction(action.auditActionId, request));
 
     this.actions.update((actions) => {
       const i = actions.findIndex((a) => a.auditActionId === action.auditActionId);
-      const updated = { ...actions[i], isComplete: false };
+      const updated = { ...actions[i], isComplete: false, lastVersion: response.lastVersion };
 
       return [...actions.slice(0, i), updated, ...actions.slice(i + 1)];
     });

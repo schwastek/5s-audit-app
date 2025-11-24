@@ -3,6 +3,7 @@ using Data.Context;
 using Data.Options;
 using Domain;
 using Domain.Auditing;
+using Domain.Concurrency;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -56,6 +57,7 @@ public class LeanAuditorContext : IdentityDbContext<User>
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         SetAuditableProperties();
+        SetConcurrencyToken();
         return base.SaveChangesAsync(cancellationToken);
     }
 
@@ -79,6 +81,20 @@ public class LeanAuditorContext : IdentityDbContext<User>
                 case EntityState.Modified:
                     entry.Property(e => e.ModifiedBy).CurrentValue = _currentUserService.Username;
                     entry.Property(e => e.ModifiedAt).CurrentValue = now;
+                    break;
+            }
+        }
+    }
+
+    private void SetConcurrencyToken()
+    {
+        foreach (var entry in ChangeTracker.Entries<IConcurrencyToken>())
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added or EntityState.Modified:
+                    // Increment version.
+                    entry.Property(e => e.Version).CurrentValue = entry.Entity.Version + 1;
                     break;
             }
         }

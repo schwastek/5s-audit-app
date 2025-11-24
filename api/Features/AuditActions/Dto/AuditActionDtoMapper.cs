@@ -12,7 +12,8 @@ public class AuditActionDtoMapper : IMapper<AuditAction, AuditActionDto>
             AuditActionId = src.AuditActionId,
             AuditId = src.AuditId,
             Description = src.Description,
-            IsComplete = src.IsComplete
+            IsComplete = src.IsComplete,
+            LastVersion = src.Version
         };
     }
 }

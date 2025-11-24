@@ -5,6 +5,7 @@ using Domain;
 using Domain.Constants;
 using Domain.Exceptions;
 using IntegrationTests.Helpers;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -39,9 +40,11 @@ internal class UpdateAuditActionTestFixture : BaseTestFixture
     [OneTimeTearDown]
     public async Task OneTimeTearDown()
     {
-        if (_audit is not null) DbContext.Audits.Remove(_audit);
-        if (_questions is not null) DbContext.Questions.RemoveRange(_questions);
+        var audit = await GetAudit(_audit?.AuditId);
+        if (audit is not null) DbContext.Audits.Remove(audit);
+        await DbContext.SaveChangesAsync();
 
+        if (_questions is not null) DbContext.Questions.RemoveRange(_questions);
         await DbContext.SaveChangesAsync();
     }
 
@@ -51,14 +54,15 @@ internal class UpdateAuditActionTestFixture : BaseTestFixture
         var request = new UpdateAuditActionRequest()
         {
             Description = TestValueGenerator.GenerateString(),
-            IsComplete = true
+            IsComplete = true,
+            LastVersion = _auditAction!.Version
         };
         var now = DateTimeOffset.UtcNow;
 
         var response = await Client.PutAsJsonAsync($"api/actions/{_auditAction!.AuditActionId}", request);
         response.EnsureSuccessStatusCode();
 
-        var audit = await GetAudit(_audit!.AuditId);
+        var audit = await GetAudit(_audit?.AuditId);
         Assert.That(audit, Is.Not.Null);
         Assert.That(audit.Actions, Is.Not.Empty);
         Assert.That(audit.Actions, Has.Count.EqualTo(1));
@@ -66,7 +70,7 @@ internal class UpdateAuditActionTestFixture : BaseTestFixture
         var auditAction = audit!.Actions.First();
         Assert.Multiple(() =>
         {
-            Assert.That(auditAction.AuditId, Is.EqualTo(_audit.AuditId));
+            Assert.That(auditAction.AuditId, Is.EqualTo(_audit!.AuditId));
             Assert.That(auditAction.AuditActionId, Is.EqualTo(_auditAction.AuditActionId));
             Assert.That(auditAction.Description, Is.EqualTo(request.Description));
             Assert.That(auditAction.IsComplete, Is.EqualTo(request.IsComplete));
@@ -77,7 +81,26 @@ internal class UpdateAuditActionTestFixture : BaseTestFixture
             Assert.That(auditAction.CreatedAt, Is.EqualTo(_auditAction.CreatedAt));
             Assert.That(auditAction.ModifiedBy, Is.EqualTo(AuditUsers.Test));
             Assert.That(auditAction.ModifiedAt, Is.GreaterThan(now));
+            Assert.That(auditAction.Version, Is.GreaterThan(request.LastVersion));
         });
+    }
+
+    [Test]
+    public async Task Should_throw_error_when_concurrency_conflict()
+    {
+        var request = new UpdateAuditActionRequest()
+        {
+            Description = TestValueGenerator.GenerateString(),
+            IsComplete = true,
+            LastVersion = -1
+        };
+
+        var response = await Client.PutAsJsonAsync($"api/actions/{_auditAction!.AuditActionId}", request);
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Conflict));
+        var content = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+        Assert.That(content, Is.Not.Null);
+        Assert.That(content.Title, Is.EqualTo("ConcurrencyConflict"));
     }
 
     [Test]
@@ -134,10 +157,15 @@ internal class UpdateAuditActionTestFixture : BaseTestFixture
         Assert.That(content.Errors, Is.EquivalentTo(new List<string> { ErrorCodes.AuditAction.AuditActionDescriptionIsTooLong }));
     }
 
-    private async Task<Audit?> GetAudit(Guid id)
+    private async Task<Audit?> GetAudit(Guid? id)
     {
+        if (id is null) return null;
+
+        // Bust DbContext cache - reload entity to avoid conflicts when saving,
+        // as the same entity has been modified by another DbContext instance (API).
+        DbContext.ChangeTracker.Clear();
+
         var audit = await DbContext.Audits
-            .AsNoTracking()
             .Where(x => x.AuditId.Equals(id))
             .Include(x => x.Actions)
             .FirstOrDefaultAsync();

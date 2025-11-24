@@ -11,7 +11,22 @@ public sealed class UpdateAuditActionRequestMapper : IMapper<UpdateAuditActionRe
         {
             AuditActionId = src.AuditActionId,
             Description = src.Description,
-            IsComplete = src.IsComplete
+            IsComplete = src.IsComplete,
+            LastVersion = src.LastVersion
+        };
+    }
+}
+
+public sealed class UpdateAuditActionCommandResultMapper : IMapper<UpdateAuditActionCommandResult, UpdateAuditActionResponse>
+{
+    public UpdateAuditActionResponse Map(UpdateAuditActionCommandResult src)
+    {
+        return new UpdateAuditActionResponse()
+        {
+            AuditActionId = src.AuditActionId,
+            Description = src.Description,
+            IsComplete = src.IsComplete,
+            LastVersion = src.LastVersion
         };
     }
 }

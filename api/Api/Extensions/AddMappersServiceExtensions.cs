@@ -72,8 +72,10 @@ public static class AddMappersServiceExtensions
         services.AddSingleton<IMapper<SaveAuditActionRequest, SaveAuditActionCommand>, SaveAuditActionRequestMapper>();
         services.AddSingleton<IMapper<SaveAuditActionCommandResult, SaveAuditActionResponse>, SaveAuditActionCommandResultMapper>();
 
-        services.AddSingleton<IMapper<DeleteAuditActionRequest, DeleteAuditActionCommand>, DeleteAuditActionRequestMapper>();
         services.AddSingleton<IMapper<UpdateAuditActionRequest, UpdateAuditActionCommand>, UpdateAuditActionRequestMapper>();
+        services.AddSingleton<IMapper<UpdateAuditActionCommandResult, UpdateAuditActionResponse>, UpdateAuditActionCommandResultMapper>();
+
+        services.AddSingleton<IMapper<DeleteAuditActionRequest, DeleteAuditActionCommand>, DeleteAuditActionRequestMapper>();
     }
 
     private static void AddQuestionMappers(IServiceCollection services)

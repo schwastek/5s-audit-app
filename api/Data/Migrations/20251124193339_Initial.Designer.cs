@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(LeanAuditorContext))]
-    [Migration("20251115191002_Initial")]
+    [Migration("20251124193339_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -122,6 +122,10 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("TEXT");
+
+                    b.Property<long>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("AuditActionId");
 

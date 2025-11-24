@@ -42,7 +42,8 @@ public sealed class SaveAuditActionCommandHandler : IRequestHandler<SaveAuditAct
             AuditActionId = auditActionDto.AuditActionId,
             AuditId = auditActionDto.AuditId,
             Description = auditActionDto.Description,
-            IsComplete = auditActionDto.IsComplete
+            IsComplete = auditActionDto.IsComplete,
+            LastVersion = auditActionDto.LastVersion
         };
 
         return result;

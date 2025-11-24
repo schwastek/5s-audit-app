@@ -17,6 +17,7 @@ import { SaveAuditAction$Params } from '../fn/actions/save-audit-action';
 import { ApiSaveAuditActionResponse } from '../models/api-save-audit-action-response';
 import { updateAuditAction } from '../fn/actions/update-audit-action';
 import { UpdateAuditAction$Params } from '../fn/actions/update-audit-action';
+import { ApiUpdateAuditActionResponse } from '../models/api-update-audit-action-response';
 
 @Injectable({ providedIn: 'root' })
 export class ApiActionsService extends BaseService {
@@ -72,7 +73,7 @@ export class ApiActionsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateAuditAction$Response(params: UpdateAuditAction$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  updateAuditAction$Response(params: UpdateAuditAction$Params, context?: HttpContext): Observable<StrictHttpResponse<ApiUpdateAuditActionResponse>> {
     const obs = updateAuditAction(this.http, this.rootUrl, params, context);
     return obs;
   }
@@ -87,10 +88,10 @@ export class ApiActionsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateAuditAction(params: UpdateAuditAction$Params, context?: HttpContext): Observable<void> {
+  updateAuditAction(params: UpdateAuditAction$Params, context?: HttpContext): Observable<ApiUpdateAuditActionResponse> {
     const resp = this.updateAuditAction$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<ApiUpdateAuditActionResponse>): ApiUpdateAuditActionResponse => r.body)
     );
   }
 

@@ -1,9 +1,10 @@
 ﻿using Domain.Auditing;
+using Domain.Concurrency;
 using System;
 
 namespace Domain;
 
-public sealed class AuditAction : IAuditableEntity
+public sealed class AuditAction : IAuditableEntity, IConcurrencyToken
 {
     public Guid AuditActionId { get; private set; }
     public string Description { get; private set; }
@@ -16,9 +17,12 @@ public sealed class AuditAction : IAuditableEntity
     public string ModifiedBy { get; private set; }
     public DateTimeOffset ModifiedAt { get; private set; }
 
+    public long Version { get; private set; }
+
     // EF Core calls this constructor when creating an instance of the entity.
     private AuditAction(Guid auditActionId, string description, bool isComplete,
-        string createdBy, DateTimeOffset createdAt, string modifiedBy, DateTimeOffset modifiedAt)
+        string createdBy, DateTimeOffset createdAt, string modifiedBy, DateTimeOffset modifiedAt, 
+        long version)
     {
         AuditActionId = auditActionId;
         Description = description;
@@ -29,6 +33,9 @@ public sealed class AuditAction : IAuditableEntity
         CreatedAt = createdAt;
         ModifiedAt = modifiedAt;
         ModifiedBy = modifiedBy;
+
+        // Set initial version.
+        Version = version;
     }
 
     public static AuditAction Create(Guid auditActionId, string description)
@@ -37,6 +44,9 @@ public sealed class AuditAction : IAuditableEntity
         var createdBy = AuditPlaceholders.Unknown;
         var createdAt = DateTimeOffset.UtcNow;
 
+        // Domain sets the initial version. EF increments it for concurrency control.
+        var initialVersion = 0;
+
         var auditAction = new AuditAction(
             auditActionId: auditActionId,
             description: description,
@@ -44,7 +54,8 @@ public sealed class AuditAction : IAuditableEntity
             createdBy: createdBy,
             createdAt: createdAt,
             modifiedBy: createdBy,
-            modifiedAt: createdAt);
+            modifiedAt: createdAt,
+            version: initialVersion);
 
         return auditAction;
     }

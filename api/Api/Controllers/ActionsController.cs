@@ -64,13 +64,13 @@ public class ActionsController : ControllerBase
     /// Updates an action
     /// </summary>
     [HttpPut("{auditActionId}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<ActionResult> UpdateAuditAction([FromRoute] Guid auditActionId, [FromBody] UpdateAuditActionRequest request)
+    public async Task<ActionResult<UpdateAuditActionResponse>> UpdateAuditAction([FromRoute] Guid auditActionId, [FromBody] UpdateAuditActionRequest request)
     {
         request.AuditActionId = auditActionId;
         var command = _mapper.Map<UpdateAuditActionRequest, UpdateAuditActionCommand>(request);
-        await _mediator.Send<UpdateAuditActionCommand, Unit>(command, HttpContext.RequestAborted);
+        var result = await _mediator.Send<UpdateAuditActionCommand, UpdateAuditActionCommandResult>(command, HttpContext.RequestAborted);
+        var response = _mapper.Map<UpdateAuditActionCommandResult, UpdateAuditActionResponse>(result);
 
-        return NoContent();
+        return Ok(response);
     }
 }

@@ -11,7 +11,8 @@ public sealed class AuditActionDtoMapper : IMapper<Features.AuditActions.Dto.Aud
             AuditActionId = src.AuditActionId,
             AuditId = src.AuditActionId,
             Description = src.Description,
-            IsComplete = src.IsComplete
+            IsComplete = src.IsComplete,
+            LastVersion = src.LastVersion
         };
     }
 }

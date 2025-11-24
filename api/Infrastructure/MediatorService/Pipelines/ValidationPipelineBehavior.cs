@@ -1,5 +1,4 @@
-﻿using Infrastructure.MediatorService;
-using Infrastructure.ValidatorService;
+﻿using Infrastructure.ValidatorService;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;

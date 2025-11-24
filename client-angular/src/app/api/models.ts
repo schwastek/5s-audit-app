@@ -20,4 +20,5 @@ export type { ApiSaveAuditActionResponse } from './models/api-save-audit-action-
 export type { ApiSaveAuditRequest } from './models/api-save-audit-request';
 export type { ApiSaveAuditResponse } from './models/api-save-audit-response';
 export type { ApiUpdateAuditActionRequest } from './models/api-update-audit-action-request';
+export type { ApiUpdateAuditActionResponse } from './models/api-update-audit-action-response';
 export type { ApiUserDto } from './models/api-user-dto';

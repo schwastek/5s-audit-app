@@ -6,4 +6,5 @@ export interface ApiSaveAuditActionResponse {
   auditId: string;
   description: string;
   isComplete: boolean;
+  lastVersion: number;
 }

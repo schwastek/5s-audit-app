@@ -15,4 +15,7 @@ public sealed record AuditActionDto
 
     /// <example>false</example>
     public bool IsComplete { get; set; }
+
+    /// <example>5</example>
+    public long LastVersion { get; set; }
 }

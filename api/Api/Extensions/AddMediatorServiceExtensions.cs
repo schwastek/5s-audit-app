@@ -41,7 +41,7 @@ public static class AddMediatorServiceExtensions
     {
         services.AddTransient<IRequestHandler<DeleteAuditActionCommand, Unit>, DeleteAuditActionHandler>();
         services.AddTransient<IRequestHandler<SaveAuditActionCommand, SaveAuditActionCommandResult>, SaveAuditActionCommandHandler>();
-        services.AddTransient<IRequestHandler<UpdateAuditActionCommand, Unit>, UpdateAuditActionHandler>();
+        services.AddTransient<IRequestHandler<UpdateAuditActionCommand, UpdateAuditActionCommandResult>, UpdateAuditActionHandler>();
     }
 
     private static void AddQuestionHandlers(this IServiceCollection services)

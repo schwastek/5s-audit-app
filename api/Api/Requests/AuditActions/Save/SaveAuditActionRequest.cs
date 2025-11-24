@@ -27,4 +27,7 @@ public sealed record SaveAuditActionResponse
 
     /// <example>false</example>
     public bool IsComplete { get; set; }
+
+    /// <example>1</example>
+    public long LastVersion { get; set; }
 }

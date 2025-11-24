@@ -120,6 +120,10 @@ namespace Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("AuditActionId");
 
                     b.HasIndex("AuditId");

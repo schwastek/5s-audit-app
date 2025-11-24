@@ -23,9 +23,10 @@ public sealed class SaveAuditActionCommandResultMapper : IMapper<SaveAuditAction
         return new SaveAuditActionResponse()
         {
             AuditActionId = src.AuditActionId,
-            AuditId = src.AuditActionId,
+            AuditId = src.AuditId,
             Description = src.Description,
-            IsComplete = src.IsComplete
+            IsComplete = src.IsComplete,
+            LastVersion = src.LastVersion
         };
     }
 }

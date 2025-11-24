@@ -36,13 +36,9 @@ internal sealed class DeleteAuditActionTestFixture : BaseTestFixture
     [OneTimeTearDown]
     public async Task OneTimeTearDown()
     {
-        // Bust DbContext cache - reload entity to avoid conflicts when saving,
-        // as the same entity has been modified by another DbContext instance (API).
-        DbContext.ChangeTracker.Clear();
-        var audit = await GetAudit(_audit!.AuditId);
-
-        // Remove
+        var audit = await GetAudit(_audit?.AuditId);
         if (audit is not null) DbContext.Audits.Remove(audit);
+
         if (_questions is not null) DbContext.Questions.RemoveRange(_questions);
 
         await DbContext.SaveChangesAsync();
@@ -54,7 +50,7 @@ internal sealed class DeleteAuditActionTestFixture : BaseTestFixture
         var response = await Client.DeleteAsync($"api/actions/{_auditAction!.AuditActionId}");
         response.EnsureSuccessStatusCode();
 
-        var audit = await GetAudit(_audit!.AuditId);
+        var audit = await GetAudit(_audit?.AuditId);
         Assert.That(audit, Is.Not.Null);
         Assert.That(audit.Actions, Is.Empty);
     }
@@ -81,10 +77,15 @@ internal sealed class DeleteAuditActionTestFixture : BaseTestFixture
         Assert.That(content.Errors, Is.EquivalentTo(new List<string> { ErrorCodes.AuditAction.AuditActionDoesNotExist }));
     }
 
-    private async Task<Audit?> GetAudit(Guid id)
+    private async Task<Audit?> GetAudit(Guid? id)
     {
+        if (id is null) return null;
+
+        // Bust DbContext cache - reload entity to avoid conflicts when saving,
+        // as the same entity has been modified by another DbContext instance (API).
+        DbContext.ChangeTracker.Clear();
+
         var audit = await DbContext.Audits
-            .AsNoTracking()
             .Where(x => x.AuditId.Equals(id))
             .Include(x => x.Actions)
             .FirstOrDefaultAsync();

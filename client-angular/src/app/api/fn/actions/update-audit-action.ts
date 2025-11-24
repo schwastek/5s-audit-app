@@ -8,13 +8,14 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { ApiUpdateAuditActionRequest } from '../../models/api-update-audit-action-request';
+import { ApiUpdateAuditActionResponse } from '../../models/api-update-audit-action-response';
 
 export interface UpdateAuditAction$Params {
   auditActionId: string;
       body?: ApiUpdateAuditActionRequest
 }
 
-export function updateAuditAction(http: HttpClient, rootUrl: string, params: UpdateAuditAction$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+export function updateAuditAction(http: HttpClient, rootUrl: string, params: UpdateAuditAction$Params, context?: HttpContext): Observable<StrictHttpResponse<ApiUpdateAuditActionResponse>> {
   const rb = new RequestBuilder(rootUrl, updateAuditAction.PATH, 'put');
   if (params) {
     rb.path('auditActionId', params.auditActionId, {});
@@ -22,11 +23,11 @@ export function updateAuditAction(http: HttpClient, rootUrl: string, params: Upd
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<ApiUpdateAuditActionResponse>;
     })
   );
 }

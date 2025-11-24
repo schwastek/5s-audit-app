@@ -29,5 +29,6 @@ public class AuditActionEntityTypeConfiguration : IEntityTypeConfiguration<Audit
             .HasDefaultValue(false);
 
         builder.ConfigureAuditableProperties();
+        builder.ConfigureConcurrencyToken();
     }
 }

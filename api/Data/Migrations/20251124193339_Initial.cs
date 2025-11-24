@@ -220,7 +220,8 @@ namespace Data.Migrations
                     CreatedBy = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
                     ModifiedBy = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    ModifiedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
+                    ModifiedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
+                    Version = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
