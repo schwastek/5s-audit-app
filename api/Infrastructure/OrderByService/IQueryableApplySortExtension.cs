@@ -14,17 +14,12 @@ public static class IQueryableApplySortExtension
         var isFirst = true;
         var sourceType = typeof(TSource);
 
-        // Define parameter passed to lambda expression "p =>"
-        var parameter = Expression.Parameter(sourceType, "p");
 
         // Build Expression Tree and execute it
         foreach (var sortable in sortables)
         {
-            // Retrieve the value of property
-            var propertyAccess = Expression.Property(parameter, sortable.PropertyName);
-
-            // "p => p.Property"
-            var selector = Expression.Lambda(propertyAccess, parameter);
+            // Produces lambda: "x => x.PropertyName".
+            var selector = KeySelectorBuilder.BuildKeySelector<TSource>(sortable.PropertyName);
 
             // Get method and make it generic like "OrderBy<TSource, PropertyType>"
             var method = (sortable.SortDescending, isFirst) switch
@@ -34,7 +29,7 @@ public static class IQueryableApplySortExtension
                 (false, true) => QueryableMethods.OrderBy,
                 (false, false) => QueryableMethods.ThenBy
             };
-            method = method.MakeGenericMethod(sourceType, propertyAccess.Type);
+            method = method.MakeGenericMethod(sourceType, selector.Body.Type);
 
             // Build Expression like "TSource.OrderBy(p => p.Property)"
             var orderExpression = Expression.Call(method, source.Expression, selector);
