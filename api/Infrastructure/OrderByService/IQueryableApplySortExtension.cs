@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -7,39 +6,69 @@ namespace Infrastructure.OrderByService;
 
 public static class IQueryableApplySortExtension
 {
-    public static IQueryable<TSource> ApplySort<TSource>(this IQueryable<TSource> source, IEnumerable<Sortable> sortables)
+    /// <summary>
+    /// Applies dynamic ordering to an <see cref="IQueryable{T}"/> based on the provided sort definitions.
+    /// </summary>
+    /// <typeparam name="TSource">The type of elements in the query.</typeparam>
+    /// <param name="source">The source query to apply ordering to.</param>
+    /// <param name="sortables">
+    /// A sequence of sort definitions that specify property names and sort directions.
+    /// The order of items determines the order in which sorting is applied.
+    /// </param>
+    /// <returns>
+    /// A new <see cref="IQueryable{T}"/> with the specified ordering applied.
+    /// If <paramref name="sortables"/> is null or empty, the original query is returned.
+    /// </returns>
+    /// <remarks>
+    /// This method builds a composed LINQ expression and relies on deferred execution.
+    /// The query is not executed until the returned <see cref="IQueryable{T}"/> is enumerated.
+    /// </remarks>
+    public static IQueryable<TSource> ApplySort<TSource>(this IQueryable<TSource> source, IEnumerable<Sortable>? sortables)
     {
-        if (!sortables.Any()) return source;
+        if (sortables is null) return source;
 
-        var isFirst = true;
-        var sourceType = typeof(TSource);
+        // Materialize once to preserve order and avoid re-enumeration.
+        var list = sortables as IReadOnlyList<Sortable> ?? sortables.ToList();
 
+        if (list.Count == 0) return source;
 
-        // Build Expression Tree and execute it
-        foreach (var sortable in sortables)
+        // Build a chained LINQ expression tree.
+        var queryExpression = source.Expression;
+
+        for (int i = 0; i < list.Count; i++)
         {
-            // Produces lambda: "x => x.PropertyName".
-            var selector = KeySelectorBuilder.BuildKeySelector<TSource>(sortable.PropertyName);
+            var sortable = list[i];
 
-            // Get method and make it generic like "OrderBy<TSource, PropertyType>"
-            var method = (sortable.SortDescending, isFirst) switch
+            // First ordering uses OrderBy; subsequent ones use ThenBy.
+            var isFirst = i == 0;
+
+            // Builds lambda: x => x.PropertyName.
+            var keySelector = KeySelectorBuilder.BuildKeySelector<TSource>(sortable.PropertyName);
+
+            // Get ordering method name.
+            var methodName = (isFirst, sortable.SortDescending) switch
             {
-                (true, true) => QueryableMethods.OrderByDescending,
-                (true, false) => QueryableMethods.ThenByDescending,
-                (false, true) => QueryableMethods.OrderBy,
-                (false, false) => QueryableMethods.ThenBy
+                (true, false) => nameof(Queryable.OrderBy),
+                (true, true) => nameof(Queryable.OrderByDescending),
+                (false, false) => nameof(Queryable.ThenBy),
+                (false, true) => nameof(Queryable.ThenByDescending)
             };
-            method = method.MakeGenericMethod(sourceType, selector.Body.Type);
 
-            // Build Expression like "TSource.OrderBy(p => p.Property)"
-            var orderExpression = Expression.Call(method, source.Expression, selector);
-
-            // Run Expression against collection
-            source = source.Provider.CreateQuery<TSource>(orderExpression);
-
-            isFirst = false;
+            // Chain ordering onto the existing query expression.
+            // Build an expression-tree call equivalent to: Queryable.OrderBy<TSource, TKey>(queryExpression, keySelector).
+            // This becomes the next link in the chain, just like writing: queryExpression.OrderBy(x => x.PropertyName).ThenBy(...).
+            queryExpression = Expression.Call(
+                type: typeof(Queryable),
+                methodName: methodName,
+                typeArguments: [typeof(TSource), keySelector.Body.Type],
+                arguments: [queryExpression, keySelector]
+            );
         }
 
-        return source;
+        // Create the final query and pass it to the underlying provider (EF, LINQ-to-Objects...).
+        // The provider will later translate and execute this expression when the query is enumerated.
+        var result = source.Provider.CreateQuery<TSource>(queryExpression);
+
+        return result;
     }
 }
