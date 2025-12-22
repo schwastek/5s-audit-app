@@ -1,6 +1,6 @@
 ﻿using Api.Requests.Audits.List;
 using Domain;
-using Infrastructure.OrderByService;
+using Infrastructure.OrderBy;
 using IntegrationTests.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -111,7 +111,7 @@ internal sealed class ListAuditsTestFixture : BaseTestFixture
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
         var content = await response.Content.ReadFromJsonAsync<ProblemDetails>();
 
-        Assert.That(content, Is.Not.Null);
-        Assert.That(content.Detail, Is.EqualTo(new InvalidOrderByException("score asc").Message));
+        Assert.That(content?.Detail, Is.Not.Null);
+        Assert.That<string>(content.Detail, Is.EqualTo(new UnsupportedOrderByException(["score"]).Message));
     }
 }

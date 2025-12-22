@@ -2,33 +2,33 @@
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Infrastructure.OrderByService;
+namespace Infrastructure.OrderBy;
 
-public static class IQueryableApplySortExtension
+public static class OrderByExecutor
 {
     /// <summary>
-    /// Applies dynamic ordering to an <see cref="IQueryable{T}"/> based on the provided sort definitions.
+    /// Applies dynamic ordering to an <see cref="IQueryable{T}"/> based on the provided sort instructions.
     /// </summary>
     /// <typeparam name="TSource">The type of elements in the query.</typeparam>
     /// <param name="source">The source query to apply ordering to.</param>
-    /// <param name="sortables">
-    /// A sequence of sort definitions that specify property names and sort directions.
+    /// <param name="instructions">
+    /// A sequence of sort instructions that specify property names and sort directions.
     /// The order of items determines the order in which sorting is applied.
     /// </param>
     /// <returns>
     /// A new <see cref="IQueryable{T}"/> with the specified ordering applied.
-    /// If <paramref name="sortables"/> is null or empty, the original query is returned.
+    /// If <paramref name="instructions"/> is null or empty, the original query is returned.
     /// </returns>
     /// <remarks>
     /// This method builds a composed LINQ expression and relies on deferred execution.
     /// The query is not executed until the returned <see cref="IQueryable{T}"/> is enumerated.
     /// </remarks>
-    public static IQueryable<TSource> ApplySort<TSource>(this IQueryable<TSource> source, IEnumerable<Sortable>? sortables)
+    public static IQueryable<TSource> ApplyOrderBy<TSource>(IQueryable<TSource> source, IEnumerable<OrderByInstruction>? instructions)
     {
-        if (sortables is null) return source;
+        if (instructions is null) return source;
 
         // Materialize once to preserve order and avoid re-enumeration.
-        var list = sortables as IReadOnlyList<Sortable> ?? sortables.ToList();
+        var list = instructions as IReadOnlyList<OrderByInstruction> ?? instructions.ToList();
 
         if (list.Count == 0) return source;
 

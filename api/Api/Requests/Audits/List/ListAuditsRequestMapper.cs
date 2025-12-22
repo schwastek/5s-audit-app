@@ -1,7 +1,8 @@
-﻿using Features.Audits.Dto;
+﻿using Domain;
+using Features.Audits.Dto;
 using Features.Audits.List;
 using Infrastructure.MappingService;
-using Infrastructure.OrderByService;
+using Infrastructure.OrderBy;
 using Infrastructure.Pagination;
 using System.Linq;
 
@@ -9,14 +10,21 @@ namespace Api.Requests.Audits.List;
 
 public sealed class ListAuditsRequestMapper : IMapper<ListAuditsRequest, ListAuditsQuery>
 {
+    private readonly IOrderByService<Audit> _orderByService;
+
+    public ListAuditsRequestMapper(IOrderByService<Audit> orderByService)
+    {
+        _orderByService = orderByService;
+    }
+
     public ListAuditsQuery Map(ListAuditsRequest src)
     {
-        var orderByQuery = new OrderByQuery(src.OrderBy);
+        var orderByQuery = _orderByService.Resolve(src.OrderBy);
         var pageableQuery = new PageableQuery(src.PageNumber, src.PageSize);
 
         return new ListAuditsQuery
         {
-            OrderBy = orderByQuery.OrderBy,
+            OrderBy = orderByQuery,
             PageNumber = pageableQuery.PageNumber,
             PageSize = pageableQuery.PageSize
         };

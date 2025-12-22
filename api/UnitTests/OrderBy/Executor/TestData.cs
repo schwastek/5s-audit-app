@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace UnitTests.OrderByService.ApplySort;
+namespace UnitTests.OrderBy.Executor;
 
 internal class Person
 {

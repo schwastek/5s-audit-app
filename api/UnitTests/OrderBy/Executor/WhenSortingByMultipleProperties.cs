@@ -1,8 +1,8 @@
-﻿using Infrastructure.OrderByService;
+﻿using Infrastructure.OrderBy;
 using System.Linq;
 using Xunit;
 
-namespace UnitTests.OrderByService.ApplySort;
+namespace UnitTests.OrderBy.Executor;
 
 public sealed class When_sorting_by_multiple_properties_ascending
 {
@@ -12,14 +12,14 @@ public sealed class When_sorting_by_multiple_properties_ascending
         // Arrange
         var source = TestData.People;
 
-        var sortables = new[]
+        var instructions = new[]
         {
-            new Sortable
+            new OrderByInstruction
             {
                 PropertyName = nameof(Person.Age),
                 SortDescending = false
             },
-            new Sortable
+            new OrderByInstruction
             {
                 PropertyName = nameof(Person.FirstName),
                 SortDescending = false
@@ -27,7 +27,7 @@ public sealed class When_sorting_by_multiple_properties_ascending
         };
 
         // Act
-        var result = source.ApplySort(sortables).ToList();
+        var result = OrderByExecutor.ApplyOrderBy(source, instructions).ToList();
 
         // Assert
         Assert.Equal(
@@ -45,14 +45,14 @@ public sealed class When_sorting_by_multiple_properties_with_mixed_directions
         // Arrange
         var source = TestData.People;
 
-        var sortables = new[]
+        var instructions = new[]
         {
-            new Sortable
+            new OrderByInstruction
             {
                 PropertyName = nameof(Person.FirstName),
                 SortDescending = false
             },
-            new Sortable
+            new OrderByInstruction
             {
                 PropertyName = nameof(Person.Age),
                 SortDescending = true
@@ -60,7 +60,7 @@ public sealed class When_sorting_by_multiple_properties_with_mixed_directions
         };
 
         // Act
-        var result = source.ApplySort(sortables).ToList();
+        var result = OrderByExecutor.ApplyOrderBy(source, instructions).ToList();
 
         Assert.Equal(
             [30, 40, 25, 30],
